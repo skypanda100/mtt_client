@@ -19,6 +19,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 
 public class HttpManager {
@@ -30,6 +31,9 @@ public class HttpManager {
     public interface RetrofitService {
         @GET
         Call<ResponseBody> get(@Header("mtt-token")String token, @Url String url);
+
+        @GET
+        Call<ResponseBody> get(@Header("mtt-token")String token, @Url String url, @QueryMap Map<String, String> options);
 
         @POST
         Call<ResponseBody> post(@Header("mtt-token")String token, @Url String url, @Body RequestBody requestBody);
@@ -55,6 +59,10 @@ public class HttpManager {
 
     public Call<ResponseBody> get(String url) {
         return mRetrofitService.get(mToken, url);
+    }
+
+    public Call<ResponseBody> get(String url, Map<String, String> options) {
+        return mRetrofitService.get(mToken, url, options);
     }
 
     public Call<ResponseBody> post(String url, HashMap<String, Object> paramMap) {

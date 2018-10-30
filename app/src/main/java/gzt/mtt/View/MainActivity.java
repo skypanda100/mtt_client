@@ -13,13 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import cn.carbs.android.avatarimageview.library.AvatarImageView;
+import gzt.mtt.Constant;
+import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;
 import gzt.mtt.View.AirQuality.AirQualityFragment;
 import gzt.mtt.View.FoodGrade.FoodGradesFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    StorageManager mStorageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +93,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initData() {
+        this.mStorageManager = new StorageManager(this);
     }
 
     private void initView() {
@@ -108,6 +118,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // 设置头像名称
+        View headerView = navigationView.getHeaderView(0);
+
+        AvatarImageView avatarImageView = headerView.findViewById(R.id.avatar);
+        Picasso.get().load(Constant.BaseImageUrl + this.mStorageManager.getSharedPreference("avatar", "")).into(avatarImageView);
+
+        TextView aliasTextView = headerView.findViewById(R.id.alias);
+        aliasTextView.setText((String)this.mStorageManager.getSharedPreference("alias", ""));
 
         this.switchFragment(FoodGradesFragment.newInstance());
     }

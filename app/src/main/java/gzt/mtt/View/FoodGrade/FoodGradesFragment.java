@@ -22,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import gzt.mtt.Constant;
@@ -120,7 +122,9 @@ public class FoodGradesFragment extends Fragment {
     }
 
     private void showFoodGrades() {
-        Call<ResponseBody> call = HttpManager.instance().get("foodGrades");
+        Map<String, String> options = new HashMap<>();
+        options.put("sort", "-dateTime");
+        Call<ResponseBody> call = HttpManager.instance().get("foodGrades", options);
         if(call != null) {
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
