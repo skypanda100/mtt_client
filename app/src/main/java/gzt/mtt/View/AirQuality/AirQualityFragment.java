@@ -39,14 +39,11 @@ public class AirQualityFragment extends Fragment {
         return new AirQualityFragment();
     }
 
-    public AirQualityFragment() {
-        this.initData();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         this.mContainerView = inflater.inflate(R.layout.fragment_air_quality, container, false);
+        this.initData();
         this.initView();
 
         return this.mContainerView;

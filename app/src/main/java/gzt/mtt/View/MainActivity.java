@@ -16,6 +16,7 @@ import android.view.MenuItem;
 
 import gzt.mtt.R;
 import gzt.mtt.View.AirQuality.AirQualityFragment;
+import gzt.mtt.View.FoodGrade.FoodGradesFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_sleep_quality) {
 
         } else if (id == R.id.nav_food_grade) {
-
+            this.switchFragment(FoodGradesFragment.newInstance());
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -86,9 +87,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initView() {
-        setContentView(R.layout.activity_main);
+        this.setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        this.setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +108,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        this.switchFragment(FoodGradesFragment.newInstance());
     }
 
     private void switchFragment(Fragment fragment) {

@@ -103,7 +103,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
                 finish();
             }
-        }, 2000);
+        }, 1500);
     }
 
     private void startMainActivity() {
@@ -113,6 +113,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
                 finish();
             }
-        }, 2000);
+        }, 1500);
     }
 }

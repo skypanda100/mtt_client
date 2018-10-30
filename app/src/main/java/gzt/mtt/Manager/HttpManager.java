@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import gzt.mtt.Constant;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -24,7 +25,6 @@ public class HttpManager {
     private static HttpManager httpManager = null;
     private Retrofit mRetrofit;
     private RetrofitService mRetrofitService;
-    private String mBaseUrl = "http://47.94.165.17:90/";
     private String mToken = "";
 
     public interface RetrofitService {
@@ -37,7 +37,7 @@ public class HttpManager {
 
     private HttpManager() {
         this.mRetrofit = new Retrofit.Builder()
-                .baseUrl(mBaseUrl)
+                .baseUrl(Constant.BaseUrl)
                 .build();
         this.mRetrofitService = this.mRetrofit.create(RetrofitService.class);
     }
@@ -68,7 +68,6 @@ public class HttpManager {
                 bodyJson.put(key, value);
             }
             String json = bodyJson.toString();
-            Log.d("zdt", json);
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
             return mRetrofitService.post(mToken, url, requestBody);
         }catch (Exception e) {
