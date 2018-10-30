@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.AirQuality.AirQualityFragment">
+
+    <android.support.design.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/corner_radius"
+        app:cardElevation="@dimen/elevation"
+        app:cardUseCompatPadding="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding">
+
+            <TextView
+                android:id="@+id/dateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:textSize="@dimen/title_one"
+                android:textStyle="bold"
+                android:gravity="center_vertical"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="temperature(℃)"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/tempGrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    style="@style/Widget.MaterialRatingBar.RatingBar"/>
+                <TextView
+                    android:id="@+id/tempQuality"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="humidity(%)"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/humidityGrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    style="@style/Widget.MaterialRatingBar.RatingBar" />
+                <TextView
+                    android:id="@+id/humidityQuality"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="pm2.5(AQI)"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/pm25Grade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    style="@style/Widget.MaterialRatingBar.RatingBar" />
+                <TextView
+                    android:id="@+id/pm25Quality"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="co2(PPM)"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/co2Grade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    style="@style/Widget.MaterialRatingBar.RatingBar" />
+                <TextView
+                    android:id="@+id/co2Quality"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="hcho(mg/m3)"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/hchoGrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    style="@style/Widget.MaterialRatingBar.RatingBar" />
+                <TextView
+                    android:id="@+id/hchoQuality"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.design.card.MaterialCardView>
+
+</RelativeLayout>
