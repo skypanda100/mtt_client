@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -69,6 +70,7 @@ public class FoodGradesFragment extends Fragment {
     private void initView() {
         this.mFoodGradesRecyclerView = this.mContainerView.findViewById(R.id.foodGrades);
         this.mFoodGradesRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+//        this.mFoodGradesRecyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
         this.mFoodGradesRecyclerView.setAdapter(mFoodGradesAdapter = new FoodGradesAdapter());
 
         this.showFoodGrades();
