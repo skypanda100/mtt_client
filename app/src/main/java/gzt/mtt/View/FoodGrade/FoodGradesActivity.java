@@ -1,28 +1,25 @@
 package gzt.mtt.View.FoodGrade;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.ImageViewCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,31 +33,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FoodGradesFragment extends Fragment {
+public class FoodGradesActivity extends AppCompatActivity {
 
-    private View mContainerView;
     private RecyclerView mFoodGradesRecyclerView;
     private RecyclerView.Adapter mFoodGradesAdapter;
     private JSONArray mFoodGrades;
     private JSONArray mUsers;
 
-    public static FoodGradesFragment newInstance() {
-        return new FoodGradesFragment();
-    }
-
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        this.mContainerView = inflater.inflate(R.layout.fragment_food_grades, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         this.initData();
         this.initView();
-
-        return this.mContainerView;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void initData() {
@@ -68,8 +58,29 @@ public class FoodGradesFragment extends Fragment {
     }
 
     private void initView() {
-        this.mFoodGradesRecyclerView = this.mContainerView.findViewById(R.id.foodGrades);
-        this.mFoodGradesRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        this.setContentView(R.layout.activity_food_grades);
+
+        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null ) {
+            getSupportActionBar().setTitle("食物评分");
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
+        }
+
+        this.mFoodGradesRecyclerView = this.findViewById(R.id.foodGrades);
+        this.mFoodGradesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        this.mFoodGradesRecyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
         this.mFoodGradesRecyclerView.setAdapter(mFoodGradesAdapter = new FoodGradesAdapter());
 
@@ -120,7 +131,7 @@ public class FoodGradesFragment extends Fragment {
     }
 
     private void onFetchAllUsersFailed(String message) {
-        Toast.makeText(this.getContext(), message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     private void showFoodGrades() {
@@ -156,15 +167,15 @@ public class FoodGradesFragment extends Fragment {
     }
 
     private void onFetchFoodGradesFailed(String message) {
-        Toast.makeText(this.getContext(), message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     class FoodGradesAdapter extends RecyclerView.Adapter {
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            FoodGradesViewHolder foodGradesViewHolder = new FoodGradesViewHolder(LayoutInflater.from(FoodGradesFragment.this.getContext())
-                    .inflate(R.layout.item_food_grades, (ViewGroup) mContainerView, false));
+            FoodGradesViewHolder foodGradesViewHolder = new FoodGradesViewHolder(LayoutInflater.from(FoodGradesActivity.this)
+                    .inflate(R.layout.item_food_grades, viewGroup, false));
             return foodGradesViewHolder;
         }
 

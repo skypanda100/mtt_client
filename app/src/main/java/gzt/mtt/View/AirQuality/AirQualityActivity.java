@@ -1,12 +1,16 @@
 package gzt.mtt.View.AirQuality;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -20,9 +24,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AirQualityFragment extends Fragment {
+public class AirQualityActivity extends AppCompatActivity {
 
-    private View mContainerView;
     private TextView mDateTimeTextView;
     private TextView mTempTextView;
     private MaterialRatingBar mTempRatingBar;
@@ -35,40 +38,54 @@ public class AirQualityFragment extends Fragment {
     private TextView mHchoTextView;
     private MaterialRatingBar mHchoRatingBar;
 
-    public static AirQualityFragment newInstance() {
-        return new AirQualityFragment();
-    }
-
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        this.mContainerView = inflater.inflate(R.layout.fragment_air_quality, container, false);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         this.initData();
         this.initView();
-
-        return this.mContainerView;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void initData() {
     }
 
     private void initView() {
-        this.mDateTimeTextView = mContainerView.findViewById(R.id.dateTime);
-        this.mTempTextView = mContainerView.findViewById(R.id.tempQuality);
-        this.mTempRatingBar = mContainerView.findViewById(R.id.tempGrade);
-        this.mHumidityTextView = mContainerView.findViewById(R.id.humidityQuality);
-        this.mHumidityRatingBar = mContainerView.findViewById(R.id.humidityGrade);
-        this.mPm25TextView = mContainerView.findViewById(R.id.pm25Quality);
-        this.mPm25RatingBar = mContainerView.findViewById(R.id.pm25Grade);
-        this.mCo2TextView = mContainerView.findViewById(R.id.co2Quality);
-        this.mCo2RatingBar = mContainerView.findViewById(R.id.co2Grade);
-        this.mHchoTextView = mContainerView.findViewById(R.id.hchoQuality);
-        this.mHchoRatingBar = mContainerView.findViewById(R.id.hchoGrade);
+        this.setContentView(R.layout.activity_air_quality);
+
+        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null ) {
+            getSupportActionBar().setTitle("空气质量");
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
+        }
+
+        this.mDateTimeTextView = this.findViewById(R.id.dateTime);
+        this.mTempTextView = this.findViewById(R.id.tempQuality);
+        this.mTempRatingBar = this.findViewById(R.id.tempGrade);
+        this.mHumidityTextView = this.findViewById(R.id.humidityQuality);
+        this.mHumidityRatingBar = this.findViewById(R.id.humidityGrade);
+        this.mPm25TextView = this.findViewById(R.id.pm25Quality);
+        this.mPm25RatingBar = this.findViewById(R.id.pm25Grade);
+        this.mCo2TextView = this.findViewById(R.id.co2Quality);
+        this.mCo2RatingBar = this.findViewById(R.id.co2Grade);
+        this.mHchoTextView = this.findViewById(R.id.hchoQuality);
+        this.mHchoRatingBar = this.findViewById(R.id.hchoGrade);
 
         this.showLatestAirQuality();
     }

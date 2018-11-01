@@ -32,6 +32,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".View.FoodGrade.FoodGradesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".View.AirQuality.AirQualityActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

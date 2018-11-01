@@ -1,5 +1,6 @@
 package gzt.mtt.View;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -22,8 +22,8 @@ import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import gzt.mtt.Constant;
 import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;
-import gzt.mtt.View.AirQuality.AirQualityFragment;
-import gzt.mtt.View.FoodGrade.FoodGradesFragment;
+import gzt.mtt.View.AirQuality.AirQualityActivity;
+import gzt.mtt.View.FoodGrade.FoodGradesActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -76,11 +76,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_air_quality) {
-            this.switchFragment(AirQualityFragment.newInstance());
+            this.startActivity(AirQualityActivity.class);
         } else if (id == R.id.nav_sleep_quality) {
 
         } else if (id == R.id.nav_food_grade) {
-            this.switchFragment(FoodGradesFragment.newInstance());
+            this.startActivity(FoodGradesActivity.class);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -127,11 +127,13 @@ public class MainActivity extends AppCompatActivity
 
         TextView aliasTextView = headerView.findViewById(R.id.alias);
         aliasTextView.setText((String)this.mStorageManager.getSharedPreference("alias", ""));
-
-        this.switchFragment(FoodGradesFragment.newInstance());
     }
 
     private void switchFragment(Fragment fragment) {
         this.getSupportFragmentManager().beginTransaction().replace(R.id.contentMain, fragment).commit();
+    }
+
+    private void startActivity(Class<?> cls) {
+        startActivity(new Intent(this, cls));
     }
 }
