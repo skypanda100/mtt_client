@@ -48,6 +48,7 @@ public class AirQualityActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        overridePendingTransition(R.anim.fade_forward, R.anim.slide_out_right);
     }
 
     private void initData() {

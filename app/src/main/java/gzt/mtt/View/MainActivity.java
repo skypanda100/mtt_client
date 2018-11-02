@@ -135,5 +135,6 @@ public class MainActivity extends AppCompatActivity
 
     private void startActivity(Class<?> cls) {
         startActivity(new Intent(this, cls));
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.fade_back);
     }
 }

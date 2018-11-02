@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -39,6 +41,7 @@ public class FoodGradesActivity extends AppCompatActivity {
     private RecyclerView.Adapter mFoodGradesAdapter;
     private JSONArray mFoodGrades;
     private JSONArray mUsers;
+    private boolean mIsOneCol = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,12 +52,38 @@ public class FoodGradesActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.food_grades, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_view) {
+            if(this.mIsOneCol) {
+                item.setIcon(R.drawable.ic_menu_one_col);
+                this.setLayoutManagerPolicy(3);
+            } else {
+                item.setIcon(R.drawable.ic_menu_three_col);
+                this.setLayoutManagerPolicy(1);
+            }
+            this.mIsOneCol = !this.mIsOneCol;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
+        overridePendingTransition(R.anim.fade_forward, R.anim.slide_out_right);
     }
 
     private void initData() {
-        this.fetchAllUsers();
+        this.fetchData();
     }
 
     private void initView() {
@@ -80,11 +109,13 @@ public class FoodGradesActivity extends AppCompatActivity {
         }
 
         this.mFoodGradesRecyclerView = this.findViewById(R.id.foodGrades);
-        this.mFoodGradesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        this.mFoodGradesRecyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
+//        this.mFoodGradesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.setLayoutManagerPolicy(1);
         this.mFoodGradesRecyclerView.setAdapter(mFoodGradesAdapter = new FoodGradesAdapter());
+    }
 
-        this.showFoodGrades();
+    private void setLayoutManagerPolicy(int cols) {
+        this.mFoodGradesRecyclerView.setLayoutManager(new GridLayoutManager(this, cols));
     }
 
     private JSONObject getUser (String userName) {
@@ -101,15 +132,40 @@ public class FoodGradesActivity extends AppCompatActivity {
         return null;
     }
 
-    private void fetchAllUsers() {
-        Call<ResponseBody> call = HttpManager.instance().get("users/all");
-        if(call != null) {
-            call.enqueue(new Callback<ResponseBody>() {
+    private void fetchData() {
+        Call<ResponseBody> allUsersCall = HttpManager.instance().get("users/all");
+        if(allUsersCall != null) {
+            allUsersCall.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         JSONArray resJsonArray = new JSONArray(response.body().string());
                         onFetchAllUsersSuccess(resJsonArray);
+
+                        Map<String, String> options = new HashMap<>();
+                        options.put("sort", "-dateTime");
+                        Call<ResponseBody> foodGradesCall = HttpManager.instance().get("foodGrades", options);
+                        if(foodGradesCall != null) {
+                            foodGradesCall.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    try {
+                                        JSONArray resJsonArray = new JSONArray(response.body().string());
+                                        onFetchFoodGradesSuccess(resJsonArray);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        onFetchFoodGradesFailed("some errors happened in server");
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    onFetchFoodGradesFailed("some errors happened in server");
+                                }
+                            });
+                        } else {
+                            onFetchFoodGradesFailed("some errors happened in client");
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         onFetchAllUsersFailed("some errors happened in server");
@@ -122,7 +178,7 @@ public class FoodGradesActivity extends AppCompatActivity {
                 }
             });
         } else {
-            this.onFetchAllUsersFailed("some errors happened in client");
+            onFetchAllUsersFailed("some errors happened in client");
         }
     }
 
@@ -135,35 +191,12 @@ public class FoodGradesActivity extends AppCompatActivity {
     }
 
     private void showFoodGrades() {
-        Map<String, String> options = new HashMap<>();
-        options.put("sort", "-dateTime");
-        Call<ResponseBody> call = HttpManager.instance().get("foodGrades", options);
-        if(call != null) {
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    try {
-                        JSONArray resJsonArray = new JSONArray(response.body().string());
-                        onFetchFoodGradesSuccess(resJsonArray);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        onFetchFoodGradesFailed("some errors happened in server");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    onFetchFoodGradesFailed("some errors happened in server");
-                }
-            });
-        } else {
-            this.onFetchFoodGradesFailed("some errors happened in client");
-        }
+        this.mFoodGradesAdapter.notifyDataSetChanged();
     }
 
     private void onFetchFoodGradesSuccess(JSONArray jsonArray) {
         this.mFoodGrades = jsonArray;
-        this.mFoodGradesAdapter.notifyDataSetChanged();
+        this.showFoodGrades();
     }
 
     private void onFetchFoodGradesFailed(String message) {
