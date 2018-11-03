@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
+import gzt.mtt.Adapter.FoodGradesAdapter;
 import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
@@ -38,7 +39,7 @@ import retrofit2.Response;
 public class FoodGradesActivity extends AppCompatActivity {
 
     private RecyclerView mFoodGradesRecyclerView;
-    private RecyclerView.Adapter mFoodGradesAdapter;
+    private FoodGradesAdapter mFoodGradesAdapter;
     private JSONArray mFoodGrades;
     private JSONArray mUsers;
     private boolean mIsOneCol = true;
@@ -109,13 +110,13 @@ public class FoodGradesActivity extends AppCompatActivity {
         }
 
         this.mFoodGradesRecyclerView = this.findViewById(R.id.foodGrades);
-//        this.mFoodGradesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.setLayoutManagerPolicy(1);
-        this.mFoodGradesRecyclerView.setAdapter(mFoodGradesAdapter = new FoodGradesAdapter());
     }
 
     private void setLayoutManagerPolicy(int cols) {
         this.mFoodGradesRecyclerView.setLayoutManager(new GridLayoutManager(this, cols));
+        this.mFoodGradesRecyclerView.setAdapter(mFoodGradesAdapter = new FoodGradesAdapter(this, cols == 1));
+        this.mFoodGradesAdapter.setFoodGrades(this.mFoodGrades);
     }
 
     private JSONObject getUser (String userName) {
@@ -190,78 +191,24 @@ public class FoodGradesActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    private void showFoodGrades() {
-        this.mFoodGradesAdapter.notifyDataSetChanged();
-    }
-
     private void onFetchFoodGradesSuccess(JSONArray jsonArray) {
-        this.mFoodGrades = jsonArray;
-        this.showFoodGrades();
+        try {
+            for(int i = 0;i < jsonArray.length();i++) {
+                JSONObject foodGrade = jsonArray.getJSONObject(i);
+                JSONObject user = this.getUser(foodGrade.getString("user"));
+                foodGrade.put("alias", user.getString("alias"));
+                foodGrade.put("avatar", user.getString("avatar"));
+            }
+            this.mFoodGrades = jsonArray;
+            if(this.mFoodGradesAdapter != null) {
+                this.mFoodGradesAdapter.setFoodGrades(this.mFoodGrades);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void onFetchFoodGradesFailed(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-    class FoodGradesAdapter extends RecyclerView.Adapter {
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            FoodGradesViewHolder foodGradesViewHolder = new FoodGradesViewHolder(LayoutInflater.from(FoodGradesActivity.this)
-                    .inflate(R.layout.item_food_grades, viewGroup, false));
-            return foodGradesViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-            FoodGradesViewHolder foodGradesViewHolder = (FoodGradesViewHolder) viewHolder;
-            try{
-                JSONObject foodGrade = mFoodGrades.getJSONObject(i);
-
-                String imagePath = foodGrade.getString("imagePath");
-                String userName = foodGrade.getString("user");
-                JSONObject user = getUser(userName);
-                String alias = user.getString("alias");
-                String avatar = user.getString("avatar");
-                String dateTime = foodGrade.getString("dateTime");
-                String comment = foodGrade.getString("comment");
-                int grade = foodGrade.getInt("grade");
-
-                Picasso.get().load(Constant.BaseImageUrl + avatar).into(foodGradesViewHolder.mAvatarAvatarImageView);
-                foodGradesViewHolder.mAliasTextView.setText(alias);
-                Picasso.get().load(Constant.BaseImageUrl + imagePath).into(foodGradesViewHolder.mFoodAppCompatImageView);
-                foodGradesViewHolder.mGradeMaterialRatingBar.setRating(grade);
-                foodGradesViewHolder.mDateTimeTextView.setText(dateTime);
-                foodGradesViewHolder.mCommentTextView.setText(comment);
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            if(mFoodGrades != null) {
-                return mFoodGrades.length();
-            }
-            return 0;
-        }
-
-        class FoodGradesViewHolder extends RecyclerView.ViewHolder {
-            AvatarImageView mAvatarAvatarImageView;
-            TextView mAliasTextView;
-            AppCompatImageView mFoodAppCompatImageView;
-            MaterialRatingBar mGradeMaterialRatingBar;
-            TextView mDateTimeTextView;
-            TextView mCommentTextView;
-            public FoodGradesViewHolder(@NonNull View itemView) {
-                super(itemView);
-                this.mAvatarAvatarImageView = itemView.findViewById(R.id.avatar);
-                this.mAliasTextView = itemView.findViewById(R.id.alias);
-                this.mFoodAppCompatImageView = itemView.findViewById(R.id.food);
-                this.mGradeMaterialRatingBar = itemView.findViewById(R.id.grade);
-                this.mDateTimeTextView = itemView.findViewById(R.id.dateTime);
-                this.mCommentTextView = itemView.findViewById(R.id.comment);
-            }
-        }
     }
 }
