@@ -23,6 +23,11 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private JSONArray mFoodGrades;
     private boolean mIsOneCol;
+    private OnItemClickListener mItemClickListener;
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
 
     public FoodGradesAdapter(Context context, boolean isOneCol) {
         this.mContext = context;
@@ -32,6 +37,10 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
     public void setFoodGrades(JSONArray foodGrades) {
         this.mFoodGrades = foodGrades;
         this.notifyDataSetChanged();
+    }
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.mItemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -45,12 +54,23 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
             foodGradesViewHolder = new FoodGradesViewHolder(LayoutInflater.from(this.mContext)
                     .inflate(R.layout.item_food_grades_three, viewGroup, false));
         }
+
         return foodGradesViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-    FoodGradesViewHolder foodGradesViewHolder = (FoodGradesViewHolder) viewHolder;
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
+        FoodGradesViewHolder foodGradesViewHolder = (FoodGradesViewHolder) viewHolder;
+
+        foodGradesViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mItemClickListener != null) {
+                    mItemClickListener.onItemClick(i);
+                }
+            }
+        });
+
         try{
             JSONObject foodGrade = mFoodGrades.getJSONObject(i);
 
@@ -60,7 +80,6 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
             String dateTime = foodGrade.getString("dateTime");
             String comment = foodGrade.getString("comment");
             int grade = foodGrade.getInt("grade");
-
 
             if(this.mIsOneCol) {
                 Picasso.get().load(Constant.BaseImageUrl + avatar).into(foodGradesViewHolder.mAvatarAvatarImageView);

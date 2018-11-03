@@ -1,36 +1,31 @@
 package gzt.mtt.View.FoodGrade;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import gzt.mtt.Adapter.FoodGradesAdapter;
-import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
-import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -117,6 +112,28 @@ public class FoodGradesActivity extends AppCompatActivity {
         this.mFoodGradesRecyclerView.setLayoutManager(new GridLayoutManager(this, cols));
         this.mFoodGradesRecyclerView.setAdapter(mFoodGradesAdapter = new FoodGradesAdapter(this, cols == 1));
         this.mFoodGradesAdapter.setFoodGrades(this.mFoodGrades);
+        this.mFoodGradesAdapter.setItemClickListener(new FoodGradesAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Toast.makeText(FoodGradesActivity.this, "" + position, Toast.LENGTH_LONG).show();
+                try {
+                    JSONObject foodGrade = mFoodGrades.getJSONObject(position);
+                    ArrayList<String> images = new ArrayList<>();
+                    images.add(foodGrade.getString("imagePath"));
+
+                    Intent intent = new Intent(FoodGradesActivity.this, FoodGradeActivity.class);
+                    intent.putExtra("alias", foodGrade.getString("alias"));
+                    intent.putExtra("avatar", foodGrade.getString("avatar"));
+                    intent.putExtra("dateTime", foodGrade.getString("dateTime"));
+                    intent.putExtra("comment", foodGrade.getString("comment"));
+                    intent.putExtra("grade", foodGrade.getInt("grade"));
+                    intent.putStringArrayListExtra("images", images);
+                    startActivity(intent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private JSONObject getUser (String userName) {
