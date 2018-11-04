@@ -21,10 +21,39 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/foods"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="260dp">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/foods"
+            android:layout_width="match_parent"
+            android:layout_height="260dp">
+        </android.support.v7.widget.RecyclerView>
+
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+            android:id="@+id/grade"
+            android:layout_below="@id/foods"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/padding"
+            style="@style/Widget.MaterialRatingBar.RatingBar"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_below="@id/grade"
+            android:layout_marginTop="@dimen/padding"
+            android:textColorHint="#c5c5c5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:hint="说点什么吧"
+                android:textSize="@dimen/title_one"
+                android:gravity="top"
+                android:minLines="6"/>
+        </android.support.design.widget.TextInputLayout>
+    </RelativeLayout>
 
 </LinearLayout>

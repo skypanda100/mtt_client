@@ -5,14 +5,18 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.youth.banner.Banner;
@@ -27,19 +31,19 @@ import java.util.List;
 import gzt.mtt.Adapter.FoodGradeAdapter;
 import gzt.mtt.Adapter.FoodGradeUploadAdapter;
 import gzt.mtt.Adapter.FoodGradesAdapter;
+import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;
 import gzt.mtt.Util.PathUtil;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class FoodGradeUploadActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CHOOSE = 0;
-    private String mAlias;
-    private String mAvatar;
-    private String mDateTime;
-    private String mComment;
-    private int mGrade;
+    private StorageManager mStorageManager;
     private List<Object> mFoods = new ArrayList<>();
     private RecyclerView mFoodsRecyclerView;
     private FoodGradeUploadAdapter mFoodGradeUploadAdapter;
+    private MaterialRatingBar mGradeRatingBar;
+    private EditText mCommentEditText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +55,24 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.food_grade_upload, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_done) {
+            this.handleActionDoneClicked();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -73,6 +95,7 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
 
     private void initData() {
         this.initFoods();
+        this.mStorageManager = new StorageManager(this);
     }
 
     private void initView() {
@@ -110,6 +133,9 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
             }
         });
         this.mFoodGradeUploadAdapter.setFoods(this.mFoods);
+
+        this.mGradeRatingBar = this.findViewById(R.id.grade);
+        this.mCommentEditText = this.findViewById(R.id.comment);
     }
 
     private void openGallery () {
@@ -121,5 +147,12 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
                 .thumbnailScale(0.85f)
                 .imageEngine(new PicassoEngine())
                 .forResult(REQUEST_CODE_CHOOSE);
+    }
+
+    private void handleActionDoneClicked() {
+        String userName = (String) this.mStorageManager.getSharedPreference("userName", "");
+        float rate = this.mGradeRatingBar.getRating();
+        String comment = this.mCommentEditText.getText().toString();
+        Log.d("zdt", userName + " - " + rate + " - " + comment);
     }
 }

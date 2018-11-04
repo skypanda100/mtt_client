@@ -8,6 +8,5 @@
         android:id="@+id/food"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:background="#dedede"
-        android:scaleType="centerCrop"/>
+        android:background="#dedede"/>
 </LinearLayout>

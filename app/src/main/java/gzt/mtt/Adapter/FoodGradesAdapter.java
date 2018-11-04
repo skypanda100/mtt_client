@@ -4,9 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -89,7 +91,9 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
                 foodGradesViewHolder.mDateTimeTextView.setText(dateTime);
                 foodGradesViewHolder.mCommentTextView.setText(comment);
             } else {
-                Picasso.with(this.mContext).load(Constant.BaseImageUrl + imagePath).into(foodGradesViewHolder.mFoodAppCompatImageView);
+                int width = 200;
+                int height = 200;
+                Picasso.with(this.mContext).load(Constant.BaseImageUrl + imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView);
             }
             }catch (Exception e) {
             e.printStackTrace();
@@ -123,6 +127,7 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
             } else {
                 this.mFoodAppCompatImageView = itemView.findViewById(R.id.food);
             }
+            this.mFoodAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
     }
 }

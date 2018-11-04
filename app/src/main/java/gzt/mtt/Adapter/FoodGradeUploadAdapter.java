@@ -21,6 +21,7 @@ public class FoodGradeUploadAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private OnItemClickListener mItemClickListener;
     private List<Object> mFoods;
+
     public interface OnItemClickListener{
         void onItemClick(int position);
     }
@@ -49,6 +50,7 @@ public class FoodGradeUploadAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
+        Log.d("zdt", i + "");
         FoodsViewHolder foodsViewHolder = (FoodsViewHolder) viewHolder;
 
         foodsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +64,7 @@ public class FoodGradeUploadAdapter extends RecyclerView.Adapter {
         Object food = mFoods.get(i);
         if (food instanceof Uri) {
             foodsViewHolder.mFoodAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Picasso.with(this.mContext).load((Uri) food).into(foodsViewHolder.mFoodAppCompatImageView);
+            Picasso.with(this.mContext).load((Uri) food).resize(300, 300).centerCrop().into(foodsViewHolder.mFoodAppCompatImageView);
         } else {
             foodsViewHolder.mFoodAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             Picasso.with(this.mContext).load((int)food).resize(128, 128).centerInside().into(foodsViewHolder.mFoodAppCompatImageView);

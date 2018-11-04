@@ -39,6 +39,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".View.FoodGrade.FoodGradeUploadActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
