@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,16 +26,34 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import gzt.mtt.Adapter.FoodGradeAdapter;
 import gzt.mtt.Adapter.FoodGradeUploadAdapter;
 import gzt.mtt.Adapter.FoodGradesAdapter;
+import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;
 import gzt.mtt.Util.PathUtil;
+import gzt.mtt.Util.TimeUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class FoodGradeUploadActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CHOOSE = 0;
@@ -47,7 +66,6 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.initData();
         this.initView();
     }
@@ -150,9 +168,91 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
     }
 
     private void handleActionDoneClicked() {
-        String userName = (String) this.mStorageManager.getSharedPreference("userName", "");
-        float rate = this.mGradeRatingBar.getRating();
+        if(!this.validate()) {
+            return;
+        }
+        List<String> images = new ArrayList<>();
+        for(int i = 0;i < this.mFoods.size() - 1;i++) {
+            String path = PathUtil.uri2path(this, (Uri) this.mFoods.get(i));
+            images.add(path);
+        }
+        this.doCompressAndUpload(images);
+    }
+
+    private boolean validate() {
+        if(this.mFoods.size() > 1) {
+            return true;
+        } else {
+            this.onUploadFailed("请添加图片");
+            return false;
+        }
+    }
+
+    private void onUploadSuccess(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void onUploadFailed(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void doCompressAndUpload(final List<String> images) {
+        final Map<String, Object> params = new HashMap<>();
+        String user = (String) this.mStorageManager.getSharedPreference("userName", "");
+        float grade = this.mGradeRatingBar.getRating();
         String comment = this.mCommentEditText.getText().toString();
-        Log.d("zdt", userName + " - " + rate + " - " + comment);
+        String dateTime = TimeUtil.date2str(new Date(), "yyyy-MM-dd HH:mm");
+        params.put("user", user);
+        params.put("grade", grade);
+        params.put("comment", comment);
+        params.put("dateTime", dateTime);
+
+        Luban.with(this)
+                .load(images)
+                .ignoreBy(100)
+                .filter(new CompressionPredicate() {
+                    @Override
+                    public boolean apply(String path) {
+                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                    }
+                })
+                .setCompressListener(new OnCompressListener() {
+                    private int mFileCount = 0;
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        mFileCount++;
+                        params.put(file.getName(), file);
+                        if(mFileCount == images.size()) {
+                            Call<ResponseBody> uploadCall = HttpManager.instance().put("foodGrades", params);
+                            if(uploadCall != null) {
+                                uploadCall.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response.body().string());
+                                            onUploadSuccess(jsonObject.getString("message"));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            onUploadFailed("some errors happened in server");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        onUploadFailed("some errors happened in server");
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+                }).launch();
     }
 }

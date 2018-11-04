@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,6 +123,12 @@ public class FoodGradesActivity extends AppCompatActivity {
                     JSONObject foodGrade = mFoodGrades.getJSONObject(position);
                     ArrayList<String> images = new ArrayList<>();
                     images.add(foodGrade.getString("imagePath"));
+                    if(foodGrade.has("others")){
+                        JSONArray others = foodGrade.getJSONArray("others");
+                        for(int i = 0;i < others.length();i++) {
+                            images.add(others.getJSONObject(i).getString("imagePath"));
+                        }
+                    }
 
                     Intent intent = new Intent(FoodGradesActivity.this, FoodGradeActivity.class);
                     intent.putExtra("alias", foodGrade.getString("alias"));

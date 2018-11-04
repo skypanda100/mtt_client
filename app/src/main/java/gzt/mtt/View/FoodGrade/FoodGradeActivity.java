@@ -23,6 +23,7 @@ public class FoodGradeActivity extends AppCompatActivity {
     private String mDateTime;
     private String mComment;
     private int mGrade;
+    private List<String> mTitles;
     private List<String> mImages;
     private FoodGradeAdapter mFoodGradeAdapter;
     @Override
@@ -50,13 +51,20 @@ public class FoodGradeActivity extends AppCompatActivity {
         this.mComment = intent.getStringExtra("comment");
         this.mGrade = intent.getIntExtra("grade", 0);
         this.mImages = intent.getStringArrayListExtra("images");
-
+        this.mTitles = new ArrayList<>();
+        for(int i = 0;i < this.mImages.size();i++) {
+            this.mTitles.add(this.mComment);
+        }
         this.mFoodGradeAdapter = new FoodGradeAdapter();
     }
 
     private void initView() {
         Banner foodGradeBanner = findViewById(R.id.foodGradeBanner);
         foodGradeBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
-        foodGradeBanner.setImages(this.mImages).setImageLoader(this.mFoodGradeAdapter).start();
+        foodGradeBanner.isAutoPlay(false);
+        foodGradeBanner.setBannerTitles(this.mTitles);
+        foodGradeBanner.setImages(this.mImages);
+        foodGradeBanner.setImageLoader(this.mFoodGradeAdapter);
+        foodGradeBanner.start();
     }
 }
