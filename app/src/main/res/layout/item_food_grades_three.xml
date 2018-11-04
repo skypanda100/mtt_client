@@ -6,7 +6,8 @@
     android:padding="1dp">
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/food"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="#dedede"
         android:scaleType="centerCrop"/>
 </LinearLayout>

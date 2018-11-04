@@ -11,6 +11,6 @@ import gzt.mtt.Constant;
 public class FoodGradeAdapter extends ImageLoader {
     @Override
     public void displayImage(Context context, Object path, ImageView imageView) {
-        Picasso.get().load(Constant.BaseImageUrl + path).into(imageView);
+        Picasso.with(context).load(Constant.BaseImageUrl + path).into(imageView);
     }
 }

@@ -67,6 +67,9 @@ public class FoodGradesActivity extends AppCompatActivity {
                 this.setLayoutManagerPolicy(1);
             }
             this.mIsOneCol = !this.mIsOneCol;
+        } else if (id == R.id.action_upload) {
+            Intent intent = new Intent(FoodGradesActivity.this, FoodGradeUploadActivity.class);
+            this.startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -115,7 +118,6 @@ public class FoodGradesActivity extends AppCompatActivity {
         this.mFoodGradesAdapter.setItemClickListener(new FoodGradesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Toast.makeText(FoodGradesActivity.this, "" + position, Toast.LENGTH_LONG).show();
                 try {
                     JSONObject foodGrade = mFoodGrades.getJSONObject(position);
                     ArrayList<String> images = new ArrayList<>();
@@ -129,6 +131,7 @@ public class FoodGradesActivity extends AppCompatActivity {
                     intent.putExtra("grade", foodGrade.getInt("grade"));
                     intent.putStringArrayListExtra("images", images);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.fade_forward, R.anim.fade_back);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

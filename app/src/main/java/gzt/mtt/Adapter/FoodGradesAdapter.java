@@ -82,14 +82,14 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
             int grade = foodGrade.getInt("grade");
 
             if(this.mIsOneCol) {
-                Picasso.get().load(Constant.BaseImageUrl + avatar).into(foodGradesViewHolder.mAvatarAvatarImageView);
+                Picasso.with(this.mContext).load(Constant.BaseImageUrl + avatar).into(foodGradesViewHolder.mAvatarAvatarImageView);
                 foodGradesViewHolder.mAliasTextView.setText(alias);
-                Picasso.get().load(Constant.BaseImageUrl + imagePath).into(foodGradesViewHolder.mFoodAppCompatImageView);
+                Picasso.with(this.mContext).load(Constant.BaseImageUrl + imagePath).into(foodGradesViewHolder.mFoodAppCompatImageView);
                 foodGradesViewHolder.mGradeMaterialRatingBar.setRating(grade);
                 foodGradesViewHolder.mDateTimeTextView.setText(dateTime);
                 foodGradesViewHolder.mCommentTextView.setText(comment);
             } else {
-                Picasso.get().load(Constant.BaseImageUrl + imagePath).into(foodGradesViewHolder.mFoodAppCompatImageView);
+                Picasso.with(this.mContext).load(Constant.BaseImageUrl + imagePath).into(foodGradesViewHolder.mFoodAppCompatImageView);
             }
             }catch (Exception e) {
             e.printStackTrace();

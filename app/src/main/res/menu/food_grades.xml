@@ -7,4 +7,11 @@
         android:title="多列"
         android:icon="@drawable/ic_menu_three_col"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_upload"
+        android:orderInCategory="100"
+        android:title="上传"
+        android:icon="@drawable/ic_menu_upload"
+        app:showAsAction="always" />
 </menu>

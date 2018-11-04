@@ -37,6 +37,11 @@ public class FoodGradeActivity extends AppCompatActivity {
         this.initView();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void initData() {
         Intent intent = this.getIntent();
         this.mAlias = intent.getStringExtra("alias");

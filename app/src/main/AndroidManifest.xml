@@ -37,6 +37,9 @@
         <activity
             android:name=".View.FoodGrade.FoodGradeActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".View.FoodGrade.FoodGradeUploadActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
