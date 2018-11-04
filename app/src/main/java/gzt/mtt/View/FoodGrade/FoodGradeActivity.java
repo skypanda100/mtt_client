@@ -60,8 +60,8 @@ public class FoodGradeActivity extends AppCompatActivity {
 
     private void initView() {
         Banner foodGradeBanner = findViewById(R.id.foodGradeBanner);
-        foodGradeBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         foodGradeBanner.isAutoPlay(false);
+        foodGradeBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE);
         foodGradeBanner.setBannerTitles(this.mTitles);
         foodGradeBanner.setImages(this.mImages);
         foodGradeBanner.setImageLoader(this.mFoodGradeAdapter);
