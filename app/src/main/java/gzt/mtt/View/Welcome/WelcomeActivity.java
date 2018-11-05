@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import gzt.mtt.BaseActivity;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;
@@ -21,15 +22,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WelcomeActivity extends AppCompatActivity {
-    private StorageManager mStorageManager;
-
+public class WelcomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
 
         this.initData();
+        this.initView();
     }
 
     private void initData() {
@@ -73,6 +72,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 onLoginFailed("some errors happened in client");
             }
         }
+    }
+
+    private void initView() {
+        this.createFullScreenView();
+        this.setContentView(R.layout.activity_welcome);
     }
 
     private void onLoginSuccess(String bodyStr) {

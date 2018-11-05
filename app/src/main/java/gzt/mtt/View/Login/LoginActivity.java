@@ -2,11 +2,9 @@ package gzt.mtt.View.Login;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.design.button.MaterialButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -18,19 +16,17 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import gzt.mtt.BaseActivity;
 import gzt.mtt.View.MainActivity;
 import gzt.mtt.Manager.HttpManager;
-import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;
 import gzt.mtt.Util.CryptUtil;
-import gzt.mtt.View.Welcome.WelcomeActivity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
-    private StorageManager mStorageManager;
+public class LoginActivity extends BaseActivity {
     private EditText mUserNameEditText;
     private EditText mPasswordEditText;
     private MaterialButton mLoginMaterialButton;
@@ -38,16 +34,16 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
         this.initData();
         this.initView();
     }
 
     private void initData() {
-        this.mStorageManager = new StorageManager(this);
     }
 
     private void initView() {
+        setContentView(R.layout.activity_login);
+
         this.mUserNameEditText = this.findViewById(R.id.userName);
         this.mPasswordEditText = this.findViewById(R.id.password);
         this.mLoginMaterialButton = this.findViewById(R.id.login);

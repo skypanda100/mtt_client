@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import gzt.mtt.Adapter.FoodGradesAdapter;
+import gzt.mtt.BaseActivity;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
 import okhttp3.ResponseBody;
@@ -32,8 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FoodGradesActivity extends AppCompatActivity {
-
+public class FoodGradesActivity extends BaseActivity {
     private RecyclerView mFoodGradesRecyclerView;
     private FoodGradesAdapter mFoodGradesAdapter;
     private JSONArray mFoodGrades;
@@ -102,11 +102,6 @@ public class FoodGradesActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
-        }
 
         this.mFoodGradesRecyclerView = this.findViewById(R.id.foodGrades);
         this.setLayoutManagerPolicy(1);

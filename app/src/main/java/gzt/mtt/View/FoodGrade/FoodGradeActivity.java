@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gzt.mtt.Adapter.FoodGradeAdapter;
+import gzt.mtt.BaseActivity;
 import gzt.mtt.R;
-public class FoodGradeActivity extends AppCompatActivity {
+public class FoodGradeActivity extends BaseActivity {
     private String mAlias;
     private String mAvatar;
     private String mDateTime;
@@ -29,10 +30,6 @@ public class FoodGradeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_food_grade);
 
         this.initData();
         this.initView();
@@ -59,6 +56,9 @@ public class FoodGradeActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        this.createFullScreenView();
+        setContentView(R.layout.activity_food_grade);
+
         Banner foodGradeBanner = findViewById(R.id.foodGradeBanner);
         foodGradeBanner.isAutoPlay(false);
         foodGradeBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);

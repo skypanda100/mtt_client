@@ -15,7 +15,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,17 +26,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
+import gzt.mtt.BaseActivity;
 import gzt.mtt.Constant;
-import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;
 import gzt.mtt.View.AirQuality.AirQualityActivity;
 import gzt.mtt.View.FoodGrade.FoodGradesActivity;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
     private static final int REQUEST_PERMISSION = 0;
-    StorageManager mStorageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +118,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initData() {
-        this.mStorageManager = new StorageManager(this);
     }
 
     private void initView() {

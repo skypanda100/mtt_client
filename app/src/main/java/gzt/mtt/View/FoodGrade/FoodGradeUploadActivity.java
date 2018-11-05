@@ -3,30 +3,22 @@ package gzt.mtt.View.FoodGrade;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -36,33 +28,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import gzt.mtt.Adapter.FoodGradeAdapter;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import gzt.mtt.Adapter.FoodGradeUploadAdapter;
-import gzt.mtt.Adapter.FoodGradesAdapter;
+import gzt.mtt.BaseActivity;
 import gzt.mtt.Manager.HttpManager;
-import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;
 import gzt.mtt.Util.PathUtil;
 import gzt.mtt.Util.TimeUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-import top.zibin.luban.CompressionPredicate;
 import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
 
-public class FoodGradeUploadActivity extends AppCompatActivity {
+public class FoodGradeUploadActivity extends BaseActivity {
     private static final int REQUEST_CODE_CHOOSE = 0;
-    private StorageManager mStorageManager;
     private List<Object> mFoods = new ArrayList<>();
     private RecyclerView mFoodsRecyclerView;
     private FoodGradeUploadAdapter mFoodGradeUploadAdapter;
     private MaterialRatingBar mGradeRatingBar;
     private EditText mCommentEditText;
+    private SweetAlertDialog mWaitingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +98,6 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
 
     private void initData() {
         this.initFoods();
-        this.mStorageManager = new StorageManager(this);
     }
 
     private void initView() {
@@ -133,11 +117,6 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
-        }
-
         this.mFoodsRecyclerView = this.findViewById(R.id.foods);
         this.mFoodsRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         this.mFoodsRecyclerView.setAdapter(mFoodGradeUploadAdapter = new FoodGradeUploadAdapter(this));
@@ -154,6 +133,9 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
 
         this.mGradeRatingBar = this.findViewById(R.id.grade);
         this.mCommentEditText = this.findViewById(R.id.comment);
+
+        this.mWaitingDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        this.mWaitingDialog.setCancelable(false);
     }
 
     private void openGallery () {
@@ -176,7 +158,20 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
             String path = PathUtil.uri2path(this, (Uri) this.mFoods.get(i));
             images.add(path);
         }
-        this.doCompressAndUpload(images);
+
+        String user = (String) this.mStorageManager.getSharedPreference("userName", "");
+        float grade = this.mGradeRatingBar.getRating();
+        String comment = this.mCommentEditText.getText().toString();
+        String dateTime = "";
+        File homeFile = new File(images.get(0));
+        if(homeFile.exists() && homeFile.isFile()){
+            dateTime = TimeUtil.date2str(new Date(homeFile.lastModified()), "yyyy-MM-dd HH:mm");
+        } else {
+            dateTime = TimeUtil.date2str(new Date(), "yyyy-MM-dd HH:mm");
+        }
+
+        UploadTask uploadTask = new UploadTask();
+        uploadTask.execute(user, grade, comment, dateTime, images);
     }
 
     private boolean validate() {
@@ -196,63 +191,68 @@ public class FoodGradeUploadActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    private void doCompressAndUpload(final List<String> images) {
-        final Map<String, Object> params = new HashMap<>();
-        String user = (String) this.mStorageManager.getSharedPreference("userName", "");
-        float grade = this.mGradeRatingBar.getRating();
-        String comment = this.mCommentEditText.getText().toString();
-        String dateTime = TimeUtil.date2str(new Date(), "yyyy-MM-dd HH:mm");
-        params.put("user", user);
-        params.put("grade", grade);
-        params.put("comment", comment);
-        params.put("dateTime", dateTime);
+    private class UploadTask extends AsyncTask {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mWaitingDialog.show();
+        }
 
-        Luban.with(this)
-                .load(images)
-                .ignoreBy(100)
-                .filter(new CompressionPredicate() {
-                    @Override
-                    public boolean apply(String path) {
-                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-                    }
-                })
-                .setCompressListener(new OnCompressListener() {
-                    private int mFileCount = 0;
-                    @Override
-                    public void onStart() {
-                    }
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            try {
+                publishProgress(0);
+                String user = (String) objects[0];
+                float grade = (float) objects[1];
+                String comment = (String) objects[2];
+                String dateTime = (String) objects[3];
+                List<String> images = (ArrayList<String>) objects[4];
+                List<File> compressImages = Luban.with(FoodGradeUploadActivity.this).load(images).get();
+                publishProgress(1);
+                Map<String, Object> params = new HashMap<>();
+                params.put("user", user);
+                params.put("grade", grade);
+                params.put("comment", comment);
+                params.put("dateTime", dateTime);
+                for(int i = 0;i < compressImages.size();i++) {
+                    File image = compressImages.get(i);
+                    params.put(image.getName(), image);
+                }
+                Response<ResponseBody> response = HttpManager.instance().put("foodGrades", params).execute();
+                JSONObject jsonObject = new JSONObject(response.body().string());
+                Log.d("zdt", jsonObject.getString("message"));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
 
-                    @Override
-                    public void onSuccess(File file) {
-                        mFileCount++;
-                        params.put(file.getName(), file);
-                        if(mFileCount == images.size()) {
-                            Call<ResponseBody> uploadCall = HttpManager.instance().put("foodGrades", params);
-                            if(uploadCall != null) {
-                                uploadCall.enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        try {
-                                            JSONObject jsonObject = new JSONObject(response.body().string());
-                                            onUploadSuccess(jsonObject.getString("message"));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                            onUploadFailed("some errors happened in server");
-                                        }
-                                    }
+        @Override
+        protected void onProgressUpdate(Object[] values) {
+            super.onProgressUpdate(values);
+            int value = (int) values[0];
+            switch (value){
+                case 0:
+                    mWaitingDialog.setContentText("图片压缩中...");
+                    break;
+                case 1:
+                    mWaitingDialog.setContentText("图片上传中...");
+                    break;
+            }
+        }
 
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        onUploadFailed("some errors happened in server");
-                                    }
-                                });
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-                }).launch();
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            boolean isSuccess = (boolean) o;
+            if (isSuccess) {
+                mWaitingDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                mWaitingDialog.setContentText("提交评分成功");
+            } else {
+                mWaitingDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                mWaitingDialog.setContentText("提交评分失败");
+            }
+        }
     }
 }

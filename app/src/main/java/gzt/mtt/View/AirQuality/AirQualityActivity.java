@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import gzt.mtt.BaseActivity;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
@@ -24,8 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AirQualityActivity extends AppCompatActivity {
-
+public class AirQualityActivity extends BaseActivity {
     private TextView mDateTimeTextView;
     private TextView mTempTextView;
     private MaterialRatingBar mTempRatingBar;
@@ -70,11 +70,6 @@ public class AirQualityActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
-        }
 
         this.mDateTimeTextView = this.findViewById(R.id.dateTime);
         this.mTempTextView = this.findViewById(R.id.tempQuality);
