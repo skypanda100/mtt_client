@@ -1,5 +1,6 @@
 package gzt.mtt.View.FoodGrade;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -141,6 +142,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
     private void openGallery () {
         Matisse.from(this)
                 .choose(MimeType.ofAll())
+                .theme(R.style.GalleryTheme)
                 .countable(true)
                 .maxSelectable(9)
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)

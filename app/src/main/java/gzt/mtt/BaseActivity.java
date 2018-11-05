@@ -1,5 +1,7 @@
 package gzt.mtt;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +29,10 @@ public class BaseActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
         }
+
+        Resources res = getResources();
+        Drawable drawable = res.getDrawable(R.color.light_overlay);
+        getWindow().setBackgroundDrawable(drawable);
     }
 
     protected void createFullScreenView() {
