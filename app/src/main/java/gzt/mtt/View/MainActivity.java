@@ -5,11 +5,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.card.MaterialCardView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,22 +25,51 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
+import gzt.mtt.Adapter.FoodGradesAdapter;
 import gzt.mtt.BaseActivity;
 import gzt.mtt.Constant;
+import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
 import gzt.mtt.View.AirQuality.AirQualityActivity;
+import gzt.mtt.View.FoodGrade.FoodGradeActivity;
 import gzt.mtt.View.FoodGrade.FoodGradesActivity;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final int REQUEST_PERMISSION = 0;
+    private static boolean isExit = false;
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
+
+    private MaterialRatingBar mAirQualityMaterialRatingBar;
+    private RecyclerView mFoodGradesRecyclerView;
+    private FoodGradesAdapter mFoodGradesAdapter;
+    private JSONArray mFoodGrades;
+    private JSONArray mUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +152,27 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if (!this.isExit) {
+            this.isExit = true;
+            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            // 利用handler延迟发送更改状态信息
+            this.mHandler.sendEmptyMessageDelayed(0, 2000);
+        } else {
+            finish();
+            System.exit(0);
+        }
+    }
+
     private void initData() {
     }
 
@@ -153,6 +209,22 @@ public class MainActivity extends BaseActivity
 
         TextView aliasTextView = headerView.findViewById(R.id.alias);
         aliasTextView.setText((String)this.mStorageManager.getSharedPreference("alias", ""));
+
+        // 空气质量
+        MaterialCardView airQualityContainer = this.findViewById(R.id.airQualityContainer);
+        airQualityContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(AirQualityActivity.class);
+            }
+        });
+        this.mAirQualityMaterialRatingBar = this.findViewById(R.id.airQuality);
+        this.showAirQuality();
+
+        // 食物评分
+        this.mFoodGradesRecyclerView = this.findViewById(R.id.foodGrades);
+        this.setLayoutManagerPolicy(1);
+        this.showFoodGrade();
     }
 
     private void setPermissions () {
@@ -184,4 +256,163 @@ public class MainActivity extends BaseActivity
         startActivity(new Intent(this, cls));
         this.overridePendingTransition(R.anim.slide_in_right, R.anim.fade_back);
     }
+
+    /** start:空气质量 **/
+    private void showAirQuality() {
+        Call<ResponseBody> call = HttpManager.instance().get("serials/last");
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    JSONObject resJson = new JSONObject(response.body().string());
+                    JSONObject grade = AirQualityActivity.evaluateAirQuality(resJson);
+                    float tempGrade = (float)grade.getDouble("tempGrade");
+                    float humidityGrade = (float)grade.getDouble("humidityGrade");
+                    float pm25Grade = (float)grade.getDouble("pm25Grade");
+                    float co2Grade = (float)grade.getDouble("co2Grade");
+                    float hchoGrade = (float)grade.getDouble("hchoGrade");
+                    float avgGrade = (tempGrade + humidityGrade + pm25Grade + co2Grade + hchoGrade) / 5;
+                    mAirQualityMaterialRatingBar.setRating(avgGrade);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+    /** end:空气质量 **/
+    /** start:食物评分 **/
+    private void setLayoutManagerPolicy(int cols) {
+        this.mFoodGradesRecyclerView.setLayoutManager(new GridLayoutManager(this, cols));
+        this.mFoodGradesRecyclerView.setAdapter(mFoodGradesAdapter = new FoodGradesAdapter(this, cols == 1));
+        this.mFoodGradesAdapter.setFoodGrades(this.mFoodGrades);
+        this.mFoodGradesAdapter.setItemClickListener(new FoodGradesAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                try {
+                    JSONObject foodGrade = mFoodGrades.getJSONObject(position);
+                    ArrayList<String> images = new ArrayList<>();
+                    images.add(foodGrade.getString("imagePath"));
+                    if(foodGrade.has("others")){
+                        JSONArray others = foodGrade.getJSONArray("others");
+                        for(int i = 0;i < others.length();i++) {
+                            images.add(others.getJSONObject(i).getString("imagePath"));
+                        }
+                    }
+
+                    Intent intent = new Intent(MainActivity.this, FoodGradeActivity.class);
+                    intent.putExtra("alias", foodGrade.getString("alias"));
+                    intent.putExtra("avatar", foodGrade.getString("avatar"));
+                    intent.putExtra("dateTime", foodGrade.getString("dateTime"));
+                    intent.putExtra("comment", foodGrade.getString("comment"));
+                    intent.putExtra("grade", foodGrade.getInt("grade"));
+                    intent.putStringArrayListExtra("images", images);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fade_forward, R.anim.fade_back);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private JSONObject getUser (String userName) {
+        for(int i = 0;i < this.mUsers.length();i++) {
+            try {
+                JSONObject user = this.mUsers.getJSONObject(i);
+                if(userName.compareTo(user.getString("username")) == 0) {
+                    return user;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private void onFetchAllUsersSuccess(JSONArray jsonArray) {
+        this.mUsers = jsonArray;
+    }
+
+    private void onFetchAllUsersFailed(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void onFetchFoodGradesSuccess(JSONArray jsonArray) {
+        try {
+            for(int i = 0;i < jsonArray.length();i++) {
+                JSONObject foodGrade = jsonArray.getJSONObject(i);
+                JSONObject user = this.getUser(foodGrade.getString("user"));
+                foodGrade.put("alias", user.getString("alias"));
+                foodGrade.put("avatar", user.getString("avatar"));
+            }
+            this.mFoodGrades = jsonArray;
+            if(this.mFoodGradesAdapter != null) {
+                this.mFoodGradesAdapter.setFoodGrades(this.mFoodGrades);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onFetchFoodGradesFailed(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void showFoodGrade() {
+        Call<ResponseBody> allUsersCall = HttpManager.instance().get("users/all");
+        if(allUsersCall != null) {
+            allUsersCall.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        JSONArray resJsonArray = new JSONArray(response.body().string());
+                        onFetchAllUsersSuccess(resJsonArray);
+
+                        Map<String, String> options = new HashMap<>();
+                        options.put("sort", "-dateTime");
+                        Call<ResponseBody> foodGradesCall = HttpManager.instance().get("foodGrades", options);
+                        if(foodGradesCall != null) {
+                            foodGradesCall.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    try {
+                                        JSONArray resJsonArray = new JSONArray(response.body().string());
+                                        JSONArray newJsonArray = new JSONArray();
+                                        newJsonArray.put(resJsonArray.getJSONObject(0));
+                                        onFetchFoodGradesSuccess(newJsonArray);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        onFetchFoodGradesFailed("some errors happened in server");
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    onFetchFoodGradesFailed("some errors happened in server");
+                                }
+                            });
+                        } else {
+                            onFetchFoodGradesFailed("some errors happened in client");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        onFetchAllUsersFailed("some errors happened in server");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    onFetchAllUsersFailed("some errors happened in server");
+                }
+            });
+        } else {
+            onFetchAllUsersFailed("some errors happened in client");
+        }
+    }
+    /** end:食物评分 **/
 }
