@@ -7,8 +7,10 @@
     <dimen name="fab_margin">16dp</dimen>
     <!-- 自定义 -->
     <dimen name="padding">10dp</dimen>
-    <dimen name="corner_radius">0dp</dimen>
+    <dimen name="corner_radius">3dp</dimen>
     <dimen name="elevation">3dp</dimen>
-    <dimen name="title_one">18sp</dimen>
-    <dimen name="title_two">15sp</dimen>
+    <dimen name="font_one">18sp</dimen>
+    <dimen name="font_two">15sp</dimen>
+    <dimen name="font_three">12sp</dimen>
+
 </resources>

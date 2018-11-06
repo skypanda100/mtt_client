@@ -2,7 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/date1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/fontBlueBlack"
+            android:textSize="@dimen/font_one"/>
+        <TextView
+            android:id="@+id/date2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/fontGray"
+            android:textSize="@dimen/font_three"/>
+        <cn.carbs.android.avatarimageview.library.AvatarImageView
+            android:id="@+id/avatar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+        <TextView
+            android:id="@+id/alias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/avatar"/>
+    </LinearLayout>
     <android.support.design.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,51 +40,59 @@
         app:cardUseCompatPadding="true">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="@dimen/padding">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-                <cn.carbs.android.avatarimageview.library.AvatarImageView
-                    android:id="@+id/avatar"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_alignParentStart="true"/>
-                <TextView
-                    android:id="@+id/alias"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@id/avatar"/>
-            </RelativeLayout>
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/food"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"/>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    android:id="@+id/grade"
-                    android:layout_width="100dp"
-                    android:layout_height="15dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    style="@style/Widget.MaterialRatingBar.RatingBar.Indicator"/>
-                <TextView
-                    android:id="@+id/dateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"/>
-            </RelativeLayout>
             <TextView
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"/>
+                android:textColor="@color/fontBlueBlack"/>
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/food1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/food2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="1dp"
+                    android:layout_height="match_parent"/>
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/food3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="1dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:drawableStart="@drawable/clock"
+                    android:textColor="@color/fontGray"
+                    android:textSize="@dimen/font_three"
+                    android:gravity="center_vertical"/>
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/grade"
+                    android:layout_width="80dp"
+                    android:layout_height="12dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Indicator"/>
+            </RelativeLayout>
         </LinearLayout>
     </android.support.design.card.MaterialCardView>
 </LinearLayout>

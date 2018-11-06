@@ -37,7 +37,7 @@
                 android:id="@+id/dateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
-                android:textSize="@dimen/title_one"
+                android:textSize="@dimen/font_one"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
                 />

@@ -52,7 +52,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_alignParentStart="true"
-                            android:textSize="@dimen/title_two"
+                            android:textSize="@dimen/font_two"
                             android:text="当前空气质量"/>
                         <me.zhanghai.android.materialratingbar.MaterialRatingBar
                             android:id="@+id/airQuality"

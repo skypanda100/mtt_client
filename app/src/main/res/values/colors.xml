@@ -4,8 +4,10 @@
     <color name="colorPrimaryDark">#2B2B2B</color>
     <color name="colorPrimaryLight">#efefef</color>
     <color name="colorAccent">#4078C0</color>
-    <color name="windowBackground">#e2e2e2</color>
+    <color name="windowBackground">#efefef</color>
+    <color name="fontBlueBlack">#687C81</color>
+    <color name="fontGray">#B2B2B2</color>
 
-    <color name="light_overlay">#e2e2e2</color>
+    <color name="light_overlay">#efefef</color>
     <color name="black_overlay">#66000000</color>
 </resources>
