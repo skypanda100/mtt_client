@@ -23,6 +23,7 @@ import com.zhihu.matisse.engine.impl.PicassoEngine;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -218,7 +219,8 @@ public class FoodGradeUploadActivity extends BaseActivity {
                 params.put("dateTime", dateTime);
                 for(int i = 0;i < compressImages.size();i++) {
                     File image = compressImages.get(i);
-                    params.put(image.getName(), image);
+                    params.put(image.getName() + "-" + i, image);
+                    Log.d("zdt", image.getName());
                 }
                 Response<ResponseBody> response = HttpManager.instance().put("foodGrades", params).execute();
                 JSONObject jsonObject = new JSONObject(response.body().string());

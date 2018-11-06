@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:text="登录"
-                    android:textSize="@dimen/font_one"
+                    android:textSize="@dimen/font_two"
                     android:textStyle="bold"
                     />
             </RelativeLayout>
@@ -44,7 +44,7 @@
                 android:layout_height="50dp">
                 <EditText
                     android:id="@+id/userName"
-                    android:textSize="@dimen/font_one"
+                    android:textSize="@dimen/font_two"
                     android:hint="用户名"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:layout_height="50dp">
                 <EditText
                     android:id="@+id/password"
-                    android:textSize="@dimen/font_one"
+                    android:textSize="@dimen/font_two"
                     android:hint="密码"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -9,8 +9,9 @@
     <dimen name="padding">10dp</dimen>
     <dimen name="corner_radius">3dp</dimen>
     <dimen name="elevation">1dp</dimen>
-    <dimen name="font_one">18sp</dimen>
-    <dimen name="font_two">15sp</dimen>
-    <dimen name="font_three">12sp</dimen>
+    <dimen name="font_one">21sp</dimen>
+    <dimen name="font_two">18sp</dimen>
+    <dimen name="font_three">15sp</dimen>
+    <dimen name="font_four">13sp</dimen>
 
 </resources>

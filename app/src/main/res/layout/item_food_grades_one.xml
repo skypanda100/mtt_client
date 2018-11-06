@@ -13,7 +13,6 @@
             android:id="@+id/date1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:textColor="@color/fontBlueBlack"
             android:textSize="@dimen/font_one"/>
         <TextView
@@ -21,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/fontGray"
-            android:textSize="@dimen/font_three"/>
+            android:textSize="@dimen/font_four"/>
         <cn.carbs.android.avatarimageview.library.AvatarImageView
             android:id="@+id/avatar"
             android:layout_width="30dp"
@@ -83,7 +82,7 @@
                     android:layout_centerVertical="true"
                     android:drawableStart="@drawable/clock"
                     android:textColor="@color/fontGray"
-                    android:textSize="@dimen/font_three"
+                    android:textSize="@dimen/font_four"
                     android:gravity="center_vertical"/>
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
                     android:id="@+id/grade"

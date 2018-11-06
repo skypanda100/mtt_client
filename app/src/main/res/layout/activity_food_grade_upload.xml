@@ -71,7 +71,7 @@
                         android:layout_height="match_parent"
                         android:inputType="textMultiLine"
                         android:hint="说点什么吧"
-                        android:textSize="@dimen/font_one"
+                        android:textSize="@dimen/font_two"
                         android:gravity="top"
                         android:minLines="6"/>
                 </android.support.design.widget.TextInputLayout>
