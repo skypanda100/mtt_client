@@ -8,7 +8,7 @@
     <!-- 自定义 -->
     <dimen name="padding">10dp</dimen>
     <dimen name="corner_radius">3dp</dimen>
-    <dimen name="elevation">3dp</dimen>
+    <dimen name="elevation">1dp</dimen>
     <dimen name="font_one">18sp</dimen>
     <dimen name="font_two">15sp</dimen>
     <dimen name="font_three">12sp</dimen>

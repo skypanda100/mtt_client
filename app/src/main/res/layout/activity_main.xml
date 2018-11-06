@@ -38,30 +38,119 @@
                 <android.support.design.card.MaterialCardView
                     android:id="@+id/airQualityContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     app:cardCornerRadius="@dimen/corner_radius"
                     app:cardElevation="@dimen/elevation"
                     app:cardUseCompatPadding="true">
-                    <RelativeLayout
+                    <GridLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/padding">
+                        android:layout_height="match_parent"
+                        android:rowCount="2"
+                        android:columnCount="5">
                         <TextView
-                            android:id="@+id/airQualityTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentStart="true"
+                            android:layout_row="0"
+                            android:layout_column="0"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:textSize="@dimen/font_three"
+                            android:textColor="@color/fontGray"
+                            android:gravity="center"
+                            android:text="temp(℃)"/>
+
+                        <TextView
+                            android:layout_row="0"
+                            android:layout_column="1"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:textSize="@dimen/font_three"
+                            android:textColor="@color/fontGray"
+                            android:gravity="center"
+                            android:text="humidity(%)"/>
+
+                        <TextView
+                            android:layout_row="0"
+                            android:layout_column="2"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:textSize="@dimen/font_three"
+                            android:textColor="@color/fontGray"
+                            android:gravity="center"
+                            android:text="pm2.5(AQI)"/>
+
+                        <TextView
+                            android:layout_row="0"
+                            android:layout_column="3"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:textSize="@dimen/font_three"
+                            android:textColor="@color/fontGray"
+                            android:gravity="center"
+                            android:text="co2(PPM)"/>
+
+                        <TextView
+                            android:layout_row="0"
+                            android:layout_column="4"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:textSize="@dimen/font_three"
+                            android:textColor="@color/fontGray"
+                            android:gravity="center"
+                            android:text="hcho(mg/m3)"/>
+
+                        <TextView
+                            android:id="@+id/temp"
+                            android:layout_row="1"
+                            android:layout_column="0"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
                             android:textSize="@dimen/font_two"
-                            android:text="当前空气质量"/>
-                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                            android:id="@+id/airQuality"
-                            android:layout_width="120dp"
-                            android:layout_height="20dp"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentEnd="true"
-                            style="@style/Widget.MaterialRatingBar.RatingBar"/>
-                    </RelativeLayout>
+                            android:textColor="@color/fontBlueBlack"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/humidity"
+                            android:layout_row="1"
+                            android:layout_column="1"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:textSize="@dimen/font_two"
+                            android:textColor="@color/fontBlueBlack"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+                        <TextView
+                            android:id="@+id/pm25"
+                            android:layout_row="1"
+                            android:layout_column="2"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:textSize="@dimen/font_two"
+                            android:textColor="@color/fontBlueBlack"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/co2"
+                            android:layout_row="1"
+                            android:layout_column="3"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:textSize="@dimen/font_two"
+                            android:textColor="@color/fontBlueBlack"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/hcho"
+                            android:layout_row="1"
+                            android:layout_column="4"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:textSize="@dimen/font_two"
+                            android:textColor="@color/fontBlueBlack"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+                    </GridLayout>
                 </android.support.design.card.MaterialCardView>
 
                 <android.support.v7.widget.RecyclerView
