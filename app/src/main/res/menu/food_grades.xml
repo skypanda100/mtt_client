@@ -5,13 +5,13 @@
         android:id="@+id/action_view"
         android:orderInCategory="100"
         android:title="多列"
-        android:icon="@drawable/ic_menu_three_col"
+        android:icon="@drawable/col_three"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_upload"
         android:orderInCategory="100"
         android:title="上传"
-        android:icon="@drawable/ic_menu_upload"
+        android:icon="@drawable/upload"
         app:showAsAction="always" />
 </menu>

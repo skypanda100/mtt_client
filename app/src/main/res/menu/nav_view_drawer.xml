@@ -6,15 +6,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_air_quality"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/air_primary"
             android:title="空气质量" />
         <item
             android:id="@+id/nav_sleep_quality"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/sleep_primary"
             android:title="睡眠质量" />
         <item
             android:id="@+id/nav_food_grade"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/food_primary"
             android:title="食物评分" />
     </group>
 
@@ -22,11 +22,11 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/share_primary"
                 android:title="Share" />
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/send_primary"
                 android:title="Send" />
         </menu>
     </item>

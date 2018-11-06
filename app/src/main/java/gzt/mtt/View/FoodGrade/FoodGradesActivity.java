@@ -1,17 +1,13 @@
 package gzt.mtt.View.FoodGrade;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 
@@ -21,7 +17,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import gzt.mtt.Adapter.FoodGradesAdapter;
@@ -61,10 +56,10 @@ public class FoodGradesActivity extends BaseActivity {
 
         if (id == R.id.action_view) {
             if(this.mIsOneCol) {
-                item.setIcon(R.drawable.ic_menu_one_col);
+                item.setIcon(R.drawable.col_one);
                 this.setLayoutManagerPolicy(3);
             } else {
-                item.setIcon(R.drawable.ic_menu_three_col);
+                item.setIcon(R.drawable.col_three);
                 this.setLayoutManagerPolicy(1);
             }
             this.mIsOneCol = !this.mIsOneCol;

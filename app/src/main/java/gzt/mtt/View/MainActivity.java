@@ -46,6 +46,7 @@ import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
 import gzt.mtt.View.AirQuality.AirQualityActivity;
 import gzt.mtt.View.FoodGrade.FoodGradeActivity;
+import gzt.mtt.View.FoodGrade.FoodGradeUploadActivity;
 import gzt.mtt.View.FoodGrade.FoodGradesActivity;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import okhttp3.ResponseBody;
@@ -57,6 +58,7 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final int REQUEST_PERMISSION = 0;
     private static boolean isExit = false;
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -64,7 +66,8 @@ public class MainActivity extends BaseActivity
             isExit = false;
         }
     };
-
+    private com.getbase.floatingactionbutton.FloatingActionButton mAddFoodGradeFloatingButton;
+    private com.getbase.floatingactionbutton.FloatingActionButton mAddSleepQualityFloatingButton;
     private MaterialRatingBar mAirQualityMaterialRatingBar;
     private RecyclerView mFoodGradesRecyclerView;
     private FoodGradesAdapter mFoodGradesAdapter;
@@ -183,15 +186,6 @@ public class MainActivity extends BaseActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -209,6 +203,23 @@ public class MainActivity extends BaseActivity
 
         TextView aliasTextView = headerView.findViewById(R.id.alias);
         aliasTextView.setText((String)this.mStorageManager.getSharedPreference("alias", ""));
+
+        // 添加食物评分
+        this.mAddFoodGradeFloatingButton = this.findViewById(R.id.addFoodGrade);
+        this.mAddFoodGradeFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(FoodGradeUploadActivity.class);
+            }
+        });
+
+        // 添加睡眠质量
+        this.mAddSleepQualityFloatingButton = this.findViewById(R.id.addSleepQuality);
+        this.mAddSleepQualityFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
 
         // 空气质量
         MaterialCardView airQualityContainer = this.findViewById(R.id.airQualityContainer);
