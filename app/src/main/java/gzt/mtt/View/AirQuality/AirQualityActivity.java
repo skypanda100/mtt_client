@@ -118,7 +118,7 @@ public class AirQualityActivity extends BaseActivity {
         });
     }
 
-    public static JSONObject evaluateAirQuality (JSONObject response) {
+    private JSONObject evaluateAirQuality (JSONObject response) {
         JSONObject res = new JSONObject();
         try {
             double temp = response.getDouble("temp");

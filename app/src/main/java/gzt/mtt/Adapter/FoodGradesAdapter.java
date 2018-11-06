@@ -102,6 +102,9 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
             if(this.mIsOneCol) {
 //                Picasso.with(this.mContext).load(Constant.BaseImageUrl + avatar).into(foodGradesViewHolder.mAvatarAvatarImageView);
 //                foodGradesViewHolder.mAliasTextView.setText(alias);
+                // 清空
+                foodGradesViewHolder.mFoodAppCompatImageView2.setImageDrawable(null);
+                foodGradesViewHolder.mFoodAppCompatImageView3.setImageDrawable(null);
                 for(int index = 0;index < 3 && index < images.size();index++) {
                     String imagePath = images.get(index);
                     switch (index) {

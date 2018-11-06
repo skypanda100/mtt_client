@@ -72,7 +72,6 @@ public class MainActivity extends BaseActivity
     private TextView mHumidityTextView;
     private TextView mPm25TextView;
     private TextView mCo2TextView;
-    private TextView mHchoTextView;
     private RecyclerView mFoodGradesRecyclerView;
     private FoodGradesAdapter mFoodGradesAdapter;
     private JSONArray mFoodGrades;
@@ -237,7 +236,6 @@ public class MainActivity extends BaseActivity
         this.mHumidityTextView = this.findViewById(R.id.humidity);
         this.mPm25TextView = this.findViewById(R.id.pm25);
         this.mCo2TextView = this.findViewById(R.id.co2);
-        this.mHchoTextView = this.findViewById(R.id.hcho);
         this.showAirQuality();
 
         // 食物评分
@@ -284,17 +282,14 @@ public class MainActivity extends BaseActivity
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     JSONObject resJson = new JSONObject(response.body().string());
-                    JSONObject grade = AirQualityActivity.evaluateAirQuality(resJson);
-                    float tempGrade = (float)grade.getDouble("tempGrade");
-                    float humidityGrade = (float)grade.getDouble("humidityGrade");
-                    float pm25Grade = (float)grade.getDouble("pm25Grade");
-                    float co2Grade = (float)grade.getDouble("co2Grade");
-                    float hchoGrade = (float)grade.getDouble("hchoGrade");
-                    mTempTextView.setText(String.format("%.1f", tempGrade));
-                    mHumidityTextView.setText(String.format("%.1f", humidityGrade));
-                    mPm25TextView.setText(String.valueOf((int)pm25Grade));
-                    mCo2TextView.setText(String.valueOf((int)co2Grade));
-                    mHchoTextView.setText(String.format("%.3f", hchoGrade));
+                    double temp = resJson.getDouble("temp");
+                    double humidity = resJson.getDouble("humidity");
+                    double co2 = resJson.getDouble("co2");
+                    double pm25 = resJson.getDouble("pm2_5");
+                    mTempTextView.setText(String.format("%.1f", temp));
+                    mHumidityTextView.setText(String.format("%.1f", humidity));
+                    mPm25TextView.setText(String.valueOf((int)pm25));
+                    mCo2TextView.setText(String.valueOf((int)co2));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
