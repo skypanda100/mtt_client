@@ -16,14 +16,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
         </android.support.design.widget.AppBarLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -38,7 +36,7 @@
                 <android.support.design.card.MaterialCardView
                     android:id="@+id/airQualityContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="60dp"
                     app:cardCornerRadius="@dimen/corner_radius"
                     app:cardElevation="@dimen/elevation"
                     app:cardUseCompatPadding="true">
@@ -146,14 +144,14 @@
             android:layout_margin="@dimen/fab_margin"
             app:fab_addButtonColorNormal="@color/colorPrimary"
             app:fab_addButtonColorPressed="@color/colorPrimaryDark"
-            app:fab_addButtonPlusIconColor="@color/colorPrimaryLight"
+            app:fab_addButtonPlusIconColor="@color/colorSecondary"
             app:fab_labelsPosition="left">
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/addFoodGrade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_icon="@drawable/food"
+                app:fab_icon="@drawable/food_secondary"
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_colorPressed="@color/colorPrimaryDark"
                 app:fab_addButtonSize="mini"
@@ -163,7 +161,7 @@
                 android:id="@+id/addSleepQuality"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_icon="@drawable/sleep"
+                app:fab_icon="@drawable/sleep_secondary"
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_colorPressed="@color/colorPrimaryDark"
                 app:fab_addButtonSize="mini"

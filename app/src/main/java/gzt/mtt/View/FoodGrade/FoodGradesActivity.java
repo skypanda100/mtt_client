@@ -56,10 +56,10 @@ public class FoodGradesActivity extends BaseActivity {
 
         if (id == R.id.action_view) {
             if(this.mIsOneCol) {
-                item.setIcon(R.drawable.col_one);
+                item.setIcon(R.drawable.col_one_secondary);
                 this.setLayoutManagerPolicy(3);
             } else {
-                item.setIcon(R.drawable.col_three);
+                item.setIcon(R.drawable.col_three_secondary);
                 this.setLayoutManagerPolicy(1);
             }
             this.mIsOneCol = !this.mIsOneCol;

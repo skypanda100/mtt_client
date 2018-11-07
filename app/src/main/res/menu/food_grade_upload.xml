@@ -5,6 +5,6 @@
         android:id="@+id/action_done"
         android:orderInCategory="100"
         android:title="提交"
-        android:icon="@drawable/done"
+        android:icon="@drawable/done_secondary"
         app:showAsAction="always" />
 </menu>

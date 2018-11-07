@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:drawableStart="@drawable/clock"
+                    android:drawableStart="@drawable/clock_secondary"
                     android:textColor="@color/fontGray"
                     android:textSize="@dimen/font_four"
                     android:gravity="center_vertical"/>
