@@ -38,7 +38,7 @@ public class FlyItemAnimator extends SimpleItemAnimator {
     @Override
     public boolean animateAdd(RecyclerView.ViewHolder viewHolder) {
         int height = ScreenUtil.getScreenHeight(viewHolder.itemView.getContext());
-        viewHolder.itemView.setTranslationY(height + 500 * this.mAddHolders.size());
+        viewHolder.itemView.setTranslationY(height);
         this.mAddHolders.add(viewHolder);
         return true;
     }
@@ -99,10 +99,10 @@ public class FlyItemAnimator extends SimpleItemAnimator {
 
     private void add(final RecyclerView.ViewHolder holder) {
         this.mAddAnimators.add(holder);
-        float height = holder.itemView.getTranslationY();
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(holder.itemView,
-                "translationY", height, 0);
+        int pos = holder.getAdapterPosition();
+        int delay = pos * 150;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(holder.itemView, "translationY", holder.itemView.getTranslationY(), 0);
         animator.setDuration(700);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -118,6 +118,7 @@ public class FlyItemAnimator extends SimpleItemAnimator {
             }
         });
         animator.setInterpolator(new DecelerateInterpolator(3.f));
+        animator.setStartDelay(delay);
         animator.start();
     }
 
