@@ -38,7 +38,7 @@ public class FlyItemAnimator extends SimpleItemAnimator {
     @Override
     public boolean animateAdd(RecyclerView.ViewHolder viewHolder) {
         int height = ScreenUtil.getScreenHeight(viewHolder.itemView.getContext());
-        viewHolder.itemView.setTranslationY(height);
+        viewHolder.itemView.setTranslationY(height + 500 * this.mAddHolders.size());
         this.mAddHolders.add(viewHolder);
         return true;
     }
@@ -99,12 +99,11 @@ public class FlyItemAnimator extends SimpleItemAnimator {
 
     private void add(final RecyclerView.ViewHolder holder) {
         this.mAddAnimators.add(holder);
-        int duration = this.mAddAnimators.size() * 250 + 500;
-        int height = ScreenUtil.getScreenHeight(holder.itemView.getContext());
+        float height = holder.itemView.getTranslationY();
 
         ObjectAnimator animator = ObjectAnimator.ofFloat(holder.itemView,
                 "translationY", height, 0);
-        animator.setDuration(duration);
+        animator.setDuration(700);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(android.animation.Animator animation) {
