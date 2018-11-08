@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gzt.mtt.Adapter.FoodGradesAdapter;
+import gzt.mtt.Animator.FlyItemAnimator;
 import gzt.mtt.BaseActivity;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
@@ -99,6 +100,7 @@ public class FoodGradesActivity extends BaseActivity {
         });
 
         this.mFoodGradesRecyclerView = this.findViewById(R.id.foodGrades);
+        this.mFoodGradesRecyclerView.setItemAnimator(new FlyItemAnimator());
         this.setLayoutManagerPolicy(1);
     }
 

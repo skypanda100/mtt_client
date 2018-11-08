@@ -40,6 +40,7 @@ import java.util.Map;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import gzt.mtt.Adapter.FoodGradesAdapter;
+import gzt.mtt.Animator.FlyItemAnimator;
 import gzt.mtt.BaseActivity;
 import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
@@ -241,6 +242,7 @@ public class MainActivity extends BaseActivity
         // 食物评分
         this.mFoodGradesRecyclerView = this.findViewById(R.id.foodGrades);
         this.setLayoutManagerPolicy(1);
+        this.mFoodGradesRecyclerView.setItemAnimator(new FlyItemAnimator());
         this.showFoodGrade();
     }
 

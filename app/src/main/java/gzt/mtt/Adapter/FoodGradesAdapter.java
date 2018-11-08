@@ -43,7 +43,11 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
 
     public void setFoodGrades(JSONArray foodGrades) {
         this.mFoodGrades = foodGrades;
-        this.notifyDataSetChanged();
+        // 这个方法不会触发动画
+//        this.notifyDataSetChanged();
+        if(this.mFoodGrades != null) {
+            notifyItemRangeInserted(0, this.mFoodGrades.length());
+        }
     }
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
