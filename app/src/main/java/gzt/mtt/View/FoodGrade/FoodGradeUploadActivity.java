@@ -78,6 +78,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.food_grade_upload, menu);
+
         return true;
     }
 
@@ -242,11 +243,15 @@ public class FoodGradeUploadActivity extends BaseActivity {
     }
 
     private boolean validate() {
-        if(this.mFoods.size() > 1) {
+        if (this.mId != null && !this.mId.equals("")) {
             return true;
         } else {
-            this.onUploadFailed("请添加图片");
-            return false;
+            if(this.mFoods.size() > 1) {
+                return true;
+            } else {
+                this.onUploadFailed("请添加图片");
+                return false;
+            }
         }
     }
 
