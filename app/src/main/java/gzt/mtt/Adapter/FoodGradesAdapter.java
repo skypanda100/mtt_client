@@ -45,11 +45,15 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
     }
 
     public void setFoodGrades(JSONArray foodGrades) {
-        this.mFoodGrades = foodGrades;
-        // 这个方法不会触发动画
 //        this.notifyDataSetChanged();
-        if(this.mFoodGrades != null) {
-            notifyItemRangeInserted(0, this.mFoodGrades.length());
+        boolean isRunAnimate = this.mFoodGrades == null;
+        this.mFoodGrades = foodGrades;
+        if (isRunAnimate) {
+            if (this.mFoodGrades != null) {
+                notifyItemRangeInserted(0, this.mFoodGrades.length());
+            }
+        } else {
+            this.notifyDataSetChanged();
         }
     }
 
@@ -89,7 +93,7 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
             JSONObject foodGrade = mFoodGrades.getJSONObject(i);
 
             List<String> images = new ArrayList<>();
-            images.add(foodGrade.getString("imagePath"));
+            images.add(Constant.BaseImageUrl + foodGrade.getString("imagePath"));
             String alias = foodGrade.getString("alias");
             String avatar = foodGrade.getString("avatar");
             String dateTime = foodGrade.getString("dateTime");
@@ -100,16 +104,11 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
             if(foodGrade.has("others")) {
                 JSONArray others = foodGrade.getJSONArray("others");
                 for(int index = 0;index < others.length();index++) {
-                    images.add(others.getJSONObject(index).getString("imagePath"));
+                    images.add(Constant.BaseImageUrl + others.getJSONObject(index).getString("imagePath"));
                 }
             }
 
             final Intent intent = new Intent(this.mContext, FoodGradeActivity.class);
-            intent.putExtra("alias", alias);
-            intent.putExtra("avatar", avatar);
-            intent.putExtra("dateTime", dateTime);
-            intent.putExtra("comment", comment);
-            intent.putExtra("grade", grade);
             intent.putStringArrayListExtra("images", (ArrayList<String>) images);
 
             int width = 200;
@@ -125,28 +124,31 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
                     String imagePath = images.get(index);
                     switch (index) {
                         case 0:
-                            Picasso.with(this.mContext).load(Constant.BaseImageUrl + imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView1);
+                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView1);
                             foodGradesViewHolder.mFoodAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    intent.putExtra("index", 0);
                                     mContext.startActivity(intent);
                                 }
                             });
                             break;
                         case 1:
-                            Picasso.with(this.mContext).load(Constant.BaseImageUrl + imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView2);
+                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView2);
                             foodGradesViewHolder.mFoodAppCompatImageView2.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    intent.putExtra("index", 1);
                                     mContext.startActivity(intent);
                                 }
                             });
                             break;
                         case 2:
-                            Picasso.with(this.mContext).load(Constant.BaseImageUrl + imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView3);
+                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView3);
                             foodGradesViewHolder.mFoodAppCompatImageView3.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    intent.putExtra("index", 2);
                                     mContext.startActivity(intent);
                                 }
                             });
@@ -160,10 +162,11 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
                 foodGradesViewHolder.mTimeTextView.setText(dateTime.substring(11));
             } else {
                 String imagePath = images.get(0);
-                Picasso.with(this.mContext).load(Constant.BaseImageUrl + imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView1);
+                Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView1);
                 foodGradesViewHolder.mFoodAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        intent.putExtra("index", 0);
                         mContext.startActivity(intent);
                     }
                 });

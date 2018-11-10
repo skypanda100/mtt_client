@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import gzt.mtt.Adapter.FoodGradeUploadAdapter;
 import gzt.mtt.BaseActivity;
+import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
 import gzt.mtt.Util.PathUtil;
@@ -43,6 +45,7 @@ import top.zibin.luban.Luban;
 
 public class FoodGradeUploadActivity extends BaseActivity {
     private static final int REQUEST_CODE_CHOOSE = 0;
+    private static final int REQUEST_CODE_DELETE = 1;
 
     private boolean mIsAdd;
     private String mId;
@@ -99,6 +102,10 @@ public class FoodGradeUploadActivity extends BaseActivity {
                 this.mFoods.add(this.mFoods.size() - 1, selected.get(i));
             }
             this.mFoodGradeUploadAdapter.setFoods(this.mFoods);
+        } else if (requestCode == REQUEST_CODE_DELETE && resultCode == RESULT_OK) {
+            int index = data.getIntExtra("index", -1);
+            this.mFoods.remove(index);
+            this.mFoodGradeUploadAdapter.setFoods(this.mFoods);
         }
     }
 
@@ -154,9 +161,15 @@ public class FoodGradeUploadActivity extends BaseActivity {
         this.mFoodGradeUploadAdapter.setItemClickListener(new FoodGradeUploadAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Toast.makeText(FoodGradeUploadActivity.this, "" + position, Toast.LENGTH_LONG).show();
                 if (mFoods.size() - 1 == position) {
                     openGallery();
+                } else {
+                    List<String> images = getStringImages();
+                    Intent intent = new Intent(FoodGradeUploadActivity.this, FoodGradeActivity.class);
+                    intent.putStringArrayListExtra("images", (ArrayList<String>) images);
+                    intent.putExtra("index", position);
+                    intent.putExtra("canDelete", true);
+                    startActivityForResult(intent, REQUEST_CODE_DELETE);
                 }
             }
         });
@@ -180,6 +193,28 @@ public class FoodGradeUploadActivity extends BaseActivity {
                 .forResult(REQUEST_CODE_CHOOSE);
     }
 
+    private List<String> getStringImages() {
+        List<String> images = new ArrayList<>();
+        for(int i = 0;i < this.mFoods.size() - 1;i++) {
+            Object food = this.mFoods.get(i);
+            if (food instanceof Uri) {
+                images.add(PathUtil.uri2path(this, (Uri) food));
+            } else {
+                images.add((String) food);
+            }
+        }
+        return images;
+    }
+
+    private List<Object> getObjectImages() {
+        List<Object> images = new ArrayList<>();
+        for(int i = 0;i < this.mFoods.size() - 1;i++) {
+            Object food = this.mFoods.get(i);
+            images.add(food);
+        }
+        return images;
+    }
+
     private void handleActionDoneClicked() {
         if(!this.validate()) {
             return;
@@ -187,12 +222,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
         this.mWaitingDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         this.mWaitingDialog.setCancelable(false);
 
-        List<Object> images = new ArrayList<>();
-        for(int i = 0;i < this.mFoods.size() - 1;i++) {
-            Object food = this.mFoods.get(i);
-            images.add(food);
-        }
-
+        List<Object> images = this.getObjectImages();
         String user = (String) this.mStorageManager.getSharedPreference("userName", "");
         float grade = this.mGradeRatingBar.getRating();
         String comment = this.mCommentEditText.getText().toString();
@@ -244,6 +274,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
                 float grade = (float) objects[2];
                 String comment = (String) objects[3];
                 String dateTime = (String) objects[4];
+                String imagePath = null;
                 List<Object> images = (ArrayList<Object>) objects[5];
                 JSONArray netImages = new JSONArray();
                 List<String> localImages = new ArrayList<>();
@@ -251,9 +282,12 @@ public class FoodGradeUploadActivity extends BaseActivity {
                 for (int i = 0;i < images.size();i++) {
                     Object image = images.get(i);
                     if (image instanceof String) {
-                        netImages.put(image);
+                        String path = ((String) image).replace(Constant.BaseImageUrl, "");
                         if (i == 0) {
                             isLocalImageFirst = false;
+                            imagePath = path;
+                        } else {
+                            netImages.put(path);
                         }
                     } else {
                         localImages.add(PathUtil.uri2path(FoodGradeUploadActivity.this, (Uri) image));
@@ -272,11 +306,13 @@ public class FoodGradeUploadActivity extends BaseActivity {
                 params.put("comment", comment);
                 params.put("dateTime", dateTime);
                 params.put("images", netImages);
+                if (imagePath != null) {
+                    params.put("imagePath", imagePath);
+                }
                 for(int i = 0;i < compressImages.size();i++) {
                     int offset = isLocalImageFirst ? 0 : 10;
                     File image = compressImages.get(i);
                     params.put(image.getName() + "-" + (i + offset), image);
-                    Log.d("zdt", image.getName());
                 }
                 Response<ResponseBody> response = HttpManager.instance().put("foodGrades", params).execute();
                 JSONObject jsonObject = new JSONObject(response.body().string());

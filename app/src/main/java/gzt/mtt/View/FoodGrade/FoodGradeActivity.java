@@ -2,25 +2,26 @@ package gzt.mtt.View.FoodGrade;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
-import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import gzt.mtt.Adapter.FoodGradeAdapter;
 import gzt.mtt.BaseActivity;
 import gzt.mtt.R;
 public class FoodGradeActivity extends BaseActivity {
-    private String mAlias;
-    private String mAvatar;
-    private String mDateTime;
-    private String mComment;
-    private float mGrade;
-    private List<String> mTitles;
+    private boolean mCanDelete;
+    private int mIndex;
     private List<String> mImages;
     private FoodGradeAdapter mFoodGradeAdapter;
+    private ViewPager mFoodViewPager;
+    private TextView mFoodIndicatorTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,35 +31,87 @@ public class FoodGradeActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (this.mCanDelete) {
+            getMenuInflater().inflate(R.menu.food_grade, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_delete) {
+            Intent intent = new Intent();
+            intent.putExtra("index", this.mIndex);
+            this.setResult(RESULT_OK, intent);
+            this.finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
 
     private void initData() {
         Intent intent = this.getIntent();
-        this.mAlias = intent.getStringExtra("alias");
-        this.mAvatar = intent.getStringExtra("avatar");
-        this.mDateTime = intent.getStringExtra("dateTime");
-        this.mComment = intent.getStringExtra("comment");
-        this.mGrade = intent.getFloatExtra("grade", 0.0f);
+        this.mIndex = intent.getIntExtra("index", 0);
         this.mImages = intent.getStringArrayListExtra("images");
-        this.mTitles = new ArrayList<>();
-        for(int i = 0;i < this.mImages.size();i++) {
-            this.mTitles.add(this.mComment);
-        }
-        this.mFoodGradeAdapter = new FoodGradeAdapter();
+        this.mCanDelete = intent.getBooleanExtra("canDelete", false);
+        this.mFoodGradeAdapter = new FoodGradeAdapter(this);
+        this.mFoodGradeAdapter.setImages(this.mImages);
+
+        Log.d("zdt", this.mImages.get(this.mIndex));
+
     }
 
     private void initView() {
         this.createFullScreenView();
         setContentView(R.layout.activity_food_grade);
 
-        Banner foodGradeBanner = findViewById(R.id.foodGradeBanner);
-        foodGradeBanner.isAutoPlay(false);
-        foodGradeBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
-        foodGradeBanner.setBannerTitles(this.mTitles);
-        foodGradeBanner.setImages(this.mImages);
-        foodGradeBanner.setImageLoader(this.mFoodGradeAdapter);
-        foodGradeBanner.start();
+        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null ) {
+            getSupportActionBar().setTitle("");
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        this.mFoodIndicatorTextView = this.findViewById(R.id.foodIndicator);
+        this.setIndicator();
+        this.mFoodViewPager = this.findViewById(R.id.foodViewPager);
+        this.mFoodViewPager.setAdapter(this.mFoodGradeAdapter);
+        this.mFoodViewPager.setCurrentItem(this.mIndex);
+        this.mFoodViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                mIndex = i;
+                setIndicator();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+    }
+
+    private void setIndicator() {
+        this.mFoodIndicatorTextView.setText((this.mIndex + 1) + "/" + this.mImages.size());
     }
 }

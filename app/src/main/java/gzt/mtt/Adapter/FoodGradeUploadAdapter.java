@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,8 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.List;
 
-import gzt.mtt.Constant;
 import gzt.mtt.R;
 
 public class FoodGradeUploadAdapter extends RecyclerView.Adapter {
@@ -68,7 +65,7 @@ public class FoodGradeUploadAdapter extends RecyclerView.Adapter {
             Picasso.with(this.mContext).load((Uri) food).resize(300, 300).centerCrop().into(foodsViewHolder.mFoodAppCompatImageView);
         } else if (food instanceof String) {
             foodsViewHolder.mFoodAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Picasso.with(this.mContext).load(Constant.BaseImageUrl + food).resize(300, 300).centerCrop().into(foodsViewHolder.mFoodAppCompatImageView);
+            Picasso.with(this.mContext).load((String) food).resize(300, 300).centerCrop().into(foodsViewHolder.mFoodAppCompatImageView);
         } else {
             foodsViewHolder.mFoodAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             Picasso.with(this.mContext).load((int)food).resize(128, 128).centerInside().into(foodsViewHolder.mFoodAppCompatImageView);

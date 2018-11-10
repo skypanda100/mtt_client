@@ -59,10 +59,6 @@ public class BaseActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
         }
-        //
-//        Resources res = getResources();
-//        Drawable drawable = res.getDrawable(R.color.light_overlay);
-//        getWindow().setBackgroundDrawable(drawable);
     }
 
     protected void createFullScreenView() {
@@ -81,7 +77,6 @@ public class BaseActivity extends AppCompatActivity {
             }
             if (hasReadPermission != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-
             }
 
             if (!permissions.isEmpty()) {

@@ -6,11 +6,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#000000"
     tools:context=".View.FoodGrade.FoodGradeActivity">
-    <com.youth.banner.Banner
-        android:id="@+id/foodGradeBanner"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:image_scale_type="fit_center">
-    </com.youth.banner.Banner>
+        android:theme="@style/AppTheme.AppBarOverlay">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#000000"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/foodViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+
+    <TextView
+        android:id="@+id/foodIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/fontGray"
+        android:textSize="@dimen/font_three"
+        android:gravity="center"
+        android:layout_gravity="bottom"/>
 </FrameLayout>

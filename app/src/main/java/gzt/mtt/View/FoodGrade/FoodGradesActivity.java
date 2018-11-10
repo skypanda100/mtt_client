@@ -2,6 +2,7 @@ package gzt.mtt.View.FoodGrade;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -9,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,15 +22,16 @@ import java.util.Map;
 import gzt.mtt.Adapter.FoodGradesAdapter;
 import gzt.mtt.Animator.FlyItemAnimator;
 import gzt.mtt.BaseActivity;
+import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
-import gzt.mtt.View.MainActivity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FoodGradesActivity extends BaseActivity {
+    private boolean mIsForegroundToBackground = false;
     private RecyclerView mFoodGradesRecyclerView;
     private FoodGradesAdapter mFoodGradesAdapter;
     private JSONArray mFoodGrades;
@@ -79,6 +80,22 @@ public class FoodGradesActivity extends BaseActivity {
         overridePendingTransition(R.anim.fade_forward, R.anim.slide_out_right);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (this.mIsForegroundToBackground) {
+            this.mIsForegroundToBackground = false;
+            this.initData();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.mIsForegroundToBackground = true;
+    }
+
     private void initData() {
         this.fetchData();
     }
@@ -115,11 +132,11 @@ public class FoodGradesActivity extends BaseActivity {
                 try {
                     JSONObject foodGrade = mFoodGrades.getJSONObject(position);
                     ArrayList<String> images = new ArrayList<>();
-                    images.add(foodGrade.getString("imagePath"));
+                    images.add(Constant.BaseImageUrl + foodGrade.getString("imagePath"));
                     if(foodGrade.has("others")){
                         JSONArray others = foodGrade.getJSONArray("others");
                         for(int i = 0;i < others.length();i++) {
-                            images.add(others.getJSONObject(i).getString("imagePath"));
+                            images.add(Constant.BaseImageUrl + others.getJSONObject(i).getString("imagePath"));
                         }
                     }
 

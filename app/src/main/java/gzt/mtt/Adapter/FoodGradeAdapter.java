@@ -1,16 +1,56 @@
 package gzt.mtt.Adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v4.view.PagerAdapter;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.youth.banner.loader.ImageLoader;
 
-import gzt.mtt.Constant;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-public class FoodGradeAdapter extends ImageLoader {
+public class FoodGradeAdapter extends PagerAdapter {
+    private List<String> mImages = new ArrayList<>();
+    private Context mContext;
+
+    public FoodGradeAdapter(Context context) {
+        this.mContext = context;
+    }
+
+    public void setImages(List<String> images) {
+        this.mImages = images;
+    }
+
     @Override
-    public void displayImage(Context context, Object path, ImageView imageView) {
-        Picasso.with(context).load(Constant.BaseImageUrl + path).into(imageView);
+    public int getCount() {
+        return this.mImages.size();
+    }
+
+    @Override
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
+        return view == o;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((View) object);
+    }
+
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, final int position) {
+        ImageView imageView = new ImageView(this.mContext);
+        String path = this.mImages.get(position);
+        if (path.startsWith("/storage")) {
+            Picasso.with(this.mContext).load(new File(path)).into(imageView);
+        } else {
+            Picasso.with(this.mContext).load(path).into(imageView);
+        }
+        container.addView(imageView);
+        return imageView;
     }
 }
