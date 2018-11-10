@@ -183,7 +183,7 @@ public class LoginActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(MainActivity.class);
                 finish();
             }
         }, 1000);

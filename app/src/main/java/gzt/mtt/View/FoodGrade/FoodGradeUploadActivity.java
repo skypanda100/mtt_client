@@ -23,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -170,7 +169,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
                     intent.putStringArrayListExtra("images", (ArrayList<String>) images);
                     intent.putExtra("index", position);
                     intent.putExtra("canDelete", true);
-                    startActivityForResult(intent, REQUEST_CODE_DELETE);
+                    startActivity(intent, REQUEST_CODE_DELETE);
                 }
             }
         });

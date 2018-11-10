@@ -104,7 +104,7 @@ public class WelcomeActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                startActivity(LoginActivity.class);
                 finish();
             }
         }, 1500);
@@ -114,7 +114,7 @@ public class WelcomeActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+                startActivity(MainActivity.class);
                 finish();
             }
         }, 1500);

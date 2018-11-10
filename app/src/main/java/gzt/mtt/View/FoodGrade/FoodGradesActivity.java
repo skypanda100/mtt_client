@@ -31,7 +31,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FoodGradesActivity extends BaseActivity {
-    private boolean mIsForegroundToBackground = false;
+    private static final int REQUEST_CODE_FOOD = 0;
+
     private RecyclerView mFoodGradesRecyclerView;
     private FoodGradesAdapter mFoodGradesAdapter;
     private JSONArray mFoodGrades;
@@ -68,7 +69,7 @@ public class FoodGradesActivity extends BaseActivity {
             this.mIsOneCol = !this.mIsOneCol;
         } else if (id == R.id.action_upload) {
             Intent intent = new Intent(FoodGradesActivity.this, FoodGradeUploadActivity.class);
-            this.startActivity(intent);
+            this.startActivity(intent, REQUEST_CODE_FOOD);
         }
 
         return super.onOptionsItemSelected(item);
@@ -77,23 +78,14 @@ public class FoodGradesActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.fade_forward, R.anim.slide_out_right);
     }
 
-
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (this.mIsForegroundToBackground) {
-            this.mIsForegroundToBackground = false;
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_FOOD) {
             this.initData();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.mIsForegroundToBackground = true;
     }
 
     private void initData() {
@@ -148,8 +140,7 @@ public class FoodGradesActivity extends BaseActivity {
                     intent.putExtra("comment", foodGrade.getString("comment"));
                     intent.putExtra("grade", (float)foodGrade.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fade_forward, R.anim.fade_back);
+                    startActivity(intent, REQUEST_CODE_FOOD);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

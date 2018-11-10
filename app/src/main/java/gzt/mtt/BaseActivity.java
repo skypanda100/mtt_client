@@ -2,6 +2,7 @@ package gzt.mtt;
 
 import android.Manifest;
 import android.app.ActionBar;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -84,5 +85,25 @@ public class BaseActivity extends AppCompatActivity {
                         REQUEST_PERMISSION);
             }
         }
+    }
+
+    public void startActivity(Class<?> cls) {
+        super.startActivity(new Intent(this, cls));
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.fade_back);
+    }
+
+    public void startActivity(Class<?> cls, int requestCode) {
+        super.startActivityForResult(new Intent(this, cls), requestCode);
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.fade_back);
+    }
+
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.fade_back);
+    }
+
+    public void startActivity(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.fade_back);
     }
 }

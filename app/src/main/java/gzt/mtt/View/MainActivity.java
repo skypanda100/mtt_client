@@ -51,6 +51,7 @@ import retrofit2.Response;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static boolean isExit = false;
+    private static final int REQUEST_CODE_FOOD = 0;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -60,7 +61,6 @@ public class MainActivity extends BaseActivity
         }
     };
 
-    private boolean mIsForegroundToBackground = false;
     private com.getbase.floatingactionbutton.FloatingActionButton mAddFoodGradeFloatingButton;
     private com.getbase.floatingactionbutton.FloatingActionButton mAddSleepQualityFloatingButton;
     private TextView mTempTextView;
@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_sleep_quality) {
 
         } else if (id == R.id.nav_food_grade) {
-            this.startActivity(FoodGradesActivity.class);
+            this.startActivity(FoodGradesActivity.class, REQUEST_CODE_FOOD);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -138,19 +138,10 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (this.mIsForegroundToBackground) {
-            this.mIsForegroundToBackground = false;
-            this.showAirQuality();
-            this.showFoodGrade();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.mIsForegroundToBackground = true;
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        this.showAirQuality();
+        this.showFoodGrade();
     }
 
     private void exit() {
@@ -198,7 +189,7 @@ public class MainActivity extends BaseActivity
         this.mAddFoodGradeFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(FoodGradeUploadActivity.class);
+                startActivity(FoodGradeUploadActivity.class, REQUEST_CODE_FOOD);
             }
         });
 
@@ -233,11 +224,6 @@ public class MainActivity extends BaseActivity
 
     private void switchFragment(Fragment fragment) {
         this.getSupportFragmentManager().beginTransaction().replace(R.id.contentMain, fragment).commit();
-    }
-
-    private void startActivity(Class<?> cls) {
-        startActivity(new Intent(this, cls));
-        this.overridePendingTransition(R.anim.slide_in_right, R.anim.fade_back);
     }
 
     /** start:空气质量 **/
@@ -295,8 +281,7 @@ public class MainActivity extends BaseActivity
                     intent.putExtra("comment", foodGrade.getString("comment"));
                     intent.putExtra("grade", (float)foodGrade.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fade_forward, R.anim.fade_back);
+                    startActivity(intent, REQUEST_CODE_FOOD);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
