@@ -6,7 +6,7 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <!-- 自定义 -->
-    <dimen name="padding">10dp</dimen>
+    <dimen name="padding">8dp</dimen>
     <dimen name="corner_radius">3dp</dimen>
     <dimen name="elevation">1dp</dimen>
     <dimen name="font_one">21sp</dimen>
