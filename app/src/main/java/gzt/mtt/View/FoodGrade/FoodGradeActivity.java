@@ -17,7 +17,7 @@ public class FoodGradeActivity extends BaseActivity {
     private String mAvatar;
     private String mDateTime;
     private String mComment;
-    private int mGrade;
+    private float mGrade;
     private List<String> mTitles;
     private List<String> mImages;
     private FoodGradeAdapter mFoodGradeAdapter;
@@ -40,7 +40,7 @@ public class FoodGradeActivity extends BaseActivity {
         this.mAvatar = intent.getStringExtra("avatar");
         this.mDateTime = intent.getStringExtra("dateTime");
         this.mComment = intent.getStringExtra("comment");
-        this.mGrade = intent.getIntExtra("grade", 0);
+        this.mGrade = intent.getFloatExtra("grade", 0.0f);
         this.mImages = intent.getStringArrayListExtra("images");
         this.mTitles = new ArrayList<>();
         for(int i = 0;i < this.mImages.size();i++) {

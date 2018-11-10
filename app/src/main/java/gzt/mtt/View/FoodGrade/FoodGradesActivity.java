@@ -24,6 +24,7 @@ import gzt.mtt.Animator.FlyItemAnimator;
 import gzt.mtt.BaseActivity;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
+import gzt.mtt.View.MainActivity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -122,12 +123,13 @@ public class FoodGradesActivity extends BaseActivity {
                         }
                     }
 
-                    Intent intent = new Intent(FoodGradesActivity.this, FoodGradeActivity.class);
+                    Intent intent = new Intent(FoodGradesActivity.this, FoodGradeUploadActivity.class);
+                    intent.putExtra("id", foodGrade.getString("_id"));
                     intent.putExtra("alias", foodGrade.getString("alias"));
                     intent.putExtra("avatar", foodGrade.getString("avatar"));
                     intent.putExtra("dateTime", foodGrade.getString("dateTime"));
                     intent.putExtra("comment", foodGrade.getString("comment"));
-                    intent.putExtra("grade", foodGrade.getInt("grade"));
+                    intent.putExtra("grade", (float)foodGrade.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
                     startActivity(intent);
                     overridePendingTransition(R.anim.fade_forward, R.anim.fade_back);

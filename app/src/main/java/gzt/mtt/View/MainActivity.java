@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -273,12 +274,13 @@ public class MainActivity extends BaseActivity
                         }
                     }
 
-                    Intent intent = new Intent(MainActivity.this, FoodGradeActivity.class);
+                    Intent intent = new Intent(MainActivity.this, FoodGradeUploadActivity.class);
+                    intent.putExtra("id", foodGrade.getString("_id"));
                     intent.putExtra("alias", foodGrade.getString("alias"));
                     intent.putExtra("avatar", foodGrade.getString("avatar"));
                     intent.putExtra("dateTime", foodGrade.getString("dateTime"));
                     intent.putExtra("comment", foodGrade.getString("comment"));
-                    intent.putExtra("grade", foodGrade.getInt("grade"));
+                    intent.putExtra("grade", (float)foodGrade.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
                     startActivity(intent);
                     overridePendingTransition(R.anim.fade_forward, R.anim.fade_back);

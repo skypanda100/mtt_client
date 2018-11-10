@@ -15,6 +15,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
+
+import gzt.mtt.Constant;
 import gzt.mtt.R;
 
 public class FoodGradeUploadAdapter extends RecyclerView.Adapter {
@@ -50,7 +52,6 @@ public class FoodGradeUploadAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
-        Log.d("zdt", i + "");
         FoodsViewHolder foodsViewHolder = (FoodsViewHolder) viewHolder;
 
         foodsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +66,9 @@ public class FoodGradeUploadAdapter extends RecyclerView.Adapter {
         if (food instanceof Uri) {
             foodsViewHolder.mFoodAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Picasso.with(this.mContext).load((Uri) food).resize(300, 300).centerCrop().into(foodsViewHolder.mFoodAppCompatImageView);
+        } else if (food instanceof String) {
+            foodsViewHolder.mFoodAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Picasso.with(this.mContext).load(Constant.BaseImageUrl + food).resize(300, 300).centerCrop().into(foodsViewHolder.mFoodAppCompatImageView);
         } else {
             foodsViewHolder.mFoodAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             Picasso.with(this.mContext).load((int)food).resize(128, 128).centerInside().into(foodsViewHolder.mFoodAppCompatImageView);

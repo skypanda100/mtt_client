@@ -2,6 +2,7 @@ package gzt.mtt.Manager;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -100,9 +101,11 @@ public class HttpManager {
         while(iterator.hasNext()) {
             String key = iterator.next();
             Object value = params.get(key);
-            if(value instanceof File) {
+            if (value instanceof File) {
                 RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), (File) value);
                 bodyParams.put("file\";filename=\"" + key, requestFile);
+            } else if (value instanceof JSONArray || value instanceof JSONObject) {
+                bodyParams.put(key, RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(value)));
             } else {
                 bodyParams.put(key, RequestBody.create(MediaType.parse("text/plain"), String.valueOf(value)));
             }

@@ -1,6 +1,5 @@
 package gzt.mtt.View.FoodGrade;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -20,10 +19,10 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,6 +43,16 @@ import top.zibin.luban.Luban;
 
 public class FoodGradeUploadActivity extends BaseActivity {
     private static final int REQUEST_CODE_CHOOSE = 0;
+
+    private boolean mIsAdd;
+    private String mId;
+    private String mAlias;
+    private String mAvatar;
+    private String mDateTime;
+    private String mComment;
+    private float mGrade;
+    private List<String> mImages;
+
     private List<Object> mFoods = new ArrayList<>();
     private RecyclerView mFoodsRecyclerView;
     private FoodGradeUploadAdapter mFoodGradeUploadAdapter;
@@ -85,7 +94,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             List<Uri> selected = Matisse.obtainResult(data);
-            this.initFoods();
+//            this.initFoods();
             for (int i = 0;i < selected.size();i++) {
                 this.mFoods.add(this.mFoods.size() - 1, selected.get(i));
             }
@@ -95,11 +104,31 @@ public class FoodGradeUploadActivity extends BaseActivity {
 
     private void initFoods() {
         this.mFoods.clear();
+        if (this.mImages != null) {
+            for(String image : this.mImages) {
+                this.mFoods.add(image);
+            }
+        }
         this.mFoods.add(R.drawable.plus);
     }
 
     private void initData() {
+        Intent intent = this.getIntent();
+        this.mId = intent.getStringExtra("id");
+        this.mAlias = intent.getStringExtra("alias");
+        this.mAvatar = intent.getStringExtra("avatar");
+        this.mDateTime = intent.getStringExtra("dateTime");
+        this.mComment = intent.getStringExtra("comment");
+        this.mGrade = intent.getFloatExtra("grade", 0.0f);
+        this.mImages = intent.getStringArrayListExtra("images");
+
         this.initFoods();
+
+        if (this.mId == null || this.mId.equals("")) {
+            this.mIsAdd = true;
+        } else {
+            this.mIsAdd = false;
+        }
     }
 
     private void initView() {
@@ -134,10 +163,9 @@ public class FoodGradeUploadActivity extends BaseActivity {
         this.mFoodGradeUploadAdapter.setFoods(this.mFoods);
 
         this.mGradeRatingBar = this.findViewById(R.id.grade);
+        this.mGradeRatingBar.setRating(this.mGrade);
         this.mCommentEditText = this.findViewById(R.id.comment);
-
-        this.mWaitingDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        this.mWaitingDialog.setCancelable(false);
+        this.mCommentEditText.setText(this.mComment);
     }
 
     private void openGallery () {
@@ -156,25 +184,31 @@ public class FoodGradeUploadActivity extends BaseActivity {
         if(!this.validate()) {
             return;
         }
-        List<String> images = new ArrayList<>();
+        this.mWaitingDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        this.mWaitingDialog.setCancelable(false);
+
+        List<Object> images = new ArrayList<>();
         for(int i = 0;i < this.mFoods.size() - 1;i++) {
-            String path = PathUtil.uri2path(this, (Uri) this.mFoods.get(i));
-            images.add(path);
+            Object food = this.mFoods.get(i);
+            images.add(food);
         }
 
         String user = (String) this.mStorageManager.getSharedPreference("userName", "");
         float grade = this.mGradeRatingBar.getRating();
         String comment = this.mCommentEditText.getText().toString();
-        String dateTime = "";
-        File homeFile = new File(images.get(0));
-        if(homeFile.exists() && homeFile.isFile()){
-            dateTime = TimeUtil.date2str(new Date(homeFile.lastModified()), "yyyy-MM-dd HH:mm");
-        } else {
-            dateTime = TimeUtil.date2str(new Date(), "yyyy-MM-dd HH:mm");
+        String dateTime = this.mIsAdd ? "" : this.mDateTime;
+        if (this.mIsAdd) {
+            String path = PathUtil.uri2path(this, (Uri) images.get(0));
+            File homeFile = new File(path);
+            if(homeFile.exists() && homeFile.isFile()){
+                dateTime = TimeUtil.date2str(new Date(homeFile.lastModified()), "yyyy-MM-dd HH:mm");
+            } else {
+                dateTime = TimeUtil.date2str(new Date(), "yyyy-MM-dd HH:mm");
+            }
         }
 
         UploadTask uploadTask = new UploadTask();
-        uploadTask.execute(user, grade, comment, dateTime, images);
+        uploadTask.execute(mId, user, grade, comment, dateTime, images);
     }
 
     private boolean validate() {
@@ -205,21 +239,43 @@ public class FoodGradeUploadActivity extends BaseActivity {
         protected Object doInBackground(Object[] objects) {
             try {
                 publishProgress(0);
-                String user = (String) objects[0];
-                float grade = (float) objects[1];
-                String comment = (String) objects[2];
-                String dateTime = (String) objects[3];
-                List<String> images = (ArrayList<String>) objects[4];
-                List<File> compressImages = Luban.with(FoodGradeUploadActivity.this).load(images).get();
+                String id = objects[0] == null ? "" : (String) objects[0];
+                String user = (String) objects[1];
+                float grade = (float) objects[2];
+                String comment = (String) objects[3];
+                String dateTime = (String) objects[4];
+                List<Object> images = (ArrayList<Object>) objects[5];
+                JSONArray netImages = new JSONArray();
+                List<String> localImages = new ArrayList<>();
+                boolean isLocalImageFirst = false;
+                for (int i = 0;i < images.size();i++) {
+                    Object image = images.get(i);
+                    if (image instanceof String) {
+                        netImages.put(image);
+                        if (i == 0) {
+                            isLocalImageFirst = false;
+                        }
+                    } else {
+                        localImages.add(PathUtil.uri2path(FoodGradeUploadActivity.this, (Uri) image));
+                        if (i == 0) {
+                            isLocalImageFirst = true;
+                        }
+                    }
+                }
+
+                List<File> compressImages = Luban.with(FoodGradeUploadActivity.this).load(localImages).get();
                 publishProgress(1);
                 Map<String, Object> params = new HashMap<>();
+                params.put("id", id);
                 params.put("user", user);
                 params.put("grade", grade);
                 params.put("comment", comment);
                 params.put("dateTime", dateTime);
+                params.put("images", netImages);
                 for(int i = 0;i < compressImages.size();i++) {
+                    int offset = isLocalImageFirst ? 0 : 10;
                     File image = compressImages.get(i);
-                    params.put(image.getName() + "-" + i, image);
+                    params.put(image.getName() + "-" + (i + offset), image);
                     Log.d("zdt", image.getName());
                 }
                 Response<ResponseBody> response = HttpManager.instance().put("foodGrades", params).execute();
