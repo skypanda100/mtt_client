@@ -1,29 +1,22 @@
 package gzt.mtt.View;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.card.MaterialCardView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +28,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
@@ -49,7 +41,6 @@ import gzt.mtt.View.AirQuality.AirQualityActivity;
 import gzt.mtt.View.FoodGrade.FoodGradeActivity;
 import gzt.mtt.View.FoodGrade.FoodGradeUploadActivity;
 import gzt.mtt.View.FoodGrade.FoodGradesActivity;
-import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,7 +48,6 @@ import retrofit2.Response;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final int REQUEST_PERMISSION = 0;
     private static boolean isExit = false;
 
     Handler mHandler = new Handler() {
@@ -138,25 +128,6 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_PERMISSION: {
-                for (int i = 0; i < permissions.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d("zdt", permissions[i]);
-                    } else if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        Log.d("zdt", permissions[i]);
-                    }
-                }
-            }
-            break;
-            default: {
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            }
-        }
     }
 
     @Override
@@ -246,27 +217,6 @@ public class MainActivity extends BaseActivity
         this.showFoodGrade();
     }
 
-    private void setPermissions () {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int hasWritePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int hasReadPermission = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-
-            List<String> permissions = new ArrayList<>();
-            if (hasWritePermission != PackageManager.PERMISSION_GRANTED) {
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (hasReadPermission != PackageManager.PERMISSION_GRANTED) {
-                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-
-            }
-
-            if (!permissions.isEmpty()) {
-                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE},
-                        REQUEST_PERMISSION);
-            }
-        }
-    }
-    
     private void switchFragment(Fragment fragment) {
         this.getSupportFragmentManager().beginTransaction().replace(R.id.contentMain, fragment).commit();
     }
