@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/group_1"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_air_quality"
             android:icon="@drawable/air_primary"
@@ -18,17 +20,13 @@
             android:title="食物评分" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/share_primary"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/send_primary"
-                android:title="Send" />
-        </menu>
-    </item>
+    <group
+        android:id="@+id/group_2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/share_primary"
+            android:title="分享" />
+    </group>
 
 </menu>

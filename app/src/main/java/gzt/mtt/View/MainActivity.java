@@ -1,6 +1,8 @@
 package gzt.mtt.View;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -120,8 +122,6 @@ public class MainActivity extends BaseActivity
             this.startActivity(FoodGradesActivity.class, REQUEST_CODE_FOOD);
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
@@ -175,6 +175,9 @@ public class MainActivity extends BaseActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        ColorStateList csl = getBaseContext().getResources().getColorStateList(R.color.navigation_menu);
+        navigationView.setItemTextColor(csl);
+        navigationView.setItemIconTintList(csl);
 
         // 设置头像名称
         View headerView = navigationView.getHeaderView(0);
