@@ -1,9 +1,7 @@
 package gzt.mtt.View.Welcome;
 
-import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -107,7 +105,7 @@ public class WelcomeActivity extends BaseActivity {
                 startActivity(LoginActivity.class);
                 finish();
             }
-        }, 700);
+        }, 500);
     }
 
     private void startMainActivity() {
@@ -117,6 +115,6 @@ public class WelcomeActivity extends BaseActivity {
                 startActivity(MainActivity.class);
                 finish();
             }
-        }, 700);
+        }, 500);
     }
 }
