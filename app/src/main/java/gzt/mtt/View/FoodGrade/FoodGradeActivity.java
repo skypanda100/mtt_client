@@ -66,7 +66,7 @@ public class FoodGradeActivity extends BaseActivity {
     }
 
     private void initView() {
-        this.createFullScreenView();
+        this.createImmerseView();
         setContentView(R.layout.activity_food_grade);
 
         Toolbar toolbar = this.findViewById(R.id.toolbar);

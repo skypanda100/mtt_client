@@ -75,7 +75,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void initView() {
-        this.createFullScreenView();
+        this.createImmerseView();
         this.setContentView(R.layout.activity_welcome);
     }
 

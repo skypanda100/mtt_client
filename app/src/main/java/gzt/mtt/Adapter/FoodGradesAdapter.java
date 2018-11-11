@@ -109,8 +109,8 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
             final Intent intent = new Intent(this.mContext, FoodGradeActivity.class);
             intent.putStringArrayListExtra("images", (ArrayList<String>) images);
 
-            int width = 200;
-            int height = 200;
+            int width = 150;
+            int height = 150;
             if(this.mIsOneCol) {
                 // 清空
                 foodGradesViewHolder.mFoodAppCompatImageView2.setImageDrawable(null);
