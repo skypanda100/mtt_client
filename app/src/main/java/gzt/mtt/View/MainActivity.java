@@ -36,6 +36,7 @@ import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import gzt.mtt.Adapter.FoodGradesAdapter;
 import gzt.mtt.Animator.FlyItemAnimator;
 import gzt.mtt.BaseActivity;
+import gzt.mtt.Component.WatingDialog.WaitingDialog;
 import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
@@ -198,6 +199,9 @@ public class MainActivity extends BaseActivity
         this.mAddSleepQualityFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                WaitingDialog waitingDialog = new WaitingDialog(MainActivity.this);
+                waitingDialog.setContentText("图片上传中");
+                waitingDialog.show();
             }
         });
 
@@ -344,16 +348,14 @@ public class MainActivity extends BaseActivity
 
                         Map<String, String> options = new HashMap<>();
                         options.put("sort", "-dateTime");
-                        Call<ResponseBody> foodGradesCall = HttpManager.instance().get("foodGrades", options);
+                        Call<ResponseBody> foodGradesCall = HttpManager.instance().get("foodGrades/last", options);
                         if(foodGradesCall != null) {
                             foodGradesCall.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     try {
                                         JSONArray resJsonArray = new JSONArray(response.body().string());
-                                        JSONArray newJsonArray = new JSONArray();
-                                        newJsonArray.put(resJsonArray.getJSONObject(0));
-                                        onFetchFoodGradesSuccess(newJsonArray);
+                                        onFetchFoodGradesSuccess(resJsonArray);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         onFetchFoodGradesFailed("some errors happened in server");

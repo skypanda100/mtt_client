@@ -29,9 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import gzt.mtt.Adapter.FoodGradeUploadAdapter;
 import gzt.mtt.BaseActivity;
+import gzt.mtt.Component.WatingDialog.WaitingDialog;
 import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
@@ -60,7 +60,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
     private FoodGradeUploadAdapter mFoodGradeUploadAdapter;
     private MaterialRatingBar mGradeRatingBar;
     private EditText mCommentEditText;
-    private SweetAlertDialog mWaitingDialog;
+    private WaitingDialog mWaitingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,7 +219,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
         if(!this.validate()) {
             return;
         }
-        this.mWaitingDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        this.mWaitingDialog = new WaitingDialog(this);
         this.mWaitingDialog.setCancelable(false);
 
         List<Object> images = this.getObjectImages();
@@ -346,12 +346,11 @@ public class FoodGradeUploadActivity extends BaseActivity {
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
             boolean isSuccess = (boolean) o;
+            mWaitingDialog.cancel();
             if (isSuccess) {
-                mWaitingDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                mWaitingDialog.setContentText("提交评分成功");
+                onUploadSuccess("提交评分成功");
             } else {
-                mWaitingDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
-                mWaitingDialog.setContentText("提交评分失败");
+                onUploadSuccess("提交评分失败");
             }
         }
     }

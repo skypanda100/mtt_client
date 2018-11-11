@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import gzt.mtt.Constant;
 import gzt.mtt.R;
 import gzt.mtt.Util.TimeUtil;
 import gzt.mtt.View.FoodGrade.FoodGradeActivity;
-import gzt.mtt.View.MainActivity;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class FoodGradesAdapter extends RecyclerView.Adapter {
