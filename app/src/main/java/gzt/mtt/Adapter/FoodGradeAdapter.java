@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -43,14 +44,15 @@ public class FoodGradeAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-        ImageView imageView = new ImageView(this.mContext);
+//        ImageView imageView = new ImageView(this.mContext);
+        PhotoView photoView = new PhotoView(this.mContext);
         String path = this.mImages.get(position);
         if (path.startsWith("/storage")) {
-            Picasso.with(this.mContext).load(new File(path)).into(imageView);
+            Picasso.with(this.mContext).load(new File(path)).into(photoView);
         } else {
-            Picasso.with(this.mContext).load(path).into(imageView);
+            Picasso.with(this.mContext).load(path).into(photoView);
         }
-        container.addView(imageView);
-        return imageView;
+        container.addView(photoView);
+        return photoView;
     }
 }

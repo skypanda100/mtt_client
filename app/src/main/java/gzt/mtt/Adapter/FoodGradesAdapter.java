@@ -109,9 +109,9 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
             final Intent intent = new Intent(this.mContext, FoodGradeActivity.class);
             intent.putStringArrayListExtra("images", (ArrayList<String>) images);
 
-            int width = 150;
-            int height = 150;
             if(this.mIsOneCol) {
+                int width = 150;
+                int height = 150;
                 // 清空
                 foodGradesViewHolder.mFoodAppCompatImageView2.setImageDrawable(null);
                 foodGradesViewHolder.mFoodAppCompatImageView2.setOnClickListener(null);
@@ -159,6 +159,8 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
                 foodGradesViewHolder.mCommentTextView.setText(comment);
                 foodGradesViewHolder.mTimeTextView.setText(dateTime.substring(11));
             } else {
+                int width = 200;
+                int height = 200;
                 String imagePath = images.get(0);
                 Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView1);
                 foodGradesViewHolder.mFoodAppCompatImageView1.setOnClickListener(new View.OnClickListener() {

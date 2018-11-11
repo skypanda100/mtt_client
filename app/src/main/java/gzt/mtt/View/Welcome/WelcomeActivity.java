@@ -107,7 +107,7 @@ public class WelcomeActivity extends BaseActivity {
                 startActivity(LoginActivity.class);
                 finish();
             }
-        }, 1500);
+        }, 700);
     }
 
     private void startMainActivity() {
@@ -117,6 +117,6 @@ public class WelcomeActivity extends BaseActivity {
                 startActivity(MainActivity.class);
                 finish();
             }
-        }, 1500);
+        }, 700);
     }
 }
