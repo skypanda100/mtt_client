@@ -8,15 +8,15 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_air_quality"
-            android:icon="@drawable/air_primary"
+            android:icon="@drawable/air"
             android:title="空气质量" />
         <item
             android:id="@+id/nav_sleep_quality"
-            android:icon="@drawable/sleep_primary"
+            android:icon="@drawable/sleep"
             android:title="睡眠质量" />
         <item
             android:id="@+id/nav_food_grade"
-            android:icon="@drawable/food_primary"
+            android:icon="@drawable/food"
             android:title="食物评分" />
     </group>
 
@@ -25,7 +25,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/share_primary"
+            android:icon="@drawable/share"
             android:title="分享" />
     </group>
 

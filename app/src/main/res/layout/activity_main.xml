@@ -150,7 +150,7 @@
                 android:id="@+id/addFoodGrade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_icon="@drawable/food_secondary"
+                app:fab_icon="@drawable/food"
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_colorPressed="@color/colorPrimaryDark"
                 app:fab_addButtonSize="mini"
@@ -160,7 +160,7 @@
                 android:id="@+id/addSleepQuality"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_icon="@drawable/sleep_secondary"
+                app:fab_icon="@drawable/sleep"
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_colorPressed="@color/colorPrimaryDark"
                 app:fab_addButtonSize="mini"
@@ -176,7 +176,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/colorSecondary"
+        android:background="@color/colorPrimary"
         app:headerLayout="@layout/nav_view_header"
         app:menu="@menu/nav_view_drawer" />
 

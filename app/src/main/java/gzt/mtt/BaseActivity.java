@@ -57,12 +57,17 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        this.setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
+        // zdt theme
+        this.setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark), true);
     }
 
-    private void setStatusBarColor(int color) {
+    private void setStatusBarColor(int color, boolean isDarkTheme) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            if (!isDarkTheme) {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
             getWindow().setStatusBarColor(color);
         }
     }
@@ -83,7 +88,7 @@ public class BaseActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        this.setStatusBarColor(Color.TRANSPARENT);
+        this.setStatusBarColor(Color.TRANSPARENT, true);
     }
 
     protected void setPermissions () {

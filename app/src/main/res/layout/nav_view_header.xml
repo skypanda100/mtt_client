@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@color/colorPrimary"
-    android:padding="@dimen/padding"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:background="@color/colorPrimary">
 
-    <cn.carbs.android.avatarimageview.library.AvatarImageView
-        android:id="@+id/avatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"/>
-
-    <TextView
-        android:id="@+id/alias"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/avatar"/>
-
-</RelativeLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/half_mtt"
+        android:scaleType="centerCrop"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/alias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:textSize="@dimen/font_two"
+            android:textColor="@color/colorPrimaryDark"/>
+        <cn.carbs.android.avatarimageview.library.AvatarImageView
+            android:id="@+id/avatar"
+            android:visibility="invisible"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_above="@id/alias"/>
+    </RelativeLayout>
+</FrameLayout>

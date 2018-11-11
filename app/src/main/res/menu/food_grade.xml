@@ -5,6 +5,6 @@
         android:id="@+id/action_delete"
         android:orderInCategory="100"
         android:title="删除"
-        android:icon="@drawable/delete_secondary"
+        android:icon="@drawable/delete"
         app:showAsAction="always" />
 </menu>

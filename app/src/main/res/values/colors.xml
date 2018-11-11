@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--zdt theme-->
     <color name="colorPrimary">#4a4b4c</color>
     <color name="colorPrimaryDark">#3a3b3c</color>
     <color name="colorSecondary">#efefef</color>
     <color name="colorAccent">#4078C0</color>
 
     <!--<color name="colorPrimary">#efefef</color>-->
-    <!--<color name="colorPrimaryDark">#fafafa</color>-->
+    <!--<color name="colorPrimaryDark">#efefef</color>-->
     <!--<color name="colorSecondary">#4a4b4c</color>-->
     <!--<color name="colorAccent">#4078C0</color>-->
 
