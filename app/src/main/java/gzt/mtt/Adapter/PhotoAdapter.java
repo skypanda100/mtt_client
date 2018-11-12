@@ -14,11 +14,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodGradeAdapter extends PagerAdapter {
+public class PhotoAdapter extends PagerAdapter {
     private List<String> mImages = new ArrayList<>();
     private Context mContext;
 
-    public FoodGradeAdapter(Context context) {
+    public PhotoAdapter(Context context) {
         this.mContext = context;
     }
 

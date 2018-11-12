@@ -1,4 +1,4 @@
-package gzt.mtt.View.FoodGrade;
+package gzt.mtt.View.Daily;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,16 +11,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import gzt.mtt.Adapter.FoodGradeAdapter;
+import gzt.mtt.Adapter.PhotoAdapter;
 import gzt.mtt.BaseActivity;
 import gzt.mtt.R;
-public class FoodGradeActivity extends BaseActivity {
+public class PhotoActivity extends BaseActivity {
     private boolean mCanDelete;
     private int mIndex;
     private List<String> mImages;
-    private FoodGradeAdapter mFoodGradeAdapter;
-    private ViewPager mFoodViewPager;
-    private TextView mFoodIndicatorTextView;
+    private PhotoAdapter mPhotoAdapter;
+    private ViewPager mPhotoViewPager;
+    private TextView mPhotoIndicatorTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +32,7 @@ public class FoodGradeActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (this.mCanDelete) {
-            getMenuInflater().inflate(R.menu.food_grade, menu);
+            getMenuInflater().inflate(R.menu.photo, menu);
         }
         return true;
     }
@@ -61,13 +61,13 @@ public class FoodGradeActivity extends BaseActivity {
         this.mIndex = intent.getIntExtra("index", 0);
         this.mImages = intent.getStringArrayListExtra("images");
         this.mCanDelete = intent.getBooleanExtra("canDelete", false);
-        this.mFoodGradeAdapter = new FoodGradeAdapter(this);
-        this.mFoodGradeAdapter.setImages(this.mImages);
+        this.mPhotoAdapter = new PhotoAdapter(this);
+        this.mPhotoAdapter.setImages(this.mImages);
     }
 
     private void initView() {
         this.createImmerseView();
-        setContentView(R.layout.activity_food_grade);
+        setContentView(R.layout.activity_photo);
 
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
@@ -83,12 +83,12 @@ public class FoodGradeActivity extends BaseActivity {
             }
         });
 
-        this.mFoodIndicatorTextView = this.findViewById(R.id.foodIndicator);
+        this.mPhotoIndicatorTextView = this.findViewById(R.id.photoIndicator);
         this.setIndicator();
-        this.mFoodViewPager = this.findViewById(R.id.foodViewPager);
-        this.mFoodViewPager.setAdapter(this.mFoodGradeAdapter);
-        this.mFoodViewPager.setCurrentItem(this.mIndex);
-        this.mFoodViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        this.mPhotoViewPager = this.findViewById(R.id.photoViewPager);
+        this.mPhotoViewPager.setAdapter(this.mPhotoAdapter);
+        this.mPhotoViewPager.setCurrentItem(this.mIndex);
+        this.mPhotoViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
 
@@ -108,6 +108,6 @@ public class FoodGradeActivity extends BaseActivity {
     }
 
     private void setIndicator() {
-        this.mFoodIndicatorTextView.setText((this.mIndex + 1) + "/" + this.mImages.size());
+        this.mPhotoIndicatorTextView.setText((this.mIndex + 1) + "/" + this.mImages.size());
     }
 }

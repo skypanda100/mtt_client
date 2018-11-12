@@ -1,4 +1,4 @@
-package gzt.mtt.View.FoodGrade;
+package gzt.mtt.View.Daily;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import gzt.mtt.Adapter.FoodGradeUploadAdapter;
+import gzt.mtt.Adapter.DailyUploadAdapter;
 import gzt.mtt.BaseActivity;
 import gzt.mtt.Component.WatingDialog.WaitingDialog;
 import gzt.mtt.Constant;
@@ -42,7 +42,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 import top.zibin.luban.Luban;
 
-public class FoodGradeUploadActivity extends BaseActivity {
+public class DailyUploadActivity extends BaseActivity {
     private static final int REQUEST_CODE_CHOOSE = 0;
     private static final int REQUEST_CODE_DELETE = 1;
 
@@ -55,9 +55,9 @@ public class FoodGradeUploadActivity extends BaseActivity {
     private float mGrade;
     private List<String> mImages;
 
-    private List<Object> mFoods = new ArrayList<>();
-    private RecyclerView mFoodsRecyclerView;
-    private FoodGradeUploadAdapter mFoodGradeUploadAdapter;
+    private List<Object> mPhotos = new ArrayList<>();
+    private RecyclerView mPhotoRecyclerView;
+    private DailyUploadAdapter mDailyUploadAdapter;
     private MaterialRatingBar mGradeRatingBar;
     private EditText mCommentEditText;
     private WaitingDialog mWaitingDialog;
@@ -76,7 +76,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.food_grade_upload, menu);
+        getMenuInflater().inflate(R.menu.daily_upload, menu);
 
         return true;
     }
@@ -97,26 +97,26 @@ public class FoodGradeUploadActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             List<Uri> selected = Matisse.obtainResult(data);
-//            this.initFoods();
+//            this.initPhotos();
             for (int i = 0;i < selected.size();i++) {
-                this.mFoods.add(this.mFoods.size() - 1, selected.get(i));
+                this.mPhotos.add(this.mPhotos.size() - 1, selected.get(i));
             }
-            this.mFoodGradeUploadAdapter.setFoods(this.mFoods);
+            this.mDailyUploadAdapter.setPhotos(this.mPhotos);
         } else if (requestCode == REQUEST_CODE_DELETE && resultCode == RESULT_OK) {
             int index = data.getIntExtra("index", -1);
-            this.mFoods.remove(index);
-            this.mFoodGradeUploadAdapter.setFoods(this.mFoods);
+            this.mPhotos.remove(index);
+            this.mDailyUploadAdapter.setPhotos(this.mPhotos);
         }
     }
 
-    private void initFoods() {
-        this.mFoods.clear();
+    private void initPhotos() {
+        this.mPhotos.clear();
         if (this.mImages != null) {
             for(String image : this.mImages) {
-                this.mFoods.add(image);
+                this.mPhotos.add(image);
             }
         }
-        this.mFoods.add(R.drawable.plus);
+        this.mPhotos.add(R.drawable.plus);
     }
 
     private void initData() {
@@ -129,7 +129,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
         this.mGrade = intent.getFloatExtra("grade", 0.0f);
         this.mImages = intent.getStringArrayListExtra("images");
 
-        this.initFoods();
+        this.initPhotos();
 
         if (this.mId == null || this.mId.equals("")) {
             this.mIsAdd = true;
@@ -139,12 +139,12 @@ public class FoodGradeUploadActivity extends BaseActivity {
     }
 
     private void initView() {
-        this.setContentView(R.layout.activity_food_grade_upload);
+        this.setContentView(R.layout.activity_daily_upload);
 
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("提交评分");
+            getSupportActionBar().setTitle("生活记录");
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -155,17 +155,17 @@ public class FoodGradeUploadActivity extends BaseActivity {
             }
         });
 
-        this.mFoodsRecyclerView = this.findViewById(R.id.foods);
-        this.mFoodsRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        this.mFoodsRecyclerView.setAdapter(mFoodGradeUploadAdapter = new FoodGradeUploadAdapter(this));
-        this.mFoodGradeUploadAdapter.setItemClickListener(new FoodGradeUploadAdapter.OnItemClickListener() {
+        this.mPhotoRecyclerView = this.findViewById(R.id.photos);
+        this.mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        this.mPhotoRecyclerView.setAdapter(mDailyUploadAdapter = new DailyUploadAdapter(this));
+        this.mDailyUploadAdapter.setItemClickListener(new DailyUploadAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                if (mFoods.size() - 1 == position) {
+                if (mPhotos.size() - 1 == position) {
                     openGallery();
                 } else {
                     List<String> images = getStringImages();
-                    Intent intent = new Intent(FoodGradeUploadActivity.this, FoodGradeActivity.class);
+                    Intent intent = new Intent(DailyUploadActivity.this, PhotoActivity.class);
                     intent.putStringArrayListExtra("images", (ArrayList<String>) images);
                     intent.putExtra("index", position);
                     intent.putExtra("canDelete", true);
@@ -173,7 +173,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
                 }
             }
         });
-        this.mFoodGradeUploadAdapter.setFoods(this.mFoods);
+        this.mDailyUploadAdapter.setPhotos(this.mPhotos);
 
         this.mGradeRatingBar = this.findViewById(R.id.grade);
         this.mGradeRatingBar.setRating(this.mGrade);
@@ -195,12 +195,12 @@ public class FoodGradeUploadActivity extends BaseActivity {
 
     private List<String> getStringImages() {
         List<String> images = new ArrayList<>();
-        for(int i = 0;i < this.mFoods.size() - 1;i++) {
-            Object food = this.mFoods.get(i);
-            if (food instanceof Uri) {
-                images.add(PathUtil.uri2path(this, (Uri) food));
+        for(int i = 0;i < this.mPhotos.size() - 1;i++) {
+            Object photo = this.mPhotos.get(i);
+            if (photo instanceof Uri) {
+                images.add(PathUtil.uri2path(this, (Uri) photo));
             } else {
-                images.add((String) food);
+                images.add((String) photo);
             }
         }
         return images;
@@ -208,9 +208,9 @@ public class FoodGradeUploadActivity extends BaseActivity {
 
     private List<Object> getObjectImages() {
         List<Object> images = new ArrayList<>();
-        for(int i = 0;i < this.mFoods.size() - 1;i++) {
-            Object food = this.mFoods.get(i);
-            images.add(food);
+        for(int i = 0;i < this.mPhotos.size() - 1;i++) {
+            Object photo = this.mPhotos.get(i);
+            images.add(photo);
         }
         return images;
     }
@@ -245,7 +245,7 @@ public class FoodGradeUploadActivity extends BaseActivity {
         if (this.mId != null && !this.mId.equals("")) {
             return true;
         } else {
-            if(this.mFoods.size() > 1) {
+            if(this.mPhotos.size() > 1) {
                 return true;
             } else {
                 this.onUploadFailed("请添加图片");
@@ -294,14 +294,14 @@ public class FoodGradeUploadActivity extends BaseActivity {
                             netImages.put(path);
                         }
                     } else {
-                        localImages.add(PathUtil.uri2path(FoodGradeUploadActivity.this, (Uri) image));
+                        localImages.add(PathUtil.uri2path(DailyUploadActivity.this, (Uri) image));
                         if (i == 0) {
                             isLocalImageFirst = true;
                         }
                     }
                 }
 
-                List<File> compressImages = Luban.with(FoodGradeUploadActivity.this).load(localImages).get();
+                List<File> compressImages = Luban.with(DailyUploadActivity.this).load(localImages).get();
                 publishProgress(1);
                 Map<String, Object> params = new HashMap<>();
                 params.put("id", id);

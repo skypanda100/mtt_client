@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#000000"
-    tools:context=".View.FoodGrade.FoodGradeActivity">
+    tools:context=".View.Daily.PhotoActivity">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,13 +21,13 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/foodViewPager"
+        android:id="@+id/photoViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v4.view.ViewPager>
 
     <TextView
-        android:id="@+id/foodIndicator"
+        android:id="@+id/photoIndicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/fontGray"

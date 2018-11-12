@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".View.FoodGrade.FoodGradeUploadActivity">
+    tools:context=".View.Daily.DailyUploadActivity">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,13 +25,13 @@
         android:layout_height="match_parent"
         android:padding="@dimen/padding">
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/foods"
+            android:id="@+id/photos"
             android:layout_width="match_parent"
             android:layout_height="270dp">
         </android.support.v7.widget.RecyclerView>
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/grade"
-            android:layout_below="@id/foods"
+            android:layout_below="@id/photos"
             android:layout_width="150dp"
             android:layout_height="25dp"
             android:layout_centerHorizontal="true"

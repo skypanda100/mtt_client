@@ -53,18 +53,18 @@
                 android:layout_height="80dp"
                 android:orientation="horizontal">
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/food1"
+                    android:id="@+id/photo1"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"/>
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/food2"
+                    android:id="@+id/photo2"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="1dp"
                     android:layout_height="match_parent"/>
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/food3"
+                    android:id="@+id/photo3"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="1dp"

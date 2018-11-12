@@ -30,16 +30,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.FoodGrade.FoodGradesActivity"
+            android:name=".View.Daily.DailyActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".View.AirQuality.AirQualityActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".View.FoodGrade.FoodGradeActivity"
+            android:name=".View.Daily.PhotoActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".View.FoodGrade.FoodGradeUploadActivity"
+            android:name=".View.Daily.DailyUploadActivity"
             android:windowSoftInputMode="adjustPan|stateHidden"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

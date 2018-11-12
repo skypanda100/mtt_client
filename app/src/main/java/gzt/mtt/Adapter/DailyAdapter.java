@@ -24,12 +24,12 @@ import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import gzt.mtt.Constant;
 import gzt.mtt.R;
 import gzt.mtt.Util.TimeUtil;
-import gzt.mtt.View.FoodGrade.FoodGradeActivity;
+import gzt.mtt.View.Daily.PhotoActivity;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
-public class FoodGradesAdapter extends RecyclerView.Adapter {
+public class DailyAdapter extends RecyclerView.Adapter {
     private Context mContext;
-    private JSONArray mFoodGrades;
+    private JSONArray mDailies;
     private boolean mIsOneCol;
     private OnItemClickListener mItemClickListener;
 
@@ -37,18 +37,18 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
         void onItemClick(int position);
     }
 
-    public FoodGradesAdapter(Context context, boolean isOneCol) {
+    public DailyAdapter(Context context, boolean isOneCol) {
         this.mContext = context;
         this.mIsOneCol = isOneCol;
     }
 
-    public void setFoodGrades(JSONArray foodGrades) {
+    public void setDailies(JSONArray dailies) {
 //        this.notifyDataSetChanged();
-        boolean isRunAnimate = this.mFoodGrades == null;
-        this.mFoodGrades = foodGrades;
+        boolean isRunAnimate = this.mDailies == null;
+        this.mDailies = dailies;
         if (isRunAnimate) {
-            if (this.mFoodGrades != null) {
-                notifyItemRangeInserted(0, this.mFoodGrades.length());
+            if (this.mDailies != null) {
+                notifyItemRangeInserted(0, this.mDailies.length());
             }
         } else {
             this.notifyDataSetChanged();
@@ -62,23 +62,23 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        FoodGradesViewHolder foodGradesViewHolder = null;
+        PhotoViewHolder photoViewHolder = null;
         if(this.mIsOneCol) {
-            foodGradesViewHolder = new FoodGradesViewHolder(LayoutInflater.from(this.mContext)
-                    .inflate(R.layout.item_food_grades_one, viewGroup, false));
+            photoViewHolder = new PhotoViewHolder(LayoutInflater.from(this.mContext)
+                    .inflate(R.layout.item_daily_one, viewGroup, false));
         } else {
-            foodGradesViewHolder = new FoodGradesViewHolder(LayoutInflater.from(this.mContext)
-                    .inflate(R.layout.item_food_grades_three, viewGroup, false));
+            photoViewHolder = new PhotoViewHolder(LayoutInflater.from(this.mContext)
+                    .inflate(R.layout.item_daily_three, viewGroup, false));
         }
 
-        return foodGradesViewHolder;
+        return photoViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
-        FoodGradesViewHolder foodGradesViewHolder = (FoodGradesViewHolder) viewHolder;
+        PhotoViewHolder photoViewHolder = (PhotoViewHolder) viewHolder;
 
-        foodGradesViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        photoViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mItemClickListener != null) {
@@ -88,42 +88,42 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
         });
 
         try{
-            JSONObject foodGrade = mFoodGrades.getJSONObject(i);
+            JSONObject daily = mDailies.getJSONObject(i);
 
             List<String> images = new ArrayList<>();
-            images.add(Constant.BaseImageUrl + foodGrade.getString("imagePath"));
-            String alias = foodGrade.getString("alias");
-            String avatar = foodGrade.getString("avatar");
-            String dateTime = foodGrade.getString("dateTime");
+            images.add(Constant.BaseImageUrl + daily.getString("imagePath"));
+            String alias = daily.getString("alias");
+            String avatar = daily.getString("avatar");
+            String dateTime = daily.getString("dateTime");
             Date date = TimeUtil.str2date(dateTime, "yyyy-MM-dd HH:mm");
             List<String> dateChStrs = TimeUtil.date2chstr(date);
-            String comment = foodGrade.getString("comment");
-            float grade = (float) foodGrade.getDouble("grade");
-            if(foodGrade.has("others")) {
-                JSONArray others = foodGrade.getJSONArray("others");
+            String comment = daily.getString("comment");
+            float grade = (float) daily.getDouble("grade");
+            if(daily.has("others")) {
+                JSONArray others = daily.getJSONArray("others");
                 for(int index = 0;index < others.length();index++) {
                     images.add(Constant.BaseImageUrl + others.getJSONObject(index).getString("imagePath"));
                 }
             }
 
-            final Intent intent = new Intent(this.mContext, FoodGradeActivity.class);
+            final Intent intent = new Intent(this.mContext, PhotoActivity.class);
             intent.putStringArrayListExtra("images", (ArrayList<String>) images);
 
             if(this.mIsOneCol) {
                 int width = 150;
                 int height = 150;
                 // 清空
-                foodGradesViewHolder.mFoodAppCompatImageView2.setImageDrawable(null);
-                foodGradesViewHolder.mFoodAppCompatImageView2.setOnClickListener(null);
-                foodGradesViewHolder.mFoodAppCompatImageView3.setImageDrawable(null);
-                foodGradesViewHolder.mFoodAppCompatImageView3.setOnClickListener(null);
+                photoViewHolder.mPhotoAppCompatImageView2.setImageDrawable(null);
+                photoViewHolder.mPhotoAppCompatImageView2.setOnClickListener(null);
+                photoViewHolder.mPhotoAppCompatImageView3.setImageDrawable(null);
+                photoViewHolder.mPhotoAppCompatImageView3.setOnClickListener(null);
 
                 for(int index = 0;index < 3 && index < images.size();index++) {
                     String imagePath = images.get(index);
                     switch (index) {
                         case 0:
-                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView1);
-                            foodGradesViewHolder.mFoodAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
+                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView1);
+                            photoViewHolder.mPhotoAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     intent.putExtra("index", 0);
@@ -132,8 +132,8 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
                             });
                             break;
                         case 1:
-                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView2);
-                            foodGradesViewHolder.mFoodAppCompatImageView2.setOnClickListener(new View.OnClickListener() {
+                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView2);
+                            photoViewHolder.mPhotoAppCompatImageView2.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     intent.putExtra("index", 1);
@@ -142,8 +142,8 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
                             });
                             break;
                         case 2:
-                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView3);
-                            foodGradesViewHolder.mFoodAppCompatImageView3.setOnClickListener(new View.OnClickListener() {
+                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView3);
+                            photoViewHolder.mPhotoAppCompatImageView3.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     intent.putExtra("index", 2);
@@ -153,17 +153,17 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
                             break;
                     }
                 }
-                foodGradesViewHolder.mGradeMaterialRatingBar.setRating(grade);
-                foodGradesViewHolder.mDateTextView1.setText(dateTime.substring(8, 10));
-                foodGradesViewHolder.mDateTextView2.setText(dateChStrs.get(1) + "/" + dateChStrs.get(3));
-                foodGradesViewHolder.mCommentTextView.setText(comment);
-                foodGradesViewHolder.mTimeTextView.setText(dateTime.substring(11));
+                photoViewHolder.mGradeMaterialRatingBar.setRating(grade);
+                photoViewHolder.mDateTextView1.setText(dateTime.substring(8, 10));
+                photoViewHolder.mDateTextView2.setText(dateChStrs.get(1) + "/" + dateChStrs.get(3));
+                photoViewHolder.mCommentTextView.setText(comment);
+                photoViewHolder.mTimeTextView.setText(dateTime.substring(11));
             } else {
                 int width = 200;
                 int height = 200;
                 String imagePath = images.get(0);
-                Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(foodGradesViewHolder.mFoodAppCompatImageView1);
-                foodGradesViewHolder.mFoodAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
+                Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView1);
+                photoViewHolder.mPhotoAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         intent.putExtra("index", 0);
@@ -178,42 +178,42 @@ public class FoodGradesAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        if(mFoodGrades != null) {
-            return mFoodGrades.length();
+        if(mDailies != null) {
+            return mDailies.length();
         }
         return 0;
     }
 
-    class FoodGradesViewHolder extends RecyclerView.ViewHolder {
+    class PhotoViewHolder extends RecyclerView.ViewHolder {
         AvatarImageView mAvatarAvatarImageView;
         TextView mAliasTextView;
-        AppCompatImageView mFoodAppCompatImageView1;
-        AppCompatImageView mFoodAppCompatImageView2;
-        AppCompatImageView mFoodAppCompatImageView3;
+        AppCompatImageView mPhotoAppCompatImageView1;
+        AppCompatImageView mPhotoAppCompatImageView2;
+        AppCompatImageView mPhotoAppCompatImageView3;
         MaterialRatingBar mGradeMaterialRatingBar;
         TextView mDateTextView1;
         TextView mDateTextView2;
         TextView mCommentTextView;
         TextView mTimeTextView;
-        public FoodGradesViewHolder(@NonNull View itemView) {
+        public PhotoViewHolder(@NonNull View itemView) {
             super(itemView);
             if(mIsOneCol) {
                 this.mAvatarAvatarImageView = itemView.findViewById(R.id.avatar);
                 this.mAliasTextView = itemView.findViewById(R.id.alias);
-                this.mFoodAppCompatImageView1 = itemView.findViewById(R.id.food1);
-                this.mFoodAppCompatImageView2 = itemView.findViewById(R.id.food2);
-                this.mFoodAppCompatImageView3 = itemView.findViewById(R.id.food3);
+                this.mPhotoAppCompatImageView1 = itemView.findViewById(R.id.photo1);
+                this.mPhotoAppCompatImageView2 = itemView.findViewById(R.id.photo2);
+                this.mPhotoAppCompatImageView3 = itemView.findViewById(R.id.photo3);
                 this.mGradeMaterialRatingBar = itemView.findViewById(R.id.grade);
                 this.mDateTextView1 = itemView.findViewById(R.id.date1);
                 this.mDateTextView2 = itemView.findViewById(R.id.date2);
                 this.mCommentTextView = itemView.findViewById(R.id.comment);
                 this.mTimeTextView = itemView.findViewById(R.id.time);
-                this.mFoodAppCompatImageView1.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                this.mFoodAppCompatImageView2.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                this.mFoodAppCompatImageView3.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                this.mPhotoAppCompatImageView1.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                this.mPhotoAppCompatImageView2.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                this.mPhotoAppCompatImageView3.setScaleType(ImageView.ScaleType.CENTER_CROP);
             } else {
-                this.mFoodAppCompatImageView1 = itemView.findViewById(R.id.food);
-                this.mFoodAppCompatImageView1.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                this.mPhotoAppCompatImageView1 = itemView.findViewById(R.id.photo);
+                this.mPhotoAppCompatImageView1.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
         }
     }

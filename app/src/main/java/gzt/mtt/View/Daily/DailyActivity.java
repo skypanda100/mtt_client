@@ -1,4 +1,4 @@
-package gzt.mtt.View.FoodGrade;
+package gzt.mtt.View.Daily;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import gzt.mtt.Adapter.FoodGradesAdapter;
+import gzt.mtt.Adapter.DailyAdapter;
 import gzt.mtt.Animator.FlyItemAnimator;
 import gzt.mtt.BaseActivity;
 import gzt.mtt.Constant;
@@ -30,12 +30,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FoodGradesActivity extends BaseActivity {
-    private static final int REQUEST_CODE_FOOD = 0;
+public class DailyActivity extends BaseActivity {
+    private static final int REQUEST_CODE_DAILY = 0;
 
-    private RecyclerView mFoodGradesRecyclerView;
-    private FoodGradesAdapter mFoodGradesAdapter;
-    private JSONArray mFoodGrades;
+    private RecyclerView mDailyRecyclerView;
+    private DailyAdapter mDailyAdapter;
+    private JSONArray mDailies;
     private JSONArray mUsers;
     private boolean mIsOneCol = true;
 
@@ -49,7 +49,7 @@ public class FoodGradesActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.food_grades, menu);
+        getMenuInflater().inflate(R.menu.daily, menu);
         return true;
     }
 
@@ -68,8 +68,8 @@ public class FoodGradesActivity extends BaseActivity {
             }
             this.mIsOneCol = !this.mIsOneCol;
         } else if (id == R.id.action_upload) {
-            Intent intent = new Intent(FoodGradesActivity.this, FoodGradeUploadActivity.class);
-            this.startActivity(intent, REQUEST_CODE_FOOD);
+            Intent intent = new Intent(DailyActivity.this, DailyUploadActivity.class);
+            this.startActivity(intent, REQUEST_CODE_DAILY);
         }
 
         return super.onOptionsItemSelected(item);
@@ -83,7 +83,7 @@ public class FoodGradesActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_FOOD) {
+        if (requestCode == REQUEST_CODE_DAILY) {
             this.initData();
         }
     }
@@ -93,12 +93,12 @@ public class FoodGradesActivity extends BaseActivity {
     }
 
     private void initView() {
-        this.setContentView(R.layout.activity_food_grades);
+        this.setContentView(R.layout.activity_daily);
 
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
         if (getSupportActionBar() != null ) {
-            getSupportActionBar().setTitle("食物评分");
+            getSupportActionBar().setTitle("生活点滴");
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -109,38 +109,38 @@ public class FoodGradesActivity extends BaseActivity {
             }
         });
 
-        this.mFoodGradesRecyclerView = this.findViewById(R.id.foodGrades);
-        this.mFoodGradesRecyclerView.setItemAnimator(new FlyItemAnimator());
+        this.mDailyRecyclerView = this.findViewById(R.id.daily);
+        this.mDailyRecyclerView.setItemAnimator(new FlyItemAnimator());
         this.setLayoutManagerPolicy(1);
     }
 
     private void setLayoutManagerPolicy(int cols) {
-        this.mFoodGradesRecyclerView.setLayoutManager(new GridLayoutManager(this, cols));
-        this.mFoodGradesRecyclerView.setAdapter(mFoodGradesAdapter = new FoodGradesAdapter(this, cols == 1));
-        this.mFoodGradesAdapter.setFoodGrades(this.mFoodGrades);
-        this.mFoodGradesAdapter.setItemClickListener(new FoodGradesAdapter.OnItemClickListener() {
+        this.mDailyRecyclerView.setLayoutManager(new GridLayoutManager(this, cols));
+        this.mDailyRecyclerView.setAdapter(mDailyAdapter = new DailyAdapter(this, cols == 1));
+        this.mDailyAdapter.setDailies(this.mDailies);
+        this.mDailyAdapter.setItemClickListener(new DailyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 try {
-                    JSONObject foodGrade = mFoodGrades.getJSONObject(position);
+                    JSONObject daily = mDailies.getJSONObject(position);
                     ArrayList<String> images = new ArrayList<>();
-                    images.add(Constant.BaseImageUrl + foodGrade.getString("imagePath"));
-                    if(foodGrade.has("others")){
-                        JSONArray others = foodGrade.getJSONArray("others");
+                    images.add(Constant.BaseImageUrl + daily.getString("imagePath"));
+                    if(daily.has("others")){
+                        JSONArray others = daily.getJSONArray("others");
                         for(int i = 0;i < others.length();i++) {
                             images.add(Constant.BaseImageUrl + others.getJSONObject(i).getString("imagePath"));
                         }
                     }
 
-                    Intent intent = new Intent(FoodGradesActivity.this, FoodGradeUploadActivity.class);
-                    intent.putExtra("id", foodGrade.getString("_id"));
-                    intent.putExtra("alias", foodGrade.getString("alias"));
-                    intent.putExtra("avatar", foodGrade.getString("avatar"));
-                    intent.putExtra("dateTime", foodGrade.getString("dateTime"));
-                    intent.putExtra("comment", foodGrade.getString("comment"));
-                    intent.putExtra("grade", (float)foodGrade.getDouble("grade"));
+                    Intent intent = new Intent(DailyActivity.this, DailyUploadActivity.class);
+                    intent.putExtra("id", daily.getString("_id"));
+                    intent.putExtra("alias", daily.getString("alias"));
+                    intent.putExtra("avatar", daily.getString("avatar"));
+                    intent.putExtra("dateTime", daily.getString("dateTime"));
+                    intent.putExtra("comment", daily.getString("comment"));
+                    intent.putExtra("grade", (float)daily.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
-                    startActivity(intent, REQUEST_CODE_FOOD);
+                    startActivity(intent, REQUEST_CODE_DAILY);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -174,27 +174,27 @@ public class FoodGradesActivity extends BaseActivity {
 
                         Map<String, String> options = new HashMap<>();
                         options.put("sort", "-dateTime");
-                        Call<ResponseBody> foodGradesCall = HttpManager.instance().get("foodGrades", options);
-                        if(foodGradesCall != null) {
-                            foodGradesCall.enqueue(new Callback<ResponseBody>() {
+                        Call<ResponseBody> dailyCall = HttpManager.instance().get("foodGrades", options);
+                        if(dailyCall != null) {
+                            dailyCall.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     try {
                                         JSONArray resJsonArray = new JSONArray(response.body().string());
-                                        onFetchFoodGradesSuccess(resJsonArray);
+                                        onFetchDailySuccess(resJsonArray);
                                     } catch (Exception e) {
                                         e.printStackTrace();
-                                        onFetchFoodGradesFailed("some errors happened in server");
+                                        onFetchDailyFailed("some errors happened in server");
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                    onFetchFoodGradesFailed("some errors happened in server");
+                                    onFetchDailyFailed("some errors happened in server");
                                 }
                             });
                         } else {
-                            onFetchFoodGradesFailed("some errors happened in client");
+                            onFetchDailyFailed("some errors happened in client");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -220,24 +220,24 @@ public class FoodGradesActivity extends BaseActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    private void onFetchFoodGradesSuccess(JSONArray jsonArray) {
+    private void onFetchDailySuccess(JSONArray jsonArray) {
         try {
             for(int i = 0;i < jsonArray.length();i++) {
-                JSONObject foodGrade = jsonArray.getJSONObject(i);
-                JSONObject user = this.getUser(foodGrade.getString("user"));
-                foodGrade.put("alias", user.getString("alias"));
-                foodGrade.put("avatar", user.getString("avatar"));
+                JSONObject daily = jsonArray.getJSONObject(i);
+                JSONObject user = this.getUser(daily.getString("user"));
+                daily.put("alias", user.getString("alias"));
+                daily.put("avatar", user.getString("avatar"));
             }
-            this.mFoodGrades = jsonArray;
-            if(this.mFoodGradesAdapter != null) {
-                this.mFoodGradesAdapter.setFoodGrades(this.mFoodGrades);
+            this.mDailies = jsonArray;
+            if(this.mDailyAdapter != null) {
+                this.mDailyAdapter.setDailies(this.mDailies);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void onFetchFoodGradesFailed(String message) {
+    private void onFetchDailyFailed(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }
