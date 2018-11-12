@@ -21,6 +21,12 @@
             android:layout_height="wrap_content"
             android:textColor="@color/fontGray"
             android:textSize="@dimen/font_four"/>
+        <TextView
+            android:id="@+id/date3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/fontGray"
+            android:textSize="@dimen/font_four"/>
         <cn.carbs.android.avatarimageview.library.AvatarImageView
             android:id="@+id/avatar"
             android:layout_width="30dp"

@@ -174,7 +174,7 @@ public class DailyActivity extends BaseActivity {
 
                         Map<String, String> options = new HashMap<>();
                         options.put("sort", "-dateTime");
-                        Call<ResponseBody> dailyCall = HttpManager.instance().get("foodGrades", options);
+                        Call<ResponseBody> dailyCall = HttpManager.instance().get("dailies", options);
                         if(dailyCall != null) {
                             dailyCall.enqueue(new Callback<ResponseBody>() {
                                 @Override

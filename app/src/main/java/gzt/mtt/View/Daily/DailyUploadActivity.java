@@ -318,7 +318,7 @@ public class DailyUploadActivity extends BaseActivity {
                     File image = compressImages.get(i);
                     params.put(image.getName() + "-" + (i + offset), image);
                 }
-                Response<ResponseBody> response = HttpManager.instance().put("foodGrades", params).execute();
+                Response<ResponseBody> response = HttpManager.instance().put("dailies", params).execute();
                 JSONObject jsonObject = new JSONObject(response.body().string());
                 Log.d("zdt", jsonObject.getString("message"));
             } catch (Exception e) {

@@ -185,7 +185,7 @@ public class MainActivity extends BaseActivity
         TextView aliasTextView = headerView.findViewById(R.id.alias);
         aliasTextView.setText((String)this.mStorageManager.getSharedPreference("alias", ""));
 
-        // 添加食物评分
+        // 添加生活记录
         this.mDailyUploadFloatingButton = this.findViewById(R.id.dailyUpload);
         this.mDailyUploadFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,7 +219,7 @@ public class MainActivity extends BaseActivity
         this.mCo2TextView = this.findViewById(R.id.co2);
         this.showAirQuality();
 
-        // 食物评分
+        // 生活点滴
         this.mDailyRecyclerView = this.findViewById(R.id.daily);
         this.setLayoutManagerPolicy(1);
         this.mDailyRecyclerView.setItemAnimator(new FlyItemAnimator());
@@ -348,7 +348,7 @@ public class MainActivity extends BaseActivity
 
                         Map<String, String> options = new HashMap<>();
                         options.put("sort", "-dateTime");
-                        Call<ResponseBody> dailyCall = HttpManager.instance().get("foodGrades/last", options);
+                        Call<ResponseBody> dailyCall = HttpManager.instance().get("dailies/last", options);
                         if(dailyCall != null) {
                             dailyCall.enqueue(new Callback<ResponseBody>() {
                                 @Override

@@ -90,6 +90,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
         try{
             JSONObject daily = mDailies.getJSONObject(i);
 
+            List<String> curDateChStrs = TimeUtil.date2chstr(new Date());
             List<String> images = new ArrayList<>();
             images.add(Constant.BaseImageUrl + daily.getString("imagePath"));
             String alias = daily.getString("alias");
@@ -156,6 +157,11 @@ public class DailyAdapter extends RecyclerView.Adapter {
                 photoViewHolder.mGradeMaterialRatingBar.setRating(grade);
                 photoViewHolder.mDateTextView1.setText(dateTime.substring(8, 10));
                 photoViewHolder.mDateTextView2.setText(dateChStrs.get(1) + "/" + dateChStrs.get(3));
+                if (!curDateChStrs.get(0).equals(dateChStrs.get(0))) {
+                    photoViewHolder.mDateTextView3.setText(dateChStrs.get(0));
+                } else {
+                    photoViewHolder.mDateTextView3.setText("");
+                }
                 photoViewHolder.mCommentTextView.setText(comment);
                 photoViewHolder.mTimeTextView.setText(dateTime.substring(11));
             } else {
@@ -193,6 +199,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
         MaterialRatingBar mGradeMaterialRatingBar;
         TextView mDateTextView1;
         TextView mDateTextView2;
+        TextView mDateTextView3;
         TextView mCommentTextView;
         TextView mTimeTextView;
         public PhotoViewHolder(@NonNull View itemView) {
@@ -206,6 +213,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
                 this.mGradeMaterialRatingBar = itemView.findViewById(R.id.grade);
                 this.mDateTextView1 = itemView.findViewById(R.id.date1);
                 this.mDateTextView2 = itemView.findViewById(R.id.date2);
+                this.mDateTextView3 = itemView.findViewById(R.id.date3);
                 this.mCommentTextView = itemView.findViewById(R.id.comment);
                 this.mTimeTextView = itemView.findViewById(R.id.time);
                 this.mPhotoAppCompatImageView1.setScaleType(ImageView.ScaleType.CENTER_CROP);
