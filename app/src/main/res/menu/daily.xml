@@ -9,9 +9,16 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_upload"
+        android:id="@+id/action_sort"
         android:orderInCategory="100"
-        android:title="上传"
-        android:icon="@drawable/upload"
+        android:title="排序"
+        android:icon="@drawable/sort"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_filter"
+        android:orderInCategory="100"
+        android:title="筛选"
+        android:icon="@drawable/filter"
         app:showAsAction="always" />
 </menu>

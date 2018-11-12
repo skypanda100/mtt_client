@@ -67,9 +67,7 @@ public class DailyActivity extends BaseActivity {
                 this.setLayoutManagerPolicy(1);
             }
             this.mIsOneCol = !this.mIsOneCol;
-        } else if (id == R.id.action_upload) {
-            Intent intent = new Intent(DailyActivity.this, DailyUploadActivity.class);
-            this.startActivity(intent, REQUEST_CODE_DAILY);
+        } else if (id == R.id.action_sort) {
         }
 
         return super.onOptionsItemSelected(item);
