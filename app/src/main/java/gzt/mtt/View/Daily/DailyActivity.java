@@ -7,8 +7,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -17,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import gzt.mtt.Adapter.DailyAdapter;
@@ -68,6 +73,27 @@ public class DailyActivity extends BaseActivity {
             }
             this.mIsOneCol = !this.mIsOneCol;
         } else if (id == R.id.action_sort) {
+            PopupMenu popup = new PopupMenu(this, this.findViewById(R.id.action_sort));
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.daily_sort, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    return false;
+                }
+            });
+            popup.show();
+        } else if (id == R.id.action_filter) {
+            PopupMenu popup = new PopupMenu(this, this.findViewById(R.id.action_filter));
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.daily_filter, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    return false;
+                }
+            });
+            popup.show();
         }
 
         return super.onOptionsItemSelected(item);

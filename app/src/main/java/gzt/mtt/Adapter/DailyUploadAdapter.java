@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -62,13 +62,13 @@ public class DailyUploadAdapter extends RecyclerView.Adapter {
         Object photo = mPhotos.get(i);
         if (photo instanceof Uri) {
             photoViewHolder.mPhotoAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Picasso.with(this.mContext).load((Uri) photo).resize(300, 300).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView);
+            Glide.with(this.mContext).load((Uri) photo).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView);
         } else if (photo instanceof String) {
             photoViewHolder.mPhotoAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Picasso.with(this.mContext).load((String) photo).resize(300, 300).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView);
+            Glide.with(this.mContext).load((String) photo).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView);
         } else {
             photoViewHolder.mPhotoAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            Picasso.with(this.mContext).load((int)photo).resize(128, 128).centerInside().into(photoViewHolder.mPhotoAppCompatImageView);
+            Glide.with(this.mContext).load((int)photo).into(photoViewHolder.mPhotoAppCompatImageView);
         }
     }
 

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -111,8 +111,6 @@ public class DailyAdapter extends RecyclerView.Adapter {
             intent.putStringArrayListExtra("images", (ArrayList<String>) images);
 
             if(this.mIsOneCol) {
-                int width = 150;
-                int height = 150;
                 // 清空
                 photoViewHolder.mPhotoAppCompatImageView2.setImageDrawable(null);
                 photoViewHolder.mPhotoAppCompatImageView2.setOnClickListener(null);
@@ -123,7 +121,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
                     String imagePath = images.get(index);
                     switch (index) {
                         case 0:
-                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView1);
+                            Glide.with(this.mContext).load(imagePath).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView1);
                             photoViewHolder.mPhotoAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -133,7 +131,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
                             });
                             break;
                         case 1:
-                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView2);
+                            Glide.with(this.mContext).load(imagePath).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView2);
                             photoViewHolder.mPhotoAppCompatImageView2.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -143,7 +141,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
                             });
                             break;
                         case 2:
-                            Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView3);
+                            Glide.with(this.mContext).load(imagePath).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView3);
                             photoViewHolder.mPhotoAppCompatImageView3.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -165,10 +163,8 @@ public class DailyAdapter extends RecyclerView.Adapter {
                 photoViewHolder.mCommentTextView.setText(comment);
                 photoViewHolder.mTimeTextView.setText(dateTime.substring(11));
             } else {
-                int width = 200;
-                int height = 200;
                 String imagePath = images.get(0);
-                Picasso.with(this.mContext).load(imagePath).resize(width, height).centerCrop().into(photoViewHolder.mPhotoAppCompatImageView1);
+                Glide.with(this.mContext).load(imagePath).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView1);
                 photoViewHolder.mPhotoAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

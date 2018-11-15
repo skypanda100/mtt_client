@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -180,7 +180,7 @@ public class MainActivity extends BaseActivity
         View headerView = navigationView.getHeaderView(0);
 
         AvatarImageView avatarImageView = headerView.findViewById(R.id.avatar);
-        Picasso.with(this).load(Constant.BaseImageUrl + this.mStorageManager.getSharedPreference("avatar", "")).into(avatarImageView);
+        Glide.with(this).load(Constant.BaseImageUrl + this.mStorageManager.getSharedPreference("avatar", "")).thumbnail(0.2f).into(avatarImageView);
 
         TextView aliasTextView = headerView.findViewById(R.id.alias);
         aliasTextView.setText((String)this.mStorageManager.getSharedPreference("alias", ""));

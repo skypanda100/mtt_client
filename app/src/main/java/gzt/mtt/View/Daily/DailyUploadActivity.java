@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.PicassoEngine;
+import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -189,7 +189,7 @@ public class DailyUploadActivity extends BaseActivity {
                 .maxSelectable(9)
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f)
-                .imageEngine(new PicassoEngine())
+                .imageEngine(new GlideEngine())
                 .forResult(REQUEST_CODE_CHOOSE);
     }
 

@@ -5,14 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class PhotoAdapter extends PagerAdapter {
     private List<String> mImages = new ArrayList<>();
@@ -48,9 +48,9 @@ public class PhotoAdapter extends PagerAdapter {
         PhotoView photoView = new PhotoView(this.mContext);
         String path = this.mImages.get(position);
         if (path.startsWith("/storage")) {
-            Picasso.with(this.mContext).load(new File(path)).into(photoView);
+            Glide.with(this.mContext).load(new File(path)).thumbnail(0.2f).into(photoView);
         } else {
-            Picasso.with(this.mContext).load(path).into(photoView);
+            Glide.with(this.mContext).load(path).thumbnail(0.2f).into(photoView);
         }
         container.addView(photoView);
         return photoView;
