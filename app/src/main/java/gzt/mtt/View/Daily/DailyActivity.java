@@ -6,13 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -21,7 +20,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import gzt.mtt.Adapter.DailyAdapter;
@@ -35,7 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DailyActivity extends BaseActivity {
+public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int REQUEST_CODE_DAILY = 0;
 
     private RecyclerView mDailyRecyclerView;
@@ -43,6 +41,8 @@ public class DailyActivity extends BaseActivity {
     private JSONArray mDailies;
     private JSONArray mUsers;
     private boolean mIsOneCol = true;
+    private String mSort = "-dateTime";
+    private String mFilter = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,36 +64,11 @@ public class DailyActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_view) {
-            if(this.mIsOneCol) {
-                item.setIcon(R.drawable.col_one);
-                this.setLayoutManagerPolicy(3);
-            } else {
-                item.setIcon(R.drawable.col_three);
-                this.setLayoutManagerPolicy(1);
-            }
-            this.mIsOneCol = !this.mIsOneCol;
+            this.changeView(item);
         } else if (id == R.id.action_sort) {
-            PopupMenu popup = new PopupMenu(this, this.findViewById(R.id.action_sort));
-            MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.daily_sort, popup.getMenu());
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    return false;
-                }
-            });
-            popup.show();
+            this.showPopupMenu(R.menu.daily_sort, R.id.action_sort);
         } else if (id == R.id.action_filter) {
-            PopupMenu popup = new PopupMenu(this, this.findViewById(R.id.action_filter));
-            MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.daily_filter, popup.getMenu());
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    return false;
-                }
-            });
-            popup.show();
+            this.showPopupMenu(R.menu.daily_filter, R.id.action_filter);
         }
 
         return super.onOptionsItemSelected(item);
@@ -102,6 +77,38 @@ public class DailyActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter_food:
+            case R.id.filter_tt:
+            case R.id.filter_scene:
+                this.mFilter = (String) item.getTitle();
+                break;
+            case R.id.filter_all:
+                this.mFilter = "";
+                break;
+            case R.id.sort_time:
+                if (this.mSort.equals("-dateTime")) {
+                    this.mSort = "dateTime";
+                } else {
+                    this.mSort = "-dateTime";
+                }
+                break;
+            case R.id.sort_grade:
+                if (this.mSort.equals("-grade")) {
+                    this.mSort = "grade";
+                } else {
+                    this.mSort = "-grade";
+                }
+                break;
+        }
+        this.fetchData();
+
+        return false;
     }
 
     @Override
@@ -197,7 +204,8 @@ public class DailyActivity extends BaseActivity {
                         onFetchAllUsersSuccess(resJsonArray);
 
                         Map<String, String> options = new HashMap<>();
-                        options.put("sort", "-dateTime");
+                        options.put("filter", mFilter);
+                        options.put("sort", mSort);
                         Call<ResponseBody> dailyCall = HttpManager.instance().get("dailies", options);
                         if(dailyCall != null) {
                             dailyCall.enqueue(new Callback<ResponseBody>() {
@@ -263,5 +271,24 @@ public class DailyActivity extends BaseActivity {
 
     private void onFetchDailyFailed(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private void changeView(MenuItem item) {
+        if(this.mIsOneCol) {
+            item.setIcon(R.drawable.col_one);
+            this.setLayoutManagerPolicy(3);
+        } else {
+            item.setIcon(R.drawable.col_three);
+            this.setLayoutManagerPolicy(1);
+        }
+        this.mIsOneCol = !this.mIsOneCol;
+    }
+
+    private void showPopupMenu(int menuId, int resId) {
+        PopupMenu popup = new PopupMenu(this, this.findViewById(resId));
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(menuId, popup.getMenu());
+        popup.setOnMenuItemClickListener(this);
+        popup.show();
     }
 }

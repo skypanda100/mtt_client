@@ -9,4 +9,8 @@
     <item
         android:id="@+id/filter_scene"
         android:title="风景" />
+
+    <item
+        android:id="@+id/filter_all"
+        android:title="所有" />
 </menu>

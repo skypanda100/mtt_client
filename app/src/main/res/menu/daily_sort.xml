@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/sort_time"
-        android:title="时间" />
+        android:title="时间序" />
     <item
         android:id="@+id/sort_grade"
-        android:title="星星" />
+        android:title="星星序" />
 </menu>
