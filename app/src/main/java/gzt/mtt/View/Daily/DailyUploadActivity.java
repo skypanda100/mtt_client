@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +34,7 @@ import gzt.mtt.Component.WatingDialog.WaitingDialog;
 import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
+import gzt.mtt.Engine.MatisseEngine;
 import gzt.mtt.Util.PathUtil;
 import gzt.mtt.Util.TimeUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
@@ -97,7 +97,7 @@ public class DailyUploadActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             List<Uri> selected = Matisse.obtainResult(data);
-//            this.initPhotos();
+
             for (int i = 0;i < selected.size();i++) {
                 this.mPhotos.add(this.mPhotos.size() - 1, selected.get(i));
             }
@@ -186,10 +186,12 @@ public class DailyUploadActivity extends BaseActivity {
                 .choose(MimeType.ofAll())
                 .theme(R.style.GalleryTheme)
                 .countable(true)
+//                .capture(true)
+//                .captureStrategy(new CaptureStrategy(true, "gzt.mtt.fileprovider"))
                 .maxSelectable(9)
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f)
-                .imageEngine(new GlideEngine())
+                .imageEngine(new MatisseEngine())
                 .forResult(REQUEST_CODE_CHOOSE);
     }
 
