@@ -95,7 +95,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
             images.add(Constant.BaseImageUrl + daily.getString("imagePath"));
             String alias = daily.getString("alias");
             String avatar = daily.getString("avatar");
-            String address = daily.getString("location");
+            String address = daily.getString("address");
             String dateTime = daily.getString("dateTime");
             Date date = TimeUtil.str2date(dateTime, "yyyy-MM-dd HH:mm");
             List<String> dateChStrs = TimeUtil.date2chstr(date);

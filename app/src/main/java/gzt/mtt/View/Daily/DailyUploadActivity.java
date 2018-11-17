@@ -327,7 +327,7 @@ public class DailyUploadActivity extends BaseActivity {
                 params.put("comment", comment);
                 params.put("dateTime", dateTime);
                 params.put("images", netImages);
-                params.put("location", address);
+                params.put("address", address);
                 params.put("type", "食物");
 
                 if (imagePath != null) {
