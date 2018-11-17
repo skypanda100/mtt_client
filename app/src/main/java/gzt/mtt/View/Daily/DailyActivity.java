@@ -25,7 +25,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import gzt.mtt.Adapter.DailyAdapter;
@@ -47,6 +49,8 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
     private JSONArray mUsers;
     private boolean mIsOneCol = true;
 
+    private List<String> mSorts;
+    private List<String> mFilters;
     private int mPageCount = 1;
     private int mFetchCount = 30;
     private String mSort = "-dateTime";
@@ -74,9 +78,11 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
         if (id == R.id.action_view) {
             this.changeView(item);
         } else if (id == R.id.action_sort) {
-            this.showPopupMenu(R.menu.daily_sort, R.id.action_sort);
+            this.mSorts = Arrays.asList(this.getResources().getStringArray(R.array.sort_array));
+            this.showPopupMenu(this.mSorts, R.id.action_sort);
         } else if (id == R.id.action_filter) {
-            this.showPopupMenu(R.menu.daily_filter, R.id.action_filter);
+            this.mFilters = Arrays.asList(this.getResources().getStringArray(R.array.type_array));
+            this.showPopupMenu(this.mFilters, R.id.action_filter);
         }
 
         return super.onOptionsItemSelected(item);
@@ -90,30 +96,33 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.filter_food:
-            case R.id.filter_tt:
-            case R.id.filter_scene:
-                this.mFilter = (String) item.getTitle();
-                break;
-            case R.id.filter_all:
-                this.mFilter = "";
-                break;
-            case R.id.sort_time:
-                if (this.mSort.equals("-dateTime")) {
-                    this.mSort = "dateTime";
-                } else {
-                    this.mSort = "-dateTime";
-                }
-                break;
-            case R.id.sort_grade:
-                if (this.mSort.equals("-grade")) {
-                    this.mSort = "grade";
-                } else {
-                    this.mSort = "-grade";
-                }
-                break;
+        if (this.mSorts != null) {
+            int sortIndex = this.mSorts.indexOf(item.getTitle());
+            switch (sortIndex) {
+                case 0:
+                    if (this.mSort.equals("-dateTime")) {
+                        this.mSort = "dateTime";
+                    } else {
+                        this.mSort = "-dateTime";
+                    }
+                    break;
+                case 1:
+                    if (this.mSort.equals("-grade")) {
+                        this.mSort = "grade";
+                    } else {
+                        this.mSort = "-grade";
+                    }
+                    break;
+            }
         }
+
+        if (this.mFilters != null) {
+            int filterIndex = this.mFilters.indexOf(item.getTitle());
+            if(filterIndex > -1) {
+                this.mFilter = filterIndex == this.mFilters.size() - 1 ? "" : this.mFilters.get(filterIndex);
+            }
+        }
+
         this.fetchData();
 
         return false;
@@ -192,6 +201,7 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
                     intent.putExtra("id", daily.getString("_id"));
                     intent.putExtra("alias", daily.getString("alias"));
                     intent.putExtra("avatar", daily.getString("avatar"));
+                    intent.putExtra("type", daily.getString("type"));
                     intent.putExtra("address", daily.getString("address"));
                     intent.putExtra("dateTime", daily.getString("dateTime"));
                     intent.putExtra("comment", daily.getString("comment"));
@@ -318,10 +328,12 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
         this.mIsOneCol = !this.mIsOneCol;
     }
 
-    private void showPopupMenu(int menuId, int resId) {
+    private void showPopupMenu(List<String> menus, int resId) {
         PopupMenu popup = new PopupMenu(this, this.findViewById(resId));
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(menuId, popup.getMenu());
+        Menu menu = popup.getMenu();
+        for(String m : menus) {
+            menu.add(m);
+        }
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }

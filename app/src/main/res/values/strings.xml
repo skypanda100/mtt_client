@@ -3,4 +3,15 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
+    <string-array name="type_array">
+        <item>食物</item>
+        <item>跳跳</item>
+        <item>风景</item>
+        <item>私人</item>
+        <item>所有</item>
+    </string-array>
+    <string-array name="sort_array">
+        <item>时间序</item>
+        <item>星星序</item>
+    </string-array>
 </resources>

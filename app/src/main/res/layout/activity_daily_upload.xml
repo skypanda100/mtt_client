@@ -31,13 +31,24 @@
             android:layout_height="270dp">
         </android.support.v7.widget.RecyclerView>
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/type"
             android:layout_below="@id/photos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/type"
+            android:drawableTint="@color/fontGray"
+            android:textColor="@color/fontGray"
+            android:textSize="@dimen/font_three"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/padding"/>
+        <TextView
+            android:id="@+id/address"
+            android:layout_below="@id/type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:drawableStart="@drawable/address"
-            android:drawableTint="@color/fontBlueBlack"
-            android:textColor="@color/fontBlueBlack"
+            android:drawableTint="@color/fontGray"
+            android:textColor="@color/fontGray"
             android:textSize="@dimen/font_three"
             android:gravity="center_vertical"
             android:layout_marginTop="@dimen/padding"/>
@@ -63,7 +74,7 @@
                 android:inputType="textMultiLine"
                 android:hint="说点什么吧"
                 android:textSize="@dimen/font_two"
-                android:textColor="@color/fontBlueBlack"
+                android:textColor="@color/fontGray"
                 android:gravity="top"
                 android:minLines="6"/>
         </android.support.design.widget.TextInputLayout>

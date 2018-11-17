@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,17 +51,21 @@ public class DailyUploadActivity extends BaseActivity {
 
     private boolean mIsAdd;
     private String mId;
+    private String mUser;
     private String mAlias;
     private String mAvatar;
+    private String mType;
     private String mAddress;
     private String mDateTime;
     private String mComment;
     private float mGrade;
     private List<String> mImages;
+    private List<String> mTypes;
 
     private List<Object> mPhotos = new ArrayList<>();
     private RecyclerView mPhotoRecyclerView;
     private DailyUploadAdapter mDailyUploadAdapter;
+    private TextView mTypeTextView;
     private TextView mAddressTextView;
     private MaterialRatingBar mGradeRatingBar;
     private EditText mCommentEditText;
@@ -134,11 +139,17 @@ public class DailyUploadActivity extends BaseActivity {
         this.mId = intent.getStringExtra("id");
         this.mAlias = intent.getStringExtra("alias");
         this.mAvatar = intent.getStringExtra("avatar");
+        this.mType = intent.getStringExtra("type");
         this.mAddress = intent.getStringExtra("address");
         this.mDateTime = intent.getStringExtra("dateTime");
         this.mComment = intent.getStringExtra("comment");
         this.mGrade = intent.getFloatExtra("grade", 0.0f);
         this.mImages = intent.getStringArrayListExtra("images");
+        String[] typeArray = getResources().getStringArray(R.array.type_array);
+        this.mTypes = new ArrayList<>();
+        for(int i = 0;i < typeArray.length - 1;i++) {
+            this.mTypes.add(typeArray[i]);
+        }
 
         this.initPhotos();
 
@@ -186,6 +197,26 @@ public class DailyUploadActivity extends BaseActivity {
         });
         this.mDailyUploadAdapter.setPhotos(this.mPhotos);
 
+        this.mTypeTextView = this.findViewById(R.id.type);
+        this.mTypeTextView.setText(this.mType == null ? "" : this.mType);
+        this.mTypeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(DailyUploadActivity.this, DailyUploadActivity.this.findViewById(R.id.type));
+                Menu menu = popup.getMenu();
+                for(String t : mTypes) {
+                    menu.add(t);
+                }
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        DailyUploadActivity.this.mTypeTextView.setText(item.getTitle());
+                        return false;
+                    }
+                });
+                popup.show();
+            }
+        });
         this.mAddressTextView = this.findViewById(R.id.address);
         this.mAddressTextView.setText(this.mAddress);
         this.mGradeRatingBar = this.findViewById(R.id.grade);
@@ -238,23 +269,24 @@ public class DailyUploadActivity extends BaseActivity {
         this.mWaitingDialog.setCancelable(false);
 
         List<Object> images = this.getObjectImages();
-        String user = (String) this.mStorageManager.getSharedPreference("userName", "");
-        float grade = this.mGradeRatingBar.getRating();
-        String comment = this.mCommentEditText.getText().toString();
-        String address = this.mAddressTextView.getText().toString();
-        String dateTime = this.mIsAdd ? "" : this.mDateTime;
+        this.mUser = (String) this.mStorageManager.getSharedPreference("userName", "");
+        this.mType = this.mTypeTextView.getText().toString();
+        this.mGrade = this.mGradeRatingBar.getRating();
+        this.mComment = this.mCommentEditText.getText().toString();
+        this.mAddress = this.mAddressTextView.getText().toString();
+        this.mDateTime = this.mIsAdd ? "" : this.mDateTime;
         if (this.mIsAdd) {
             String path = PathUtil.uri2path(this, (Uri) images.get(0));
             File homeFile = new File(path);
             if(homeFile.exists() && homeFile.isFile()){
-                dateTime = TimeUtil.date2str(new Date(homeFile.lastModified()), "yyyy-MM-dd HH:mm");
+                this.mDateTime = TimeUtil.date2str(new Date(homeFile.lastModified()), "yyyy-MM-dd HH:mm");
             } else {
-                dateTime = TimeUtil.date2str(new Date(), "yyyy-MM-dd HH:mm");
+                this.mDateTime = TimeUtil.date2str(new Date(), "yyyy-MM-dd HH:mm");
             }
         }
 
         UploadTask uploadTask = new UploadTask();
-        uploadTask.execute(mId, user, address, grade, comment, dateTime, images);
+        uploadTask.execute(images);
     }
 
     private boolean validate() {
@@ -289,14 +321,15 @@ public class DailyUploadActivity extends BaseActivity {
         protected Object doInBackground(Object[] objects) {
             try {
                 publishProgress(0);
-                String id = objects[0] == null ? "" : (String) objects[0];
-                String user = (String) objects[1];
-                String address = (String) objects[2];
-                float grade = (float) objects[3];
-                String comment = (String) objects[4];
-                String dateTime = (String) objects[5];
+                String id = mId == null ? "" : mId;
+                String user = mUser;
+                String type = mType;
+                String address = mAddress;
+                float grade = mGrade;
+                String comment = mComment;
+                String dateTime = mDateTime;
                 String imagePath = null;
-                List<Object> images = (ArrayList<Object>) objects[6];
+                List<Object> images = (ArrayList<Object>) objects[0];
                 JSONArray netImages = new JSONArray();
                 List<String> localImages = new ArrayList<>();
                 boolean isLocalImageFirst = false;
@@ -328,7 +361,7 @@ public class DailyUploadActivity extends BaseActivity {
                 params.put("dateTime", dateTime);
                 params.put("images", netImages);
                 params.put("address", address);
-                params.put("type", "食物");
+                params.put("type", type);
 
                 if (imagePath != null) {
                     params.put("imagePath", imagePath);
