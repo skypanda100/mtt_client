@@ -150,6 +150,9 @@ public class DailyUploadActivity extends BaseActivity {
         for(int i = 0;i < typeArray.length - 1;i++) {
             this.mTypes.add(typeArray[i]);
         }
+        if(this.mType == null && this.mTypes.size() > 0) {
+            this.mType = this.mTypes.get(0);
+        }
 
         this.initPhotos();
 
@@ -198,7 +201,7 @@ public class DailyUploadActivity extends BaseActivity {
         this.mDailyUploadAdapter.setPhotos(this.mPhotos);
 
         this.mTypeTextView = this.findViewById(R.id.type);
-        this.mTypeTextView.setText(this.mType == null ? "" : this.mType);
+        this.mTypeTextView.setText(this.mType);
         this.mTypeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
