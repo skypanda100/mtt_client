@@ -2,17 +2,23 @@ package gzt.mtt.View.Daily;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+
+import com.scwang.smartrefresh.header.TaurusHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,14 +39,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
-    private static final int REQUEST_CODE_DAILY = 0;
-
+public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener, OnRefreshListener, OnLoadMoreListener {
+    private RefreshLayout mDailyRefreshLayout;
     private RecyclerView mDailyRecyclerView;
     private DailyAdapter mDailyAdapter;
     private JSONArray mDailies;
     private JSONArray mUsers;
     private boolean mIsOneCol = true;
+
+    private int mPageCount = 1;
+    private int mFetchCount = 30;
     private String mSort = "-dateTime";
     private String mFilter = "";
 
@@ -112,11 +120,14 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_DAILY) {
-            this.initData();
-        }
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        fetchData();
+    }
+
+    @Override
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+        this.mPageCount++;
+        fetchData();
     }
 
     private void initData() {
@@ -139,6 +150,20 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
                 onBackPressed();
             }
         });
+
+        this.mDailyRefreshLayout = this.findViewById(R.id.daily_refresh);
+        // header
+        TaurusHeader taurusHeader = new TaurusHeader(this);
+        taurusHeader.setBackgroundColor(this.getResources().getColor(R.color.colorPrimary));
+        this.mDailyRefreshLayout.setRefreshHeader(taurusHeader);
+        // foot
+        BallPulseFooter ballPulseFooter = new BallPulseFooter(this);
+        ballPulseFooter.setSpinnerStyle(SpinnerStyle.Scale);
+        ballPulseFooter.setAnimatingColor(this.getResources().getColor(R.color.colorPrimary));
+        this.mDailyRefreshLayout.setRefreshFooter(ballPulseFooter);
+
+        this.mDailyRefreshLayout.setOnRefreshListener(this);
+        this.mDailyRefreshLayout.setOnLoadMoreListener(this);
 
         this.mDailyRecyclerView = this.findViewById(R.id.daily);
         this.mDailyRecyclerView.setItemAnimator(new FlyItemAnimator());
@@ -171,7 +196,7 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
                     intent.putExtra("comment", daily.getString("comment"));
                     intent.putExtra("grade", (float)daily.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
-                    startActivity(intent, REQUEST_CODE_DAILY);
+                    startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -206,6 +231,8 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
                         Map<String, String> options = new HashMap<>();
                         options.put("filter", mFilter);
                         options.put("sort", mSort);
+                        options.put("limit", String.valueOf(mPageCount * mFetchCount));
+
                         Call<ResponseBody> dailyCall = HttpManager.instance().get("dailies", options);
                         if(dailyCall != null) {
                             dailyCall.enqueue(new Callback<ResponseBody>() {
@@ -253,6 +280,9 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
     }
 
     private void onFetchDailySuccess(JSONArray jsonArray) {
+        this.mDailyRefreshLayout.finishRefresh(1000);
+        this.mDailyRefreshLayout.finishLoadMore(1000);
+
         try {
             for(int i = 0;i < jsonArray.length();i++) {
                 JSONObject daily = jsonArray.getJSONObject(i);
@@ -270,6 +300,9 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
     }
 
     private void onFetchDailyFailed(String message) {
+        this.mDailyRefreshLayout.finishRefresh(1000, false);
+        this.mDailyRefreshLayout.finishLoadMore(1000);
+
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 

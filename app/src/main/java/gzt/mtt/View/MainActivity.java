@@ -5,7 +5,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -23,6 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.scwang.smartrefresh.header.TaurusHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,17 +44,16 @@ import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
 import gzt.mtt.View.AirQuality.AirQualityActivity;
-import gzt.mtt.View.Daily.DailyUploadActivity;
 import gzt.mtt.View.Daily.DailyActivity;
+import gzt.mtt.View.Daily.DailyUploadActivity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnRefreshListener {
     private static boolean isExit = false;
-    private static final int REQUEST_CODE_DAILY = 0;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -61,6 +63,7 @@ public class MainActivity extends BaseActivity
         }
     };
 
+    private RefreshLayout mMainRefreshLayout;
     private com.getbase.floatingactionbutton.FloatingActionButton mDailyUploadFloatingButton;
     private com.getbase.floatingactionbutton.FloatingActionButton mSleepQualityUploadFloatingButton;
     private TextView mTempTextView;
@@ -116,7 +119,7 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_sleep_quality) {
 
         } else if (id == R.id.nav_daily) {
-            this.startActivity(DailyActivity.class, REQUEST_CODE_DAILY);
+            this.startActivity(DailyActivity.class);
         } else if (id == R.id.nav_share) {
 
         }
@@ -136,8 +139,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         this.showAirQuality();
         this.showDaily();
     }
@@ -190,7 +192,7 @@ public class MainActivity extends BaseActivity
         this.mDailyUploadFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(DailyUploadActivity.class, REQUEST_CODE_DAILY);
+                startActivity(DailyUploadActivity.class);
             }
         });
 
@@ -204,6 +206,13 @@ public class MainActivity extends BaseActivity
                 waitingDialog.show();
             }
         });
+
+        this.mMainRefreshLayout = this.findViewById(R.id.main_refresh);
+        // header
+        TaurusHeader taurusHeader = new TaurusHeader(this);
+        taurusHeader.setBackgroundColor(this.getResources().getColor(R.color.colorPrimary));
+        this.mMainRefreshLayout.setRefreshHeader(taurusHeader);
+        this.mMainRefreshLayout.setOnRefreshListener(this);
 
         // 空气质量
         MaterialCardView airQualityContainer = this.findViewById(R.id.airQualityContainer);
@@ -285,7 +294,7 @@ public class MainActivity extends BaseActivity
                     intent.putExtra("comment", daily.getString("comment"));
                     intent.putExtra("grade", (float)daily.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
-                    startActivity(intent, REQUEST_CODE_DAILY);
+                    startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -316,6 +325,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void onFetchDailySuccess(JSONArray jsonArray) {
+        this.mMainRefreshLayout.finishRefresh(1000);
         try {
             for(int i = 0;i < jsonArray.length();i++) {
                 JSONObject daily = jsonArray.getJSONObject(i);
@@ -333,6 +343,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void onFetchDailyFailed(String message) {
+        this.mMainRefreshLayout.finishRefresh(1000, false);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 

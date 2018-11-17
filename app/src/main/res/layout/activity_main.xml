@@ -15,12 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -28,111 +29,121 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <RelativeLayout
-                android:id="@+id/contentMain"
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/main_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <android.support.design.card.MaterialCardView
-                    android:id="@+id/airQualityContainer"
+                android:layout_height="match_parent"
+                app:srlEnablePreviewInEditMode="true">
+
+                <RelativeLayout
+                    android:id="@+id/contentMain"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    app:cardCornerRadius="@dimen/corner_radius"
-                    app:cardElevation="@dimen/elevation"
-                    app:cardUseCompatPadding="true">
-                    <GridLayout
+                    android:layout_height="match_parent">
+
+                    <android.support.design.card.MaterialCardView
+                        android:id="@+id/airQualityContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        app:cardCornerRadius="@dimen/corner_radius"
+                        app:cardElevation="@dimen/elevation"
+                        app:cardUseCompatPadding="true">
+
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:columnCount="4"
+                            android:rowCount="2">
+
+                            <TextView
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="0"
+                                android:layout_columnWeight="1"
+                                android:gravity="center"
+                                android:text="温度"
+                                android:textColor="@color/fontGray"
+                                android:textSize="@dimen/font_four" />
+
+                            <TextView
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="1"
+                                android:layout_columnWeight="1"
+                                android:gravity="center"
+                                android:text="湿度"
+                                android:textColor="@color/fontGray"
+                                android:textSize="@dimen/font_four" />
+
+                            <TextView
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="2"
+                                android:layout_columnWeight="1"
+                                android:gravity="center"
+                                android:text="PM2.5"
+                                android:textColor="@color/fontGray"
+                                android:textSize="@dimen/font_four" />
+
+                            <TextView
+                                android:layout_row="0"
+                                android:layout_rowWeight="1"
+                                android:layout_column="3"
+                                android:layout_columnWeight="1"
+                                android:gravity="center"
+                                android:text="二氧化碳"
+                                android:textColor="@color/fontGray"
+                                android:textSize="@dimen/font_four" />
+
+                            <TextView
+                                android:id="@+id/temp"
+                                android:layout_row="1"
+                                android:layout_rowWeight="1"
+                                android:layout_column="0"
+                                android:layout_columnWeight="1"
+                                android:gravity="center"
+                                android:textColor="@color/fontBlueBlack"
+                                android:textSize="@dimen/font_one" />
+
+                            <TextView
+                                android:id="@+id/humidity"
+                                android:layout_row="1"
+                                android:layout_rowWeight="1"
+                                android:layout_column="1"
+                                android:layout_columnWeight="1"
+                                android:gravity="center"
+                                android:textColor="@color/fontBlueBlack"
+                                android:textSize="@dimen/font_one" />
+
+                            <TextView
+                                android:id="@+id/pm25"
+                                android:layout_row="1"
+                                android:layout_rowWeight="1"
+                                android:layout_column="2"
+                                android:layout_columnWeight="1"
+                                android:gravity="center"
+                                android:textColor="@color/fontBlueBlack"
+                                android:textSize="@dimen/font_one" />
+
+                            <TextView
+                                android:id="@+id/co2"
+                                android:layout_row="1"
+                                android:layout_rowWeight="1"
+                                android:layout_column="3"
+                                android:layout_columnWeight="1"
+                                android:gravity="center"
+                                android:textColor="@color/fontBlueBlack"
+                                android:textSize="@dimen/font_one" />
+                        </GridLayout>
+                    </android.support.design.card.MaterialCardView>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/daily"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:rowCount="2"
-                        android:columnCount="4">
-                        <TextView
-                            android:layout_row="0"
-                            android:layout_column="0"
-                            android:layout_rowWeight="1"
-                            android:layout_columnWeight="1"
-                            android:textSize="@dimen/font_four"
-                            android:textColor="@color/fontGray"
-                            android:gravity="center"
-                            android:text="温度"/>
-
-                        <TextView
-                            android:layout_row="0"
-                            android:layout_column="1"
-                            android:layout_rowWeight="1"
-                            android:layout_columnWeight="1"
-                            android:textSize="@dimen/font_four"
-                            android:textColor="@color/fontGray"
-                            android:gravity="center"
-                            android:text="湿度"/>
-
-                        <TextView
-                            android:layout_row="0"
-                            android:layout_column="2"
-                            android:layout_rowWeight="1"
-                            android:layout_columnWeight="1"
-                            android:textSize="@dimen/font_four"
-                            android:textColor="@color/fontGray"
-                            android:gravity="center"
-                            android:text="PM2.5"/>
-
-                        <TextView
-                            android:layout_row="0"
-                            android:layout_column="3"
-                            android:layout_rowWeight="1"
-                            android:layout_columnWeight="1"
-                            android:textSize="@dimen/font_four"
-                            android:textColor="@color/fontGray"
-                            android:gravity="center"
-                            android:text="二氧化碳"/>
-
-                        <TextView
-                            android:id="@+id/temp"
-                            android:layout_row="1"
-                            android:layout_column="0"
-                            android:layout_rowWeight="1"
-                            android:layout_columnWeight="1"
-                            android:textSize="@dimen/font_one"
-                            android:textColor="@color/fontBlueBlack"
-                            android:gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/humidity"
-                            android:layout_row="1"
-                            android:layout_column="1"
-                            android:layout_rowWeight="1"
-                            android:layout_columnWeight="1"
-                            android:textSize="@dimen/font_one"
-                            android:textColor="@color/fontBlueBlack"
-                            android:gravity="center"/>
-                        <TextView
-                            android:id="@+id/pm25"
-                            android:layout_row="1"
-                            android:layout_column="2"
-                            android:layout_rowWeight="1"
-                            android:layout_columnWeight="1"
-                            android:textSize="@dimen/font_one"
-                            android:textColor="@color/fontBlueBlack"
-                            android:gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/co2"
-                            android:layout_row="1"
-                            android:layout_column="3"
-                            android:layout_rowWeight="1"
-                            android:layout_columnWeight="1"
-                            android:textSize="@dimen/font_one"
-                            android:textColor="@color/fontBlueBlack"
-                            android:gravity="center"/>
-                    </GridLayout>
-                </android.support.design.card.MaterialCardView>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/daily"
-                    android:scrollbars="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/airQualityContainer">
-                </android.support.v7.widget.RecyclerView>
-            </RelativeLayout>
+                        android:layout_below="@id/airQualityContainer"
+                        android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -151,21 +162,21 @@
                 android:id="@+id/dailyUpload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_icon="@drawable/food"
+                app:fab_addButtonSize="mini"
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_colorPressed="@color/colorPrimaryDark"
-                app:fab_addButtonSize="mini"
-                app:fab_title="Label on the right"/>
+                app:fab_icon="@drawable/food"
+                app:fab_title="Label on the right" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/sleepQualityUpload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_icon="@drawable/sleep"
+                app:fab_addButtonSize="mini"
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_colorPressed="@color/colorPrimaryDark"
-                app:fab_addButtonSize="mini"
-                app:fab_title="Another one on the right"/>
+                app:fab_icon="@drawable/sleep"
+                app:fab_title="Another one on the right" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
@@ -176,8 +187,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
         android:background="@color/colorPrimary"
+        android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_view_header"
         app:menu="@menu/nav_view_drawer" />
 
