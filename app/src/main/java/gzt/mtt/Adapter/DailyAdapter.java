@@ -95,6 +95,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
             images.add(Constant.BaseImageUrl + daily.getString("imagePath"));
             String alias = daily.getString("alias");
             String avatar = daily.getString("avatar");
+            String address = daily.getString("location");
             String dateTime = daily.getString("dateTime");
             Date date = TimeUtil.str2date(dateTime, "yyyy-MM-dd HH:mm");
             List<String> dateChStrs = TimeUtil.date2chstr(date);
@@ -152,6 +153,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
                             break;
                     }
                 }
+                photoViewHolder.mAddressTextView.setText(address);
                 photoViewHolder.mGradeMaterialRatingBar.setRating(grade);
                 photoViewHolder.mDateTextView1.setText(dateTime.substring(8, 10));
                 photoViewHolder.mDateTextView2.setText(dateChStrs.get(1) + "/" + dateChStrs.get(3));
@@ -189,6 +191,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
     class PhotoViewHolder extends RecyclerView.ViewHolder {
         AvatarImageView mAvatarAvatarImageView;
         TextView mAliasTextView;
+        TextView mAddressTextView;
         AppCompatImageView mPhotoAppCompatImageView1;
         AppCompatImageView mPhotoAppCompatImageView2;
         AppCompatImageView mPhotoAppCompatImageView3;
@@ -203,6 +206,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
             if(mIsOneCol) {
                 this.mAvatarAvatarImageView = itemView.findViewById(R.id.avatar);
                 this.mAliasTextView = itemView.findViewById(R.id.alias);
+                this.mAddressTextView = itemView.findViewById(R.id.address);
                 this.mPhotoAppCompatImageView1 = itemView.findViewById(R.id.photo1);
                 this.mPhotoAppCompatImageView2 = itemView.findViewById(R.id.photo2);
                 this.mPhotoAppCompatImageView3 = itemView.findViewById(R.id.photo3);

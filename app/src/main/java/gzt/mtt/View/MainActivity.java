@@ -290,6 +290,7 @@ public class MainActivity extends BaseActivity
                     intent.putExtra("id", daily.getString("_id"));
                     intent.putExtra("alias", daily.getString("alias"));
                     intent.putExtra("avatar", daily.getString("avatar"));
+                    intent.putExtra("address", daily.getString("location"));
                     intent.putExtra("dateTime", daily.getString("dateTime"));
                     intent.putExtra("comment", daily.getString("comment"));
                     intent.putExtra("grade", (float)daily.getDouble("grade"));

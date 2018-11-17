@@ -30,9 +30,20 @@
             android:layout_width="match_parent"
             android:layout_height="270dp">
         </android.support.v7.widget.RecyclerView>
+        <TextView
+            android:id="@+id/address"
+            android:layout_below="@id/photos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/address"
+            android:drawableTint="@color/fontBlueBlack"
+            android:textColor="@color/fontBlueBlack"
+            android:textSize="@dimen/font_three"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/padding"/>
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/grade"
-            android:layout_below="@id/photos"
+            android:layout_below="@id/address"
             android:layout_width="150dp"
             android:layout_height="25dp"
             android:layout_centerHorizontal="true"

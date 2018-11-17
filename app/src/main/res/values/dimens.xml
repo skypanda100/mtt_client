@@ -13,5 +13,6 @@
     <dimen name="font_two">18sp</dimen>
     <dimen name="font_three">15sp</dimen>
     <dimen name="font_four">13sp</dimen>
+    <dimen name="font_five">11sp</dimen>
 
 </resources>
