@@ -2,11 +2,23 @@ package gzt.mtt.Util;
 
 import android.content.Context;
 import android.media.ExifInterface;
-import android.util.Log;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class PhotoUtil {
+    public static Date getCreateTime(String path) {
+        Date date = null;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            String timeStr = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+            date = TimeUtil.str2date(timeStr, "yyyy:MM:dd HH:mm:ss");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     public static String getAddress(Context context, String path) {
         String address = null;
         try {
