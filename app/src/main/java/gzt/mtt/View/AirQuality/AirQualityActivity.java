@@ -1,22 +1,15 @@
 package gzt.mtt.View.AirQuality;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import gzt.mtt.BaseActivity;
+import gzt.mtt.View.BaseActivity;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;

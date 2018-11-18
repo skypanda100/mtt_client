@@ -2,7 +2,6 @@ package gzt.mtt.View.Login;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.os.Handler;
 import android.support.design.button.MaterialButton;
 import android.os.Bundle;
@@ -16,7 +15,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import gzt.mtt.BaseActivity;
+import gzt.mtt.View.BaseActivity;
 import gzt.mtt.View.MainActivity;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;

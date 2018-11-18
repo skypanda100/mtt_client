@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import gzt.mtt.BaseActivity;
+import gzt.mtt.View.BaseActivity;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;

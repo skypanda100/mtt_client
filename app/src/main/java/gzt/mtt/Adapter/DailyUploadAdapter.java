@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import gzt.mtt.Manager.ImageManager;
 import gzt.mtt.R;
 
 public class DailyUploadAdapter extends RecyclerView.Adapter {
@@ -62,13 +63,13 @@ public class DailyUploadAdapter extends RecyclerView.Adapter {
         Object photo = mPhotos.get(i);
         if (photo instanceof Uri) {
             photoViewHolder.mPhotoAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Glide.with(this.mContext).load((Uri) photo).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView);
+            ImageManager.loadImage(this.mContext, (Uri) photo, photoViewHolder.mPhotoAppCompatImageView);
         } else if (photo instanceof String) {
             photoViewHolder.mPhotoAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Glide.with(this.mContext).load((String) photo).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView);
+            ImageManager.loadImage(this.mContext, (String) photo, photoViewHolder.mPhotoAppCompatImageView);
         } else {
             photoViewHolder.mPhotoAppCompatImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            Glide.with(this.mContext).load((int)photo).into(photoViewHolder.mPhotoAppCompatImageView);
+            ImageManager.loadImage(this.mContext, (int) photo, photoViewHolder.mPhotoAppCompatImageView);
         }
     }
 

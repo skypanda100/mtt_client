@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,6 +20,7 @@ import java.util.List;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import gzt.mtt.Constant;
+import gzt.mtt.Manager.ImageManager;
 import gzt.mtt.R;
 import gzt.mtt.Util.TimeUtil;
 import gzt.mtt.View.Daily.PhotoActivity;
@@ -57,6 +56,13 @@ public class DailyAdapter extends RecyclerView.Adapter {
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.mItemClickListener = itemClickListener;
+    }
+
+    public void resetImageView(ImageView imageView) {
+//        ImageManager.clearView(this.mContext, imageView);
+        imageView.setTag(null);
+        imageView.setImageDrawable(null);
+        imageView.setOnClickListener(null);
     }
 
     @NonNull
@@ -113,16 +119,15 @@ public class DailyAdapter extends RecyclerView.Adapter {
 
             if(this.mIsOneCol) {
                 // 清空
-                photoViewHolder.mPhotoAppCompatImageView2.setImageDrawable(null);
-                photoViewHolder.mPhotoAppCompatImageView2.setOnClickListener(null);
-                photoViewHolder.mPhotoAppCompatImageView3.setImageDrawable(null);
-                photoViewHolder.mPhotoAppCompatImageView3.setOnClickListener(null);
+                this.resetImageView(photoViewHolder.mPhotoAppCompatImageView1);
+                this.resetImageView(photoViewHolder.mPhotoAppCompatImageView2);
+                this.resetImageView(photoViewHolder.mPhotoAppCompatImageView3);
 
                 for(int index = 0;index < 3 && index < images.size();index++) {
                     String imagePath = images.get(index);
                     switch (index) {
                         case 0:
-                            Glide.with(this.mContext).load(imagePath).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView1);
+                            ImageManager.loadImage(this.mContext, imagePath, photoViewHolder.mPhotoAppCompatImageView1);
                             photoViewHolder.mPhotoAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -132,7 +137,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
                             });
                             break;
                         case 1:
-                            Glide.with(this.mContext).load(imagePath).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView2);
+                            ImageManager.loadImage(this.mContext, imagePath, photoViewHolder.mPhotoAppCompatImageView2);
                             photoViewHolder.mPhotoAppCompatImageView2.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -142,7 +147,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
                             });
                             break;
                         case 2:
-                            Glide.with(this.mContext).load(imagePath).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView3);
+                            ImageManager.loadImage(this.mContext, imagePath, photoViewHolder.mPhotoAppCompatImageView3);
                             photoViewHolder.mPhotoAppCompatImageView3.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -165,8 +170,11 @@ public class DailyAdapter extends RecyclerView.Adapter {
                 photoViewHolder.mCommentTextView.setText(comment);
                 photoViewHolder.mTimeTextView.setText(dateTime.substring(11));
             } else {
+                // 清空
+                this.resetImageView(photoViewHolder.mPhotoAppCompatImageView1);
+
                 String imagePath = images.get(0);
-                Glide.with(this.mContext).load(imagePath).thumbnail(0.2f).into(photoViewHolder.mPhotoAppCompatImageView1);
+                ImageManager.loadImage(this.mContext, imagePath, photoViewHolder.mPhotoAppCompatImageView1);
                 photoViewHolder.mPhotoAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

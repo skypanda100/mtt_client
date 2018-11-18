@@ -13,6 +13,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import gzt.mtt.Manager.ImageManager;
+
 
 public class PhotoAdapter extends PagerAdapter {
     private List<String> mImages = new ArrayList<>();
@@ -44,13 +46,12 @@ public class PhotoAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-//        ImageView imageView = new ImageView(this.mContext);
         PhotoView photoView = new PhotoView(this.mContext);
         String path = this.mImages.get(position);
         if (path.startsWith("/storage")) {
-            Glide.with(this.mContext).load(new File(path)).thumbnail(0.2f).into(photoView);
+            ImageManager.loadImage(this.mContext, new File(path), photoView);
         } else {
-            Glide.with(this.mContext).load(path).thumbnail(0.2f).into(photoView);
+            ImageManager.loadImage(this.mContext, path, photoView);
         }
         container.addView(photoView);
         return photoView;

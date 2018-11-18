@@ -31,15 +31,15 @@ import java.util.List;
 import java.util.Map;
 
 import gzt.mtt.Adapter.DailyUploadAdapter;
-import gzt.mtt.BaseActivity;
 import gzt.mtt.Component.WatingDialog.WaitingDialog;
 import gzt.mtt.Constant;
+import gzt.mtt.Engine.MatisseEngine;
 import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
-import gzt.mtt.Engine.MatisseEngine;
 import gzt.mtt.Util.PathUtil;
 import gzt.mtt.Util.PhotoUtil;
 import gzt.mtt.Util.TimeUtil;
+import gzt.mtt.View.BaseActivity;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -131,7 +131,7 @@ public class DailyUploadActivity extends BaseActivity {
                 this.mPhotos.add(image);
             }
         }
-        this.mPhotos.add(R.drawable.plus);
+        this.mPhotos.add(R.drawable.add);
     }
 
     private void initData() {

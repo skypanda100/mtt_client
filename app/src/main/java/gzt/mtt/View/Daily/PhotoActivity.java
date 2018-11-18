@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import gzt.mtt.Adapter.PhotoAdapter;
-import gzt.mtt.BaseActivity;
+import gzt.mtt.View.BaseActivity;
 import gzt.mtt.R;
 public class PhotoActivity extends BaseActivity {
     private boolean mCanDelete;

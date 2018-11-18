@@ -5,10 +5,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
 import com.zhihu.matisse.engine.ImageEngine;
+
+import gzt.mtt.GlideApp;
 
 public class MatisseEngine implements ImageEngine {
     @Override
@@ -17,7 +18,7 @@ public class MatisseEngine implements ImageEngine {
                 .centerCrop()
                 .placeholder(placeholder)//这里可自己添加占位图
                 .override(resize, resize);
-        Glide.with(context)
+        GlideApp.with(context)
                 .asBitmap()  // some .jpeg files are actually gif
                 .load(uri)
                 .apply(options)
@@ -30,7 +31,7 @@ public class MatisseEngine implements ImageEngine {
                 .centerCrop()
                 .placeholder(placeholder)//这里可自己添加占位图
                 .override(resize, resize);
-        Glide.with(context)
+        GlideApp.with(context)
                 .asGif()  // some .jpeg files are actually gif
                 .load(uri)
                 .apply(options)
@@ -44,7 +45,7 @@ public class MatisseEngine implements ImageEngine {
                 .centerCrop()
                 .override(resizeX, resizeY)
                 .priority(Priority.HIGH);
-        Glide.with(context)
+        GlideApp.with(context)
                 .load(uri)
                 .apply(options)
                 .into(imageView);
@@ -55,7 +56,7 @@ public class MatisseEngine implements ImageEngine {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .override(resizeX, resizeY);
-        Glide.with(context)
+        GlideApp.with(context)
                 .asGif()  // some .jpeg files are actually gif
                 .load(uri)
                 .apply(options)

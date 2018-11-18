@@ -1,4 +1,4 @@
-package gzt.mtt;
+package gzt.mtt.View;
 
 import android.Manifest;
 import android.app.ActionBar;
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gzt.mtt.Manager.StorageManager;
+import gzt.mtt.R;
 
 public class BaseActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION = 0;

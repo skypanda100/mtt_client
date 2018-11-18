@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.scwang.smartrefresh.header.TaurusHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -39,10 +38,10 @@ import java.util.Map;
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import gzt.mtt.Adapter.DailyAdapter;
 import gzt.mtt.Animator.FlyItemAnimator;
-import gzt.mtt.BaseActivity;
 import gzt.mtt.Component.WatingDialog.WaitingDialog;
 import gzt.mtt.Constant;
 import gzt.mtt.Manager.HttpManager;
+import gzt.mtt.Manager.ImageManager;
 import gzt.mtt.R;
 import gzt.mtt.View.AirQuality.AirQualityActivity;
 import gzt.mtt.View.Daily.DailyActivity;
@@ -191,7 +190,7 @@ public class MainActivity extends BaseActivity
         View headerView = navigationView.getHeaderView(0);
 
         AvatarImageView avatarImageView = headerView.findViewById(R.id.avatar);
-        Glide.with(this).load(Constant.BaseImageUrl + this.mStorageManager.getSharedPreference("avatar", "")).thumbnail(0.2f).into(avatarImageView);
+        ImageManager.loadImage(this, Constant.BaseImageUrl + this.mStorageManager.getSharedPreference("avatar", ""), avatarImageView);
 
         TextView aliasTextView = headerView.findViewById(R.id.alias);
         aliasTextView.setText((String)this.mStorageManager.getSharedPreference("alias", ""));
