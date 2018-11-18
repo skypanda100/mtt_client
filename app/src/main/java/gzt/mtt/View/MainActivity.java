@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.card.MaterialCardView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -53,8 +54,9 @@ import retrofit2.Response;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnRefreshListener {
+    private static final int REQUEST_CODE_DAILY = 0;
+    private static final int REQUEST_CODE_AIR = 1;
     private static boolean isExit = false;
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -115,11 +117,11 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_air_quality) {
-            this.startActivity(AirQualityActivity.class);
+            this.startActivity(AirQualityActivity.class, REQUEST_CODE_AIR);
         } else if (id == R.id.nav_sleep_quality) {
 
         } else if (id == R.id.nav_daily) {
-            this.startActivity(DailyActivity.class);
+            this.startActivity(DailyActivity.class, REQUEST_CODE_DAILY);
         } else if (id == R.id.nav_share) {
 
         }
@@ -136,6 +138,13 @@ public class MainActivity extends BaseActivity
             return false;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        this.showAirQuality();
+        this.showDaily();
     }
 
     @Override
@@ -192,7 +201,7 @@ public class MainActivity extends BaseActivity
         this.mDailyUploadFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(DailyUploadActivity.class);
+                startActivity(DailyUploadActivity.class, REQUEST_CODE_DAILY);
             }
         });
 
@@ -219,7 +228,7 @@ public class MainActivity extends BaseActivity
         airQualityContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(AirQualityActivity.class);
+                startActivity(AirQualityActivity.class, REQUEST_CODE_AIR);
             }
         });
         this.mTempTextView = this.findViewById(R.id.temp);
@@ -296,7 +305,7 @@ public class MainActivity extends BaseActivity
                     intent.putExtra("comment", daily.getString("comment"));
                     intent.putExtra("grade", (float)daily.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
-                    startActivity(intent);
+                    startActivity(intent, REQUEST_CODE_DAILY);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

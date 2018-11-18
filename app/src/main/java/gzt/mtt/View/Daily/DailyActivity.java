@@ -3,6 +3,7 @@ package gzt.mtt.View.Daily;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener, OnRefreshListener, OnLoadMoreListener {
+    private static final int REQUEST_CODE_DAILY = 0;
     private RefreshLayout mDailyRefreshLayout;
     private RecyclerView mDailyRecyclerView;
     private DailyAdapter mDailyAdapter;
@@ -129,6 +131,14 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_DAILY) {
+            this.fetchData();
+        }
+    }
+
+    @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         fetchData();
     }
@@ -207,7 +217,7 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
                     intent.putExtra("comment", daily.getString("comment"));
                     intent.putExtra("grade", (float)daily.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
-                    startActivity(intent);
+                    startActivity(intent, REQUEST_CODE_DAILY);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

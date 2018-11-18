@@ -307,6 +307,7 @@ public class DailyUploadActivity extends BaseActivity {
 
     private void onUploadSuccess(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        this.finish();
     }
 
     private void onUploadFailed(String message) {
