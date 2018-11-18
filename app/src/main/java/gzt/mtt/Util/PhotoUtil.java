@@ -3,11 +3,13 @@ package gzt.mtt.Util;
 import android.content.Context;
 import android.media.ExifInterface;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
 public class PhotoUtil {
-    public static Date getCreateTime(String path) {
+    public static String getTime(String path) {
+        String photoTimeStr = null;
         Date date = null;
         try {
             ExifInterface exifInterface = new ExifInterface(path);
@@ -16,7 +18,17 @@ public class PhotoUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return date;
+        if (date != null) {
+            photoTimeStr = TimeUtil.date2str(date, "yyyy-MM-dd HH:mm");
+        } else {
+            File photo = new File(path);
+            if(photo.exists() && photo.isFile()){
+                photoTimeStr = TimeUtil.date2str(new Date(photo.lastModified()), "yyyy-MM-dd HH:mm");
+            } else {
+                photoTimeStr = TimeUtil.date2str(new Date(), "yyyy-MM-dd HH:mm");
+            }
+        }
+        return photoTimeStr;
     }
 
     public static String getAddress(Context context, String path) {

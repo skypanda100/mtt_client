@@ -280,17 +280,7 @@ public class DailyUploadActivity extends BaseActivity {
         this.mDateTime = this.mIsAdd ? "" : this.mDateTime;
         if (this.mIsAdd) {
             String path = PathUtil.uri2path(this, (Uri) images.get(0));
-            Date date = PhotoUtil.getCreateTime(path);
-            if (date != null) {
-                this.mDateTime = TimeUtil.date2str(date, "yyyy-MM-dd HH:mm");
-            } else {
-                File homeFile = new File(path);
-                if(homeFile.exists() && homeFile.isFile()){
-                    this.mDateTime = TimeUtil.date2str(new Date(homeFile.lastModified()), "yyyy-MM-dd HH:mm");
-                } else {
-                    this.mDateTime = TimeUtil.date2str(new Date(), "yyyy-MM-dd HH:mm");
-                }
-            }
+            this.mDateTime = PhotoUtil.getTime(path);
         }
 
         UploadTask uploadTask = new UploadTask();
