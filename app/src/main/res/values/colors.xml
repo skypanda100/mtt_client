@@ -13,6 +13,7 @@
 
     <color name="windowBackground">#efefef</color>
     <color name="fontBlueBlack">#687C81</color>
+    <color name="fontBlack">#292A2D</color>
     <color name="fontGray">#B2B2B2</color>
     <color name="windowGray">#E0E0E0</color>
     <color name="light_overlay">#efefef</color>

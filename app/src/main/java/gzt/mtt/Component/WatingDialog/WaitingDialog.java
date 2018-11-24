@@ -3,12 +3,13 @@ package gzt.mtt.Component.WatingDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import gzt.mtt.R;
 
 public class WaitingDialog extends Dialog {
-    private TextView mContentTextView;
+    TextView mContentTextView;
 
     public WaitingDialog(Context context) {
         super(context);
@@ -28,6 +29,7 @@ public class WaitingDialog extends Dialog {
     private void initView() {
         this.setContentView(R.layout.component_waiting_dialog);
         this.mContentTextView = this.findViewById(R.id.content);
+        this.mContentTextView.setVisibility(View.GONE);
     }
 
     public void setContentText(String text) {
