@@ -268,7 +268,7 @@ public class DailyUploadActivity extends BaseActivity {
         if(!this.validate()) {
             return;
         }
-        this.mWaitingDialog = new WaitingDialog(this);
+        this.mWaitingDialog = new WaitingDialog();
         this.mWaitingDialog.setCancelable(false);
 
         List<Object> images = this.getObjectImages();
@@ -313,7 +313,7 @@ public class DailyUploadActivity extends BaseActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mWaitingDialog.show();
+            mWaitingDialog.show(getFragmentManager(), "");
         }
 
         @Override
@@ -386,10 +386,10 @@ public class DailyUploadActivity extends BaseActivity {
             int value = (int) values[0];
             switch (value){
                 case 0:
-                    mWaitingDialog.setContentText("图片压缩中...");
+//                    mWaitingDialog.setContentText("图片压缩中...");
                     break;
                 case 1:
-                    mWaitingDialog.setContentText("图片上传中...");
+//                    mWaitingDialog.setContentText("图片上传中...");
                     break;
             }
         }
@@ -398,7 +398,7 @@ public class DailyUploadActivity extends BaseActivity {
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
             boolean isSuccess = (boolean) o;
-            mWaitingDialog.cancel();
+//            mWaitingDialog.cancel();
             if (isSuccess) {
                 onUploadSuccess("提交评分成功");
             } else {

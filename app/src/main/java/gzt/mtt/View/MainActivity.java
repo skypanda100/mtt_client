@@ -209,9 +209,9 @@ public class MainActivity extends BaseActivity
         this.mSleepQualityUploadFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WaitingDialog waitingDialog = new WaitingDialog(MainActivity.this);
-                waitingDialog.setContentText("图片上传中");
-                waitingDialog.show();
+                WaitingDialog waitingDialog = new WaitingDialog();
+//                waitingDialog.setContentText("图片上传中");
+                waitingDialog.show(getFragmentManager(), "");
             }
         });
 

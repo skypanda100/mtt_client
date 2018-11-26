@@ -1,38 +1,74 @@
 package gzt.mtt.Component.WatingDialog;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
+import fr.tvbarthel.lib.blurdialogfragment.BlurDialogFragment;
 import gzt.mtt.R;
 
-public class WaitingDialog extends Dialog {
-    TextView mContentTextView;
-
-    public WaitingDialog(Context context) {
-        super(context);
-        this.initData();
-        this.initView();
+public class WaitingDialog extends BlurDialogFragment {
+    private Dialog mDialog;
+    private GradientDrawable mGradientDrawable;
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        this.mDialog = null;
+        this.mGradientDrawable = null;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if (this.mDialog == null) {
+            this.mGradientDrawable = new GradientDrawable();
+            this.mGradientDrawable.setCornerRadius(getResources().getDimensionPixelSize(R.dimen.corner_radius));
+            this.mGradientDrawable.setColor(getResources().getColor(R.color.colorPrimary));
+
+            this.mDialog = new Dialog(getActivity());
+            this.mDialog.setContentView(R.layout.component_waiting_dialog);
+            this.mDialog.findViewById(R.id.waitingBackGround).setBackground(this.mGradientDrawable);
+        }
+        return this.mDialog;
     }
 
-    private void initData() {
-
+    @Override
+    protected float getDownScaleFactor() {
+        // Allow to customize the down scale factor.
+        return 5.0f;
     }
 
-    private void initView() {
-        this.setContentView(R.layout.component_waiting_dialog);
-        this.mContentTextView = this.findViewById(R.id.content);
-        this.mContentTextView.setVisibility(View.GONE);
+    @Override
+    protected int getBlurRadius() {
+        // Allow to customize the blur radius factor.
+        return 10;
     }
 
-    public void setContentText(String text) {
-        this.mContentTextView.setText(text);
+    @Override
+    protected boolean isActionBarBlurred() {
+        // Enable or disable the blur effect on the action bar.
+        // Disabled by default.
+        return true;
+    }
+
+    @Override
+    protected boolean isDimmingEnable() {
+        // Enable or disable the dimming effect.
+        // Disabled by default.
+        return true;
+    }
+
+    @Override
+    protected boolean isRenderScriptEnable() {
+        // Enable or disable the use of RenderScript for blurring effect
+        // Disabled by default.
+        return true;
+    }
+
+    @Override
+    protected boolean isDebugEnable() {
+        // Enable or disable debug mode.
+        // False by default.
+        return false;
     }
 }
