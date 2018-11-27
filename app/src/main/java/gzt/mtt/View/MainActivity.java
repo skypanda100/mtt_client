@@ -211,7 +211,7 @@ public class MainActivity extends BaseActivity
             public void onClick(View v) {
                 WaitingDialog waitingDialog = new WaitingDialog();
 //                waitingDialog.setContentText("图片上传中");
-                waitingDialog.show(getFragmentManager(), "");
+                waitingDialog.show(getSupportFragmentManager(), "");
             }
         });
 

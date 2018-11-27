@@ -5,10 +5,10 @@ import android.content.DialogInterface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
-import fr.tvbarthel.lib.blurdialogfragment.BlurDialogFragment;
+import fr.tvbarthel.lib.blurdialogfragment.SupportBlurDialogFragment;
 import gzt.mtt.R;
 
-public class WaitingDialog extends BlurDialogFragment {
+public class WaitingDialog extends SupportBlurDialogFragment {
     private Dialog mDialog;
     private GradientDrawable mGradientDrawable;
     @Override

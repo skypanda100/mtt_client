@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -180,6 +181,9 @@ public class DailyUploadActivity extends BaseActivity {
             }
         });
 
+        this.mWaitingDialog = new WaitingDialog();
+        this.mWaitingDialog.setCancelable(false);
+
         this.mPhotoRecyclerView = this.findViewById(R.id.photos);
         this.mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         this.mPhotoRecyclerView.setAdapter(mDailyUploadAdapter = new DailyUploadAdapter(this));
@@ -268,10 +272,8 @@ public class DailyUploadActivity extends BaseActivity {
         if(!this.validate()) {
             return;
         }
-        this.mWaitingDialog = new WaitingDialog();
-        this.mWaitingDialog.setCancelable(false);
 
-        List<Object> images = this.getObjectImages();
+        final List<Object> images = this.getObjectImages();
         this.mUser = (String) this.mStorageManager.getSharedPreference("userName", "");
         this.mType = this.mTypeTextView.getText().toString();
         this.mGrade = this.mGradeRatingBar.getRating();
@@ -282,9 +284,16 @@ public class DailyUploadActivity extends BaseActivity {
             String path = PathUtil.uri2path(this, (Uri) images.get(0));
             this.mDateTime = PhotoUtil.getTime(path);
         }
+        this.mWaitingDialog.show(getSupportFragmentManager(), "");
 
-        UploadTask uploadTask = new UploadTask();
-        uploadTask.execute(images);
+        // 如果不延迟的话，这个dialog背景不会模糊，不清楚为什么
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UploadTask uploadTask = new UploadTask();
+                uploadTask.execute(images);
+            }
+        }, 1000);
     }
 
     private boolean validate() {
@@ -301,11 +310,17 @@ public class DailyUploadActivity extends BaseActivity {
     }
 
     private void onUploadSuccess(String message) {
+        if (this.mWaitingDialog.getDialog() != null) {
+            this.mWaitingDialog.dismiss();
+        }
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         this.finish();
     }
 
     private void onUploadFailed(String message) {
+        if (this.mWaitingDialog.getDialog() != null) {
+            this.mWaitingDialog.dismiss();
+        }
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
@@ -313,7 +328,6 @@ public class DailyUploadActivity extends BaseActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mWaitingDialog.show(getFragmentManager(), "");
         }
 
         @Override
@@ -398,11 +412,10 @@ public class DailyUploadActivity extends BaseActivity {
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
             boolean isSuccess = (boolean) o;
-//            mWaitingDialog.cancel();
             if (isSuccess) {
                 onUploadSuccess("提交评分成功");
             } else {
-                onUploadSuccess("提交评分失败");
+                onUploadFailed("提交评分失败");
             }
         }
     }
