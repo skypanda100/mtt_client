@@ -41,4 +41,5 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
     implementation 'fr.tvbarthel.blurdialogfragment:lib:2.2.0'
+    implementation 'co.lujun:androidtagview:1.1.4'
 }

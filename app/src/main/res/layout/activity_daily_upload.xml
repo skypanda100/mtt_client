@@ -60,12 +60,26 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/padding"
             style="@style/Widget.MaterialRatingBar.RatingBar"/>
+        <co.lujun.androidtagview.TagContainerLayout
+            android:id="@+id/tag"
+            android:layout_marginTop="@dimen/padding"
+            android:layout_below="@id/grade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:container_background_color="#00000000"
+            app:container_border_color="#00000000"
+            app:container_border_radius="0dp"
+            app:container_border_width="4dp"
+            app:container_enable_drag="true"
+            app:container_gravity="center"
+            app:tag_clickable="true"
+            app:tag_theme="random"/>
         <android.support.design.widget.TextInputLayout
             android:id="@+id/commentContainer"
             android:textColorHint="@color/fontGray"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/grade"
+            android:layout_below="@id/tag"
             android:layout_marginTop="@dimen/padding">
             <EditText
                 android:id="@+id/comment"

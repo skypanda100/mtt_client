@@ -26,11 +26,12 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import co.lujun.androidtagview.TagContainerLayout;
+import co.lujun.androidtagview.TagView;
 import gzt.mtt.Adapter.DailyUploadAdapter;
 import gzt.mtt.Component.WatingDialog.WaitingDialog;
 import gzt.mtt.Constant;
@@ -39,14 +40,13 @@ import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.R;
 import gzt.mtt.Util.PathUtil;
 import gzt.mtt.Util.PhotoUtil;
-import gzt.mtt.Util.TimeUtil;
 import gzt.mtt.View.BaseActivity;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import top.zibin.luban.Luban;
 
-public class DailyUploadActivity extends BaseActivity {
+public class DailyUploadActivity extends BaseActivity implements TagView.OnTagClickListener {
     private static final int REQUEST_CODE_CHOOSE = 0;
     private static final int REQUEST_CODE_DELETE = 1;
 
@@ -62,12 +62,14 @@ public class DailyUploadActivity extends BaseActivity {
     private float mGrade;
     private List<String> mImages;
     private List<String> mTypes;
+    private List<String> mTags;
 
     private List<Object> mPhotos = new ArrayList<>();
     private RecyclerView mPhotoRecyclerView;
     private DailyUploadAdapter mDailyUploadAdapter;
     private TextView mTypeTextView;
     private TextView mAddressTextView;
+    private TagContainerLayout mTagContainerLayout;
     private MaterialRatingBar mGradeRatingBar;
     private EditText mCommentEditText;
     private WaitingDialog mWaitingDialog;
@@ -100,6 +102,22 @@ public class DailyUploadActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onTagClick(int position, String text) {
+
+    }
+
+    @Override
+    public void onTagLongClick(int position, String text) {
+
+    }
+
+    @Override
+    public void onTagCrossClick(int position) {
+
     }
 
     @Override
@@ -136,6 +154,12 @@ public class DailyUploadActivity extends BaseActivity {
     }
 
     private void initData() {
+        this.mTags = new ArrayList<>();
+        this.mTags.add("牛肉");
+        this.mTags.add("猪肉");
+        this.mTags.add("羊肉");
+        this.mTags.add("绿色蔬菜");
+
         Intent intent = this.getIntent();
         this.mId = intent.getStringExtra("id");
         this.mAlias = intent.getStringExtra("alias");
@@ -226,6 +250,9 @@ public class DailyUploadActivity extends BaseActivity {
         });
         this.mAddressTextView = this.findViewById(R.id.address);
         this.mAddressTextView.setText(this.mAddress);
+        this.mTagContainerLayout = this.findViewById(R.id.tag);
+        this.mTagContainerLayout.setOnTagClickListener(this);
+        this.mTagContainerLayout.setTags(this.mTags);
         this.mGradeRatingBar = this.findViewById(R.id.grade);
         this.mGradeRatingBar.setRating(this.mGrade);
         this.mCommentEditText = this.findViewById(R.id.comment);
