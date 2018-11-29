@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -293,7 +294,13 @@ public class MainActivity extends BaseActivity
                             images.add(Constant.BaseImageUrl + others.getJSONObject(i).getString("imagePath"));
                         }
                     }
-
+                    ArrayList<String> tags = new ArrayList<>();
+                    if (daily.has("tags")) {
+                        JSONArray tagArray = daily.getJSONArray("tags");
+                        for (int i = 0;i < tagArray.length();i++) {
+                            tags.add(tagArray.getString(i));
+                        }
+                    }
                     Intent intent = new Intent(MainActivity.this, DailyUploadActivity.class);
                     intent.putExtra("id", daily.getString("_id"));
                     intent.putExtra("alias", daily.getString("alias"));
@@ -304,6 +311,8 @@ public class MainActivity extends BaseActivity
                     intent.putExtra("comment", daily.getString("comment"));
                     intent.putExtra("grade", (float)daily.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
+                    intent.putStringArrayListExtra("tags", tags);
+
                     startActivity(intent, REQUEST_CODE_DAILY);
                 } catch (JSONException e) {
                     e.printStackTrace();

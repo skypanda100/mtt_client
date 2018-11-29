@@ -205,6 +205,13 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
                             images.add(Constant.BaseImageUrl + others.getJSONObject(i).getString("imagePath"));
                         }
                     }
+                    ArrayList<String> tags = new ArrayList<>();
+                    if (daily.has("tags")) {
+                        JSONArray tagArray = daily.getJSONArray("tags");
+                        for (int i = 0;i < tagArray.length();i++) {
+                            tags.add(tagArray.getString(i));
+                        }
+                    }
 
                     Intent intent = new Intent(DailyActivity.this, DailyUploadActivity.class);
                     intent.putExtra("id", daily.getString("_id"));
@@ -216,6 +223,8 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
                     intent.putExtra("comment", daily.getString("comment"));
                     intent.putExtra("grade", (float)daily.getDouble("grade"));
                     intent.putStringArrayListExtra("images", images);
+                    intent.putStringArrayListExtra("tags", tags);
+
                     startActivity(intent, REQUEST_CODE_DAILY);
                 } catch (JSONException e) {
                     e.printStackTrace();

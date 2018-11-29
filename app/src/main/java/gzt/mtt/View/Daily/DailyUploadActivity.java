@@ -2,7 +2,9 @@ package gzt.mtt.View.Daily;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -63,6 +65,7 @@ public class DailyUploadActivity extends BaseActivity implements TagView.OnTagCl
     private List<String> mImages;
     private List<String> mTypes;
     private List<String> mTags;
+    private List<String> mCheckedTags;
 
     private List<Object> mPhotos = new ArrayList<>();
     private RecyclerView mPhotoRecyclerView;
@@ -107,7 +110,15 @@ public class DailyUploadActivity extends BaseActivity implements TagView.OnTagCl
 
     @Override
     public void onTagClick(int position, String text) {
-
+        TagView tagView = this.mTagContainerLayout.getTagView(position);
+        if (this.mCheckedTags.contains(text)) {
+            this.mCheckedTags.remove(text);
+            this.setTagUnChecked(tagView);
+        } else {
+            this.mCheckedTags.add(text);
+            this.setTagChecked(tagView);
+        }
+        Log.d("zdt", this.mCheckedTags.toString());
     }
 
     @Override
@@ -155,9 +166,16 @@ public class DailyUploadActivity extends BaseActivity implements TagView.OnTagCl
 
     private void initData() {
         this.mTags = new ArrayList<>();
-        this.mTags.add("牛肉");
+        this.mTags.add("鸡肉");
+        this.mTags.add("鸭肉");
+        this.mTags.add("鱼肉");
         this.mTags.add("猪肉");
+        this.mTags.add("牛肉");
         this.mTags.add("羊肉");
+        this.mTags.add("面条");
+        this.mTags.add("包子");
+        this.mTags.add("馒头");
+        this.mTags.add("垃圾食品");
         this.mTags.add("绿色蔬菜");
 
         Intent intent = this.getIntent();
@@ -170,6 +188,11 @@ public class DailyUploadActivity extends BaseActivity implements TagView.OnTagCl
         this.mComment = intent.getStringExtra("comment");
         this.mGrade = intent.getFloatExtra("grade", 0.0f);
         this.mImages = intent.getStringArrayListExtra("images");
+        this.mCheckedTags = intent.getStringArrayListExtra("tags");
+
+        if (this.mCheckedTags == null) {
+            this.mCheckedTags = new ArrayList<>();
+        }
         String[] typeArray = getResources().getStringArray(R.array.type_array);
         this.mTypes = new ArrayList<>();
         for(int i = 0;i < typeArray.length - 1;i++) {
@@ -253,6 +276,13 @@ public class DailyUploadActivity extends BaseActivity implements TagView.OnTagCl
         this.mTagContainerLayout = this.findViewById(R.id.tag);
         this.mTagContainerLayout.setOnTagClickListener(this);
         this.mTagContainerLayout.setTags(this.mTags);
+        for (String tag : this.mCheckedTags) {
+            int index = this.mTags.indexOf(tag);
+            Log.d("zdt", index + "-" + tag);
+            if (index > -1) {
+                this.setTagChecked(this.mTagContainerLayout.getTagView(index));
+            }
+        }
         this.mGradeRatingBar = this.findViewById(R.id.grade);
         this.mGradeRatingBar.setRating(this.mGrade);
         this.mCommentEditText = this.findViewById(R.id.comment);
@@ -351,6 +381,16 @@ public class DailyUploadActivity extends BaseActivity implements TagView.OnTagCl
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+    private void setTagChecked(TagView tagView) {
+        tagView.setTagTextColor(getResources().getColor(R.color.colorAccent));
+        tagView.setTagBorderColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    private void setTagUnChecked(TagView tagView) {
+        tagView.setTagTextColor(getResources().getColor(R.color.fontGray));
+        tagView.setTagBorderColor(getResources().getColor(R.color.fontGray));
+    }
+
     private class UploadTask extends AsyncTask {
         @Override
         protected void onPreExecute() {
@@ -369,6 +409,11 @@ public class DailyUploadActivity extends BaseActivity implements TagView.OnTagCl
                 String comment = mComment;
                 String dateTime = mDateTime;
                 String imagePath = null;
+                JSONArray tags = new JSONArray();
+                Log.d("zdt", mCheckedTags.toString());
+                for (String tag : mCheckedTags) {
+                    tags.put(tag);
+                }
                 List<Object> images = (ArrayList<Object>) objects[0];
                 JSONArray netImages = new JSONArray();
                 List<String> localImages = new ArrayList<>();
@@ -402,6 +447,7 @@ public class DailyUploadActivity extends BaseActivity implements TagView.OnTagCl
                 params.put("images", netImages);
                 params.put("address", address);
                 params.put("type", type);
+                params.put("tags", tags);
 
                 if (imagePath != null) {
                     params.put("imagePath", imagePath);
