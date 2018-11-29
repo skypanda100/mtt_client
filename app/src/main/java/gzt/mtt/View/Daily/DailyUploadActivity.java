@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,16 @@ import top.zibin.luban.Luban;
 public class DailyUploadActivity extends BaseActivity implements TagView.OnTagClickListener {
     private static final int REQUEST_CODE_CHOOSE = 0;
     private static final int REQUEST_CODE_DELETE = 1;
+    private static final String[] TAGS = {
+            "鸡肉", "鸭肉", "猪肉", "牛肉", "羊肉", "鱼", "虾", "蟹", "猪蹄", "肥肠", "猪肝", "猪腰", "鸡肝",
+            "黄豆", "绿豆", "红豆", "豌豆", "毛豆", "芸豆", "蚕豆", "豆腐", "豆皮", "腐竹",
+            "米饭", "馒头", "面条", "烙饼", "包子", "饺子", "馄饨", "馅饼", "汤圆",
+            "玉米", "红薯", "山药", "土豆", "小米", "薏米", "玉米面",
+            "绿叶蔬菜", "花菜", "菌菇", "萝卜", "青红椒", "豆芽", "海藻", "番茄",
+            "香肠", "腊肉", "熏肉",
+            "芝麻酱", "辣椒酱", "甜面酱", "豆瓣酱", "辣椒油", "花椒油",
+            "香蕉", "苹果", "猕猴桃", "桔子", "橙子", "香蕉", "车厘子", "草莓", "芒果", "西瓜", "蜜瓜", "小番茄", "梨", "菠萝"
+    };
 
     private boolean mIsAdd;
     private String mId;
@@ -165,18 +176,7 @@ public class DailyUploadActivity extends BaseActivity implements TagView.OnTagCl
     }
 
     private void initData() {
-        this.mTags = new ArrayList<>();
-        this.mTags.add("鸡肉");
-        this.mTags.add("鸭肉");
-        this.mTags.add("鱼肉");
-        this.mTags.add("猪肉");
-        this.mTags.add("牛肉");
-        this.mTags.add("羊肉");
-        this.mTags.add("面条");
-        this.mTags.add("包子");
-        this.mTags.add("馒头");
-        this.mTags.add("垃圾食品");
-        this.mTags.add("绿色蔬菜");
+        this.mTags = new ArrayList<>(Arrays.asList(TAGS));
 
         Intent intent = this.getIntent();
         this.mId = intent.getStringExtra("id");
