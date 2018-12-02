@@ -2,6 +2,7 @@ package gzt.mtt.View.Daily;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -9,9 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.File;
+import java.net.URI;
 import java.util.List;
 
 import gzt.mtt.Adapter.PhotoAdapter;
+import gzt.mtt.Manager.ImageManager;
+import gzt.mtt.Util.PathUtil;
+import gzt.mtt.Util.PhotoUtil;
 import gzt.mtt.View.BaseActivity;
 import gzt.mtt.R;
 public class PhotoActivity extends BaseActivity {
@@ -31,8 +37,10 @@ public class PhotoActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (this.mCanDelete) {
-            getMenuInflater().inflate(R.menu.photo, menu);
+        getMenuInflater().inflate(R.menu.photo, menu);
+        if (!this.mCanDelete) {
+            MenuItem deleteMenuItem = menu.findItem(R.id.action_delete);
+            deleteMenuItem.setVisible(false);
         }
         return true;
     }
@@ -46,6 +54,8 @@ public class PhotoActivity extends BaseActivity {
             intent.putExtra("index", this.mIndex);
             this.setResult(RESULT_OK, intent);
             this.finish();
+        } else if (id == R.id.action_share) {
+            this.share();
         }
 
         return super.onOptionsItemSelected(item);
@@ -109,5 +119,34 @@ public class PhotoActivity extends BaseActivity {
 
     private void setIndicator() {
         this.mPhotoIndicatorTextView.setText((this.mIndex + 1) + "/" + this.mImages.size());
+    }
+
+    private void share() {
+        String title = "MTT";
+        String subject = "";
+        String content = "";
+        String imagePath = this.mImages.get(this.mIndex);
+        URI uri = null;
+        if (imagePath.startsWith("/storage")) {
+            uri = new File(imagePath).toURI();
+        } else {
+//            ImageManager.loadImage(this.mContext, path, photoView);
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        if (subject != null && !"".equals(subject)) {
+            intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        }
+        if (content != null && !"".equals(content)) {
+            intent.putExtra(Intent.EXTRA_TEXT, content);
+        }
+
+        // 设置弹出框标题
+        if (title != null && !"".equals(title)) { // 自定义标题
+            startActivity(Intent.createChooser(intent, title));
+        } else { // 系统默认标题
+            startActivity(intent);
+        }
     }
 }

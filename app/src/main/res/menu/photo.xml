@@ -7,4 +7,11 @@
         android:title="删除"
         android:icon="@drawable/delete"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_share"
+        android:orderInCategory="100"
+        android:title="分享"
+        android:icon="@drawable/share"
+        app:showAsAction="always" />
 </menu>

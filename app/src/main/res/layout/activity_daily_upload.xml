@@ -65,6 +65,7 @@
                 style="@style/Widget.MaterialRatingBar.RatingBar"/>
             <co.lujun.androidtagview.TagContainerLayout
                 android:id="@+id/tag"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/padding"
                 android:layout_below="@id/grade"
                 android:layout_width="match_parent"
