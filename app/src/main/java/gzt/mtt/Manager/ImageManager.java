@@ -18,7 +18,7 @@ import gzt.mtt.R;
 import gzt.mtt.Util.PathUtil;
 
 public class ImageManager {
-    private static CustomViewTarget createTarget(final String tag, final ImageView imageView) {
+    private static CustomViewTarget createCustomViewTarget(final String tag, final ImageView imageView) {
         // set tag
         imageView.setTag(tag);
 
@@ -51,7 +51,7 @@ public class ImageManager {
 
     public static void loadImage(Context context, final String url, final ImageView imageView) {
         // target
-        CustomViewTarget customViewTarget = createTarget(url, imageView);
+        CustomViewTarget customViewTarget = createCustomViewTarget(url, imageView);
         // load
         GlideApp.with(context).load(url).placeholder(R.drawable.loading).error(R.drawable.loading).thumbnail(0.2f).into(customViewTarget);
     }
@@ -59,7 +59,7 @@ public class ImageManager {
     public static void loadImage(Context context, final Uri uri, final ImageView imageView) {
         // target
         String path = PathUtil.uri2path(context, uri);
-        CustomViewTarget customViewTarget = createTarget(path, imageView);
+        CustomViewTarget customViewTarget = createCustomViewTarget(path, imageView);
         // load
         GlideApp.with(context).load(uri).placeholder(R.drawable.loading).error(R.drawable.loading).thumbnail(0.2f).into(customViewTarget);
     }
@@ -67,7 +67,7 @@ public class ImageManager {
     public static void loadImage(Context context, final File file, final ImageView imageView) {
         // target
         String path = file.getAbsolutePath();
-        CustomViewTarget customViewTarget = createTarget(path, imageView);
+        CustomViewTarget customViewTarget = createCustomViewTarget(path, imageView);
         // load
         GlideApp.with(context).load(file).placeholder(R.drawable.loading).error(R.drawable.loading).thumbnail(0.2f).into(customViewTarget);
     }
@@ -75,7 +75,7 @@ public class ImageManager {
     public static void loadImage(Context context, final int id, final ImageView imageView) {
         // target
         String path = String.valueOf(id);
-        CustomViewTarget customViewTarget = createTarget(path, imageView);
+        CustomViewTarget customViewTarget = createCustomViewTarget(path, imageView);
         // load
         GlideApp.with(context).load(id).placeholder(R.drawable.loading).error(R.drawable.loading).thumbnail(0.2f).into(customViewTarget);
     }
