@@ -1,6 +1,7 @@
 package gzt.mtt.View.Daily;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -312,20 +313,32 @@ public class DailyActivity extends BaseActivity implements PopupMenu.OnMenuItemC
         this.mDailyRefreshLayout.finishRefresh(1000);
         this.mDailyRefreshLayout.finishLoadMore(1000);
 
-        try {
-            for(int i = 0;i < jsonArray.length();i++) {
-                JSONObject daily = jsonArray.getJSONObject(i);
-                JSONObject user = this.getUser(daily.getString("user"));
-                daily.put("alias", user.getString("alias"));
-                daily.put("avatar", user.getString("avatar"));
+        new AsyncTask<Object, Integer, Object>() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                JSONArray jsonArray = (JSONArray) objects[0];
+                try {
+                    for(int i = 0;i < jsonArray.length();i++) {
+                        JSONObject daily = jsonArray.getJSONObject(i);
+                        JSONObject user = getUser(daily.getString("user"));
+                        daily.put("alias", user.getString("alias"));
+                        daily.put("avatar", user.getString("avatar"));
+                    }
+                    mDailies = jsonArray;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
-            this.mDailies = jsonArray;
-            if(this.mDailyAdapter != null) {
-                this.mDailyAdapter.setDailies(this.mDailies);
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if(mDailyAdapter != null) {
+                    mDailyAdapter.setDailies(mDailies);
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        }.execute(jsonArray);
     }
 
     private void onFetchDailyFailed(String message) {
