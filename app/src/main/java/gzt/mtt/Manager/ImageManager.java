@@ -53,7 +53,7 @@ public class ImageManager {
         // target
         CustomViewTarget customViewTarget = createCustomViewTarget(url, imageView);
         // load
-        GlideApp.with(context).load(url).placeholder(R.drawable.loading).error(R.drawable.loading).thumbnail(0.2f).into(customViewTarget);
+        GlideApp.with(context).load(url).placeholder(R.drawable.cat).error(R.drawable.cat).thumbnail(0.2f).into(customViewTarget);
     }
 
     public static void loadImage(Context context, final Uri uri, final ImageView imageView) {
@@ -61,7 +61,7 @@ public class ImageManager {
         String path = PathUtil.uri2path(context, uri);
         CustomViewTarget customViewTarget = createCustomViewTarget(path, imageView);
         // load
-        GlideApp.with(context).load(uri).placeholder(R.drawable.loading).error(R.drawable.loading).thumbnail(0.2f).into(customViewTarget);
+        GlideApp.with(context).load(uri).placeholder(R.drawable.cat).error(R.drawable.cat).thumbnail(0.2f).into(customViewTarget);
     }
 
     public static void loadImage(Context context, final File file, final ImageView imageView) {
@@ -69,7 +69,7 @@ public class ImageManager {
         String path = file.getAbsolutePath();
         CustomViewTarget customViewTarget = createCustomViewTarget(path, imageView);
         // load
-        GlideApp.with(context).load(file).placeholder(R.drawable.loading).error(R.drawable.loading).thumbnail(0.2f).into(customViewTarget);
+        GlideApp.with(context).load(file).placeholder(R.drawable.cat).error(R.drawable.cat).thumbnail(0.2f).into(customViewTarget);
     }
 
     public static void loadImage(Context context, final int id, final ImageView imageView) {
@@ -77,7 +77,7 @@ public class ImageManager {
         String path = String.valueOf(id);
         CustomViewTarget customViewTarget = createCustomViewTarget(path, imageView);
         // load
-        GlideApp.with(context).load(id).placeholder(R.drawable.loading).error(R.drawable.loading).thumbnail(0.2f).into(customViewTarget);
+        GlideApp.with(context).load(id).placeholder(R.drawable.cat).error(R.drawable.cat).thumbnail(0.2f).into(customViewTarget);
     }
 
     public static void clearView(Context context, final ImageView imageView) {
