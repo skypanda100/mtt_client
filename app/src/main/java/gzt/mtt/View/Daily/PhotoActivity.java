@@ -87,7 +87,6 @@ public class PhotoActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         this.createImmerseView();
-        Log.d("zdt", "resume");
     }
 
     private void initData() {
@@ -103,7 +102,7 @@ public class PhotoActivity extends BaseActivity {
         this.createImmerseView();
         setContentView(R.layout.activity_photo);
 
-        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        final Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("");
@@ -114,6 +113,25 @@ public class PhotoActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+        toolbar.setVisibility(View.GONE);
+
+        this.mPhotoAdapter.setImageClickListener(new PhotoAdapter.OnImageClickListener() {
+            @Override
+            public void onImageClick(View view) {
+                if (toolbar.getVisibility() == View.GONE) {
+                    toolbar.setVisibility(View.VISIBLE);
+                } else {
+                    toolbar.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        this.mPhotoAdapter.setImageLongClickListener(new PhotoAdapter.OnImageLongClickListener() {
+            @Override
+            public void onImageLongClick(View view) {
+                Log.d("zdt", "long");
             }
         });
 
