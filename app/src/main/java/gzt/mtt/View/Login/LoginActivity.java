@@ -123,8 +123,6 @@ public class LoginActivity extends BaseActivity {
             String password = this.mPasswordEditText.getText().toString();
 
             JSONObject jsonObject = new JSONObject(bodyStr);
-            HttpManager.instance().setToken(jsonObject.getString("token"));
-
             this.mStorageManager.put("alias", jsonObject.getString("alias"));
             this.mStorageManager.put("avatar", jsonObject.getString("avatar"));
             this.mStorageManager.put("token", jsonObject.getString("token"));

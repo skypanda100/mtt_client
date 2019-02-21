@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import gzt.mtt.Manager.HttpManager;
 import gzt.mtt.Manager.StorageManager;
 import gzt.mtt.R;
 
@@ -55,6 +56,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private void initData() {
         this.mStorageManager = new StorageManager(this);
+        HttpManager.instance().setToken((String) this.mStorageManager.getSharedPreference("token", ""));
     }
 
     private void initView() {

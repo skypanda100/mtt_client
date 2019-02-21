@@ -80,7 +80,6 @@ public class WelcomeActivity extends BaseActivity {
     private void onLoginSuccess(String bodyStr) {
         try {
             JSONObject jsonObject = new JSONObject(bodyStr);
-            HttpManager.instance().setToken(jsonObject.getString("token"));
 
             this.mStorageManager.put("alias", jsonObject.getString("alias"));
             this.mStorageManager.put("avatar", jsonObject.getString("avatar"));
