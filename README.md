@@ -7,6 +7,7 @@
 - [ ] 将库表结构重新整理一下，比如不要首页与其他页的区别了
 - [x] WaitingDialog的show函数后面直接跟AsyncTask，AsyncTask里有逻辑（比如：Thread.sleep(1000)），背景不模糊
 - [ ] retrofit的call仅仅是异步并不是子线程，所以这个项目里用到retrofit的地方得改成子线程
+- [x] 回到桌面或者切换到其他app后（也就是说被系统回收了）再进入会报错
 
 #### undo
 - [x] 下拉刷新，上拉加载
