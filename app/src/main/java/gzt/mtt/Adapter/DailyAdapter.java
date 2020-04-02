@@ -124,10 +124,10 @@ public class DailyAdapter extends RecyclerView.Adapter {
                 this.resetImageView(photoViewHolder.mPhotoAppCompatImageView3);
 
                 for(int index = 0;index < 3 && index < images.size();index++) {
-                    String imagePath = images.get(index);
+                    String thumbnailPath = images.get(index) + Constant.ThumbnailSuffix;
                     switch (index) {
                         case 0:
-                            ImageManager.loadImage(this.mContext, imagePath, photoViewHolder.mPhotoAppCompatImageView1);
+                            ImageManager.loadImage(this.mContext, thumbnailPath, photoViewHolder.mPhotoAppCompatImageView1);
                             photoViewHolder.mPhotoAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -137,7 +137,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
                             });
                             break;
                         case 1:
-                            ImageManager.loadImage(this.mContext, imagePath, photoViewHolder.mPhotoAppCompatImageView2);
+                            ImageManager.loadImage(this.mContext, thumbnailPath, photoViewHolder.mPhotoAppCompatImageView2);
                             photoViewHolder.mPhotoAppCompatImageView2.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -147,7 +147,7 @@ public class DailyAdapter extends RecyclerView.Adapter {
                             });
                             break;
                         case 2:
-                            ImageManager.loadImage(this.mContext, imagePath, photoViewHolder.mPhotoAppCompatImageView3);
+                            ImageManager.loadImage(this.mContext, thumbnailPath, photoViewHolder.mPhotoAppCompatImageView3);
                             photoViewHolder.mPhotoAppCompatImageView3.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -173,8 +173,8 @@ public class DailyAdapter extends RecyclerView.Adapter {
                 // 清空
                 this.resetImageView(photoViewHolder.mPhotoAppCompatImageView1);
 
-                String imagePath = images.get(0);
-                ImageManager.loadImage(this.mContext, imagePath, photoViewHolder.mPhotoAppCompatImageView1);
+                String thumbnailPath = images.get(0) + Constant.ThumbnailSuffix;
+                ImageManager.loadImage(this.mContext, thumbnailPath, photoViewHolder.mPhotoAppCompatImageView1);
                 photoViewHolder.mPhotoAppCompatImageView1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
